@@ -4,24 +4,25 @@
   </div>
 </template>
 
-<style>
+<script>
+import { setRem } from 'utils/utils'
+export default {
+  mounted () {
+    // setRem()
+  }
+}
+</script>
+
+<style lang="scss">
+@import url('../assets/scss/reset.scss');
+body {
+  font-size: 2.666667vw;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

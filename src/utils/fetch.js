@@ -39,7 +39,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 				value: sendConfig
 			})
 		}
-		
+
 		try {
 			var response = await fetch(url, requestConfig);
 			var responseJson = await response.json();
@@ -78,10 +78,10 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 							obj = JSON.parse(obj);
 						}
 						if(obj.result == ERR_Reload){
-							window.location.href = `#/login`;
+							window.location.href = `/shop/login`;
 							removeStore('userInfo');
 						}
-						if(obj.result != ERR_OK) reject(new Error(obj.resultNote));						
+						if(obj.result != ERR_OK) reject(new Error(obj.resultNote));
 						resolve(obj);
 					} else {
 						reject(new Error(requestObj.status));
