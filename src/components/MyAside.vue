@@ -44,8 +44,10 @@ export default {
     background: rgba(0, 0, 0 , .4);
   }
   .aside-content {
-    width: 70%;
+    width: 28rem;
     height: 100%;
+    box-sizing: border-box;
+    padding: 3rem 2.4rem 0 3.5rem;
     overflow: hidden;
     overflow-y: auto;
     background: #ffffff;

@@ -22,5 +22,12 @@ module.exports = {
       .set('assets', resolve('src/assets'))
       .set('components', resolve('src/components'))
       .set('utils', resolve('src/utils'))
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "@/assets/scss/mixin.scss";`
+      }
+    }
   }
 }

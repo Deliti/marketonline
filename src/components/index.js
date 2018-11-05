@@ -7,12 +7,16 @@
 // import SupportBank from './SupportBank.vue'
 
 import MessageBox from './MessageBox'
+import MyAside from './MyAside.vue'
+import CollapseItem from './MyCollapse/CollapseItem.vue'
 
 export {
   // JianPan,
   // Loading,
   // Tips,
-  MessageBox
+  MessageBox,
+  MyAside,
+  CollapseItem
   // Button,
   // TextInput,
   // KeyBoard,

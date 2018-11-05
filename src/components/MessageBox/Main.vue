@@ -1,14 +1,13 @@
 <template>
   <div class="cover-wrap" v-show="show">
     <div class="cover" @click="hideCover"></div>
-      <div class="content-box">
+    <div class="content-box">
       <header class="title" v-if="title !== ''">{{title}}</header>
       <div class="content">
         <span>{{message}}</span>
       </div>
       <footer class="button-wrap">
         <div class="f-button cancel" @click="cancle">{{buttons[0].text}}</div>
-        <i class="middle-line" v-if="buttons.length === 2"></i>
         <div class="f-button comfirm" v-if="buttons.length === 2" @click="comfirm">{{buttons[1].text}}</div>
       </footer>
     </div>
@@ -53,11 +52,6 @@
     justify-content: space-between;
     align-items: center;
   }
-
-  .filament {
-    transform: scale(0.5);
-    background: #E0E0E0;
-  }
   .cover-wrap {
     width: 100%;
     height: 100%;
@@ -74,6 +68,8 @@
   .content-box {
     width: 27rem;
     height: 12.9rem;
+    // padding: 2rem;
+    box-sizing: border-box;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -95,7 +91,6 @@
       font-size: 1.5rem;
       color: #1A2833;
       line-height: 1.5rem;
-      border-bottom: 1px solid #E0E0E0;
     }
 
     .button-wrap {
@@ -103,18 +98,12 @@
       height: 4.3rem;
       position: relative;
 
-      .middle-line {
-        @extend .filament;
-        position: absolute;
-        width: 1px;
-        height: 100%;
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-      }
-
       .f-button {
         flex: 1;
+        width: 4rem;
+        height: 2rem;
+        box-sizing: border-box;
+        border: 1px solid #000000;
         line-height: 4.3rem;
         text-align: center;
         font-size: 1.7rem;

@@ -1,3 +1,18 @@
+const IsPC = () => {
+  var userAgentInfo = navigator.userAgent
+  var Agents = ["Android", "iPhone",
+              "SymbianOS", "Windows Phone",
+              "iPad", "iPod"]
+  var flag = true
+  for (var v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+      flag = false
+      break
+    }
+  }
+  return flag
+}
+
 export const setRem = () => {
   (function(doc, win) {
     var docEl = doc.documentElement,
@@ -8,7 +23,7 @@ export const setRem = () => {
         if (clientWidth >= 640) {
           docEl.style.fontSize = '100px';
         } else {
-          docEl.style.fontSize = (clientWidth / 100) + 'px';
+          docEl.style.fontSize = (clientWidth / 10) + 'px';
         }
       };
 

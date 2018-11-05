@@ -15,8 +15,8 @@ export default {
 
 <style lang="scss">
 @import url('../assets/scss/reset.scss');
-body {
-  font-size: 2.666667vw;
+html,body {
+  font-size: 2.6666667vw;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
