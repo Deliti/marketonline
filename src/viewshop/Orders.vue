@@ -9,9 +9,9 @@
         <div class="time-content">
           <span>篩選日期：</span>
           <div class="time-box">
-            <b class="time-now">今日</b>
-            <i class="down-icon"></i>
-            <div class="time-option-wrap">
+            <b class="time-now"  @click="toggleShowTime">今日</b>
+            <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
+            <div class="time-option-wrap" v-show="timeshow">
               <div class="time-option">今日</div>
               <div class="time-option">本週</div>
               <div class="time-option">本月</div>
@@ -57,7 +57,12 @@
 export default {
   data () {
     return {
-
+      timeshow: false
+    }
+  },
+  methods: {
+    toggleShowTime () {
+      this.timeshow = !this.timeshow
     }
   }
 }
@@ -96,6 +101,10 @@ export default {
             width: 1.1rem;
             height: .6rem;
             background: #000000;
+            transition: all .3s;
+          }
+          .rotate-down {
+            transform: rotate(180deg);
           }
           .time-option-wrap {
             position: absolute;
