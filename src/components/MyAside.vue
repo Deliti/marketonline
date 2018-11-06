@@ -42,12 +42,15 @@ export default {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0 , .4);
+    position: absolute;
+    left: 0;top: 0;
+    right: 0;bottom: 0;
   }
   .aside-content {
-    width: 28rem;
+    width: 27.9rem;
     height: 100%;
     box-sizing: border-box;
-    padding: 3rem 2.4rem 0 3.5rem;
+    padding: 3.5rem 2.4rem 0 3.5rem;
     overflow: hidden;
     overflow-y: auto;
     background: #ffffff;

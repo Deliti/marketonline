@@ -2,7 +2,7 @@ import {
 	baseUrl,
 	basePath
 } from './env'
-import { removeStore } from './mUtils'
+// import { removeStore } from './mUtils'
 
 export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 	type = type.toUpperCase();
@@ -47,8 +47,8 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			throw new Error(error)
 		}
 		if(responseJson.result == ERR_Reload){
-			window.location.href = `/#/login`;
-			removeStore('userInfo');
+			// window.location.href = `/#/login`;
+			// removeStore('userInfo');
 		}
 		if(responseJson.result != ERR_OK) return responseJson.resultNote;
 		return responseJson
@@ -78,8 +78,8 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 							obj = JSON.parse(obj);
 						}
 						if(obj.result == ERR_Reload){
-							window.location.href = `/shop/login`;
-							removeStore('userInfo');
+							// window.location.href = `/shop/login`;
+							// removeStore('userInfo');
 						}
 						if(obj.result != ERR_OK) reject(new Error(obj.resultNote));
 						resolve(obj);

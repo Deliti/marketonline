@@ -23,6 +23,15 @@ module.exports = {
       .set('components', resolve('src/components'))
       .set('utils', resolve('src/utils'))
   },
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://106.15.93.184:8087',
+        ws: true,
+        changeOrigin: true
+      }
+    }
+  },
   css: {
     loaderOptions: {
       sass: {

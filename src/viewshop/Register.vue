@@ -6,8 +6,16 @@
     <my-aside :show="leaderShow" @hide="hideLeader">
       <div class="option-wrap">
         <collapse-item>
-          <div slot="title">花蒂玛塘区</div>
-          <div v-for="(item, index) in leaders" 
+          <div slot="title" class="option-title">花蒂玛塘区</div>
+          <div v-for="(item, index) in leaders"
+              :key="index"
+              @click="chooseLeader(item)">
+            {{item.name}}
+          </div>
+        </collapse-item>
+        <collapse-item>
+          <div slot="title" class="option-title">清华去</div>
+          <div v-for="(item, index) in leaders"
               :key="index"
               @click="chooseLeader(item)">
             {{item.name}}
@@ -17,7 +25,7 @@
     </my-aside>
     <my-aside :show="addrShow" @hide="hideAddr">
       <div class="option-wrap">
-        <div v-for="(item, index) in addrs" 
+        <div v-for="(item, index) in addrs"
             :key="index"
             @click="chooseAddr(item)">
           {{item.name}}
@@ -29,6 +37,7 @@
 
 <script>
 import { MessageBox, MyAside, CollapseItem } from 'components/index.js'
+
 export default {
   data () {
     return {
@@ -64,6 +73,9 @@ export default {
     MyAside,
     CollapseItem
   },
+  mounted () {
+
+  },
   methods: {
     showLeader () {
       this.leaderShow = true
@@ -88,5 +100,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.option-title {
+  font-size: 1.6rem;
+}
 </style>
