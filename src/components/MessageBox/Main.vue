@@ -66,16 +66,15 @@
     }
   }
   .content-box {
-    width: 27rem;
-    height: 12.9rem;
-    // padding: 2rem;
+    width: 29rem;
+    padding: 2rem;
     box-sizing: border-box;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     background: #FFFFFF;
-    border-radius: 1.4rem;
+    border-radius: .2rem;
     overflow: hidden;
 
     .title {
@@ -86,29 +85,33 @@
 
     .content {
       position: relative;
-      padding: 3.5rem 2.6rem;
       text-align: center;
-      font-size: 1.5rem;
-      color: #1A2833;
+      font-size: 1.4rem;
+      color: #444444;
       line-height: 1.5rem;
+      margin-bottom: 2.5rem;
     }
 
     .button-wrap {
       @extend .flex-box;
-      height: 4.3rem;
+      height: 3rem;
       position: relative;
 
       .f-button {
-        flex: 1;
-        width: 4rem;
-        height: 2rem;
+        width: 11.1rem;
+        height: 100%;
         box-sizing: border-box;
-        border: 1px solid #000000;
-        line-height: 4.3rem;
+        line-height: 3rem;
+        border-radius: .2rem;
         text-align: center;
-        font-size: 1.7rem;
-        color: #137FFB;
-        ;
+        font-size: 1.4rem;
+        color: #444444;
+        border: 1px solid #152935;
+      }
+      .comfirm {
+        background: #1CD0A3;
+        border: none;
+        color: #FFFFFF;
       }
     }
   }

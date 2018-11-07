@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="page-title">
       <i class="return-icon"></i>
-      <h1>我的訂單</h1>
+      <h1>財務匯總</h1>
     </div>
     <div class="page-content">
       <div class="time-wrap">
@@ -23,8 +23,8 @@
       <section class="order-wrap" @click="linkjump('orderDetail')">
         <div class="order-title-box">
           <div class="flex-box">
-            <p class="order-text-1">團長：江先生  96XXXXXX</p>
-            <a class="tel-text">聯繫團長</a>
+            <p class="order-text-1">江先生  96XXXXXX</p>
+            <a class="tel-text">聯繫團員</a>
           </div>
           <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
         </div>
@@ -39,13 +39,7 @@
           </div>
           <div class="order-info-box">
             <span class="order-no">訂單編號：1000043</span>
-            <span class="order-get hide">已取 0 件</span>
-            <button class="suggest-btn" @click.stop="linkjump('suggest')">反饋意見</button>
-            <button class="status-btn hide">取貨</button>
-            <button class="finish-btn">
-              <i class="check-btn-icon"></i>
-              <label>已完成</label>
-            </button>
+            <span class="order-get">提成金額：$38</span>
           </div>
         </div>
       </section>

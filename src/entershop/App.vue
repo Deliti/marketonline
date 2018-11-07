@@ -5,11 +5,7 @@
 </template>
 
 <script>
-import { setRem } from 'utils/utils'
 export default {
-  mounted () {
-    // setRem()
-  }
 }
 </script>
 

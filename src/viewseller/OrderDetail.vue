@@ -2,14 +2,14 @@
   <div class="page-wrap">
     <div class="page-title">
       <i class="return-icon"></i>
-      <h1>訂單詳情</h1>
+      <h1>團員訂單</h1>
     </div>
     <div class="page-content">
       <div class="order-wrap">
         <div class="order-title-box">
           <div class="flex-box">
-            <p class="order-text-1">團長：江先生  96XXXXXX</p>
-            <a class="tel-text">聯繫團長</a>
+            <p class="order-text-1">江先生  96XXXXXX</p>
+            <a class="tel-text">聯繫團員</a>
           </div>
           <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
         </div>
@@ -64,20 +64,7 @@
           <span class="total-price">$76.00</span>
         </div>
       </div>
-      <div class="code-info">
-        <div class="code-box">
-          取貨驗證碼<br>
-          <span>450088</span>
-        </div>
-        <div class="qrcode"></div>
-      </div>
-      <div class="over-wrap">
-        <button class="suggest-btn" @click="linkjump('suggest')">反饋意見</button>
-        <div class="finish-btn">
-          <i class="check-btn-icon"></i>
-          <label>已完成</label>
-        </div>
-      </div>
+      
     </div>
   </div>
 </template>
@@ -265,54 +252,7 @@ export default {
         }
       }
     }
-    .code-info {
-      padding-top: 3.6rem;
-      .code-box {
-        font-size: 1.8rem;
-        color: #444444;
-        text-align: center;
-        span {
-          font-size: 2.4rem;
-        }
-      }
-      .qrcode {
-        width: 10.75rem;
-        height: 10.75rem;
-        margin: .5rem auto 0;
-        padding-bottom: 3.3rem;
-      }
-    }
-    .over-wrap {
-      padding: 2.4rem 0;
-      display: flex;
-      justify-content: flex-end;
-      .finish-btn {
-        width: 11.1rem;
-        height: 3rem;
-        margin-left: 1.5rem;
-        box-sizing: border-box;
-        padding: 0 2rem 0 2.5rem;
-        border-radius: .2rem;
-        border: 1px solid #152935;
-        font-size: 1.4rem;
-        color: #444444;
-        @extend .flex-box;
-        .check-btn-icon {
-          width: .93rem;
-          height: .75rem;
-          @include backImg('../assets/images/checkmark.png');
-        }
-      }
-      .suggest-btn {
-        width: 7.25rem;
-        height: 3rem;
-        background: #F2917C;
-        border-radius: .2rem;
-        text-align: center;
-        line-height: 3rem;
-        color: #ffffff;
-      }
-    }
+    
   }
 }
 </style>

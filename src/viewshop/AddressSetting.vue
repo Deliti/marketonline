@@ -171,6 +171,7 @@ export default {
         padding: 0;
         text-align: center;
         .mint-tab-item-label {
+          font-size: 1.6rem;
           display: inline-block;
           height: 100%;
           line-height: 3.5rem;
