@@ -9,13 +9,13 @@
         <div class="time-content">
           <span>篩選日期：</span>
           <div class="time-box">
-            <b class="time-now"  @click="toggleShowTime">今日</b>
+            <b class="time-now"  @click="toggleShowTime">{{currentTime}}</b>
             <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
             <div class="time-option-wrap" v-show="timeshow">
               <div class="time-option">今日</div>
               <div class="time-option">本週</div>
               <div class="time-option">本月</div>
-              <div class="time-option">其他月份</div>
+              <div class="time-option" @click="showMonthPop">其他月份</div>
             </div>
           </div>
         </div>
@@ -50,19 +50,67 @@
         </div>
       </section>
     </div>
+    <mt-popup
+      v-model="otherMonthVisible"
+      class="mint-popup"
+      position="bottom">
+      <mt-picker :slots="dataList"
+                :show-toolbar="true"
+                ref="picker"
+                value-key="cName">
+        <div class="picker-button-wrap">
+          <span class="cancel-btn" @click="hideMonthPop">取消</span>
+          <span class="comfirm-btn" @click="timeConfirm">確認</span>
+        </div>
+      </mt-picker>
+    </mt-popup>
   </div>
 </template>
 
 <script>
+import { Popup, Picker } from 'mint-ui'
+const timeTextConf = []
 export default {
   data () {
     return {
-      timeshow: false
+      currentTime: 0,
+      timeTextConf: timeTextConf,
+      timeshow: false,
+      otherMonthVisible: false
     }
+  },
+  computed: {
+    dataList () {
+      const monthList = ['2018/11','2018/10','2018/9','2018/8','2018/7','2018/6']
+      let dateSlots = [
+        {
+          flex: 1,
+          values: monthList,
+          className: 'slot1',
+          textAlign: 'center'
+        }
+      ]
+      return  dateSlots
+    }
+  },
+  components: {
+    mtPopup: Popup,
+    mtPicker: Picker
   },
   methods: {
     toggleShowTime () {
       this.timeshow = !this.timeshow
+    },
+    showMonthPop () {
+      this.timeshow = false
+      this.otherMonthVisible = true
+    },
+    hideMonthPop () {
+      this.otherMonthVisible = false
+    },
+    timeConfirm () {
+      this.currentTime = this.$refs.picker.getValues()[0]
+      this.otherMonthVisible = false
     }
   }
 }
@@ -100,7 +148,7 @@ export default {
           .down-icon {
             width: 1.1rem;
             height: .6rem;
-            background: #000000;
+            @include backImg('../assets/images/triangle4.png');
             transition: all .3s;
           }
           .rotate-down {
@@ -223,10 +271,27 @@ export default {
           .check-btn-icon {
             width: .93rem;
             height: .75rem;
-            background: red;
+            @include backImg('../assets/images/checkmark.png');
           }
         }
       }
+    }
+  }
+  .mint-popup {
+    width: 100%;
+  }
+  .picker-button-wrap {
+    width: 100%;
+    height: 3rem;
+    @extend .flex-box;
+    span {
+
+    }
+    .cancel-btn {
+
+    }
+    .comfirm-btn {
+
     }
   }
 }

@@ -44,24 +44,27 @@ export default {
 .collapse-wrap {
   width: 100%;
   .collapse-item__header {
-    height: 4.8rem;
+    height: 2.5rem;
+    padding-bottom: .9rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #E5E5E5;
     .collapse-item__header__arrow {
       transition: transform .3s;
-      &::before {
-        content: "\E604";
-      }
+      width: 1.2rem;
+      height: .7rem;
+      @include backImg('../../assets/images/up-arrow.png');
+      transform: rotate(180deg);
     }
     .el-icon-arrow-down {
-      transform: rotate(180deg);
+      transform: rotate(0deg);
     }
   }
   .el-collapse-item__wrap {
+    padding-top: .3rem;
     .el-collapse-item__content {
-      
+
     }
   }
 }

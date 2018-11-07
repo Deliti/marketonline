@@ -1,20 +1,6 @@
 .theme-color {
   background: linear-gradient(-135deg, #0AC4BA 0%, #2BDA8E 100%);
 }
-.page-title {
-  height: 7rem;
-  position: relative;
-  text-align: center;
-  font-size: 1.8rem;
-  line-height: 7rem;
-  color: #444444;
-  .return-icon {
-    width: 3rem;
-    height: 3rem;
-    position: absolute;
-    left: 2.6rem;top: 2.2rem;
-  }
-}
 .flex-box {
   display: flex;
   justify-content: space-between;

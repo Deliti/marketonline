@@ -71,6 +71,13 @@
         </div>
         <div class="qrcode"></div>
       </div>
+      <div class="over-wrap">
+        <button class="suggest-btn">反饋意見</button>
+        <div class="finish-btn">
+          <i class="check-btn-icon"></i>
+          <label>已完成</label>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -143,7 +150,7 @@ export default {
       }
     }
     .order-detail-wrap {
-      background: #ffffff;
+      @include backImg('../assets/images/rectangletip.png');
       .detail-title {
         width: 100%;
         height: 4.9rem;
@@ -215,7 +222,7 @@ export default {
             padding-left: 6.4rem;
             font-size: 1.2rem;
             color: #444444;
-          } 
+          }
         }
         .over-order {
           background: #F6F6F6;
@@ -268,6 +275,37 @@ export default {
         height: 10.75rem;
         margin: .5rem auto 0;
         padding-bottom: 3.3rem;
+      }
+    }
+    .over-wrap {
+      padding: 2.4rem 0;
+      display: flex;
+      justify-content: flex-end;
+      .finish-btn {
+        width: 11.1rem;
+        height: 3rem;
+        margin-left: 1.5rem;
+        box-sizing: border-box;
+        padding: 0 2rem 0 2.5rem;
+        border-radius: .2rem;
+        border: 1px solid #152935;
+        font-size: 1.4rem;
+        color: #444444;
+        @extend .flex-box;
+        .check-btn-icon {
+          width: .93rem;
+          height: .75rem;
+          @include backImg('../assets/images/checkmark.png');
+        }
+      }
+      .suggest-btn {
+        width: 7.25rem;
+        height: 3rem;
+        background: #F2917C;
+        border-radius: .2rem;
+        text-align: center;
+        line-height: 3rem;
+        color: #ffffff;
       }
     }
   }
