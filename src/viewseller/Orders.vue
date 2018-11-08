@@ -49,10 +49,10 @@
                   <span class="order-no">訂單編號：1000043</span>
                   <span class="order-get">已取 0 件</span>
                   <button class="status-btn hide">取貨</button>
-                  <button class="finish-btn ">
+                  <div class="finish-btn ">
                     <i class="check-btn-icon"></i>
                     <label>已完成</label>
-                  </button>
+                  </div>
                 </div>
               </div>
             </section>

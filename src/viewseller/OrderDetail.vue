@@ -42,7 +42,8 @@
           <div class="solid-hr"></div>
           <div class="order-item">
             <div class="order-item-flex">
-              <label class="order-item-status">未取貨</label>
+              <label class="order-item-status" v-if="!isOverd && !isVerifed">未取貨</label>
+              <i class="radius-circle" v-else></i>
               <img src="" alt="" class="good-img">
               <div class="order-item-detail">
                 <p class="good-name">進口百香果 90G-110G/個</p>
@@ -64,7 +65,35 @@
           <span class="total-price">$76.00</span>
         </div>
       </div>
-      
+      <section class="bottom-block-wrap">
+        <div class="status-wrap" v-if="isOverd">
+          <div class="finish-btn">
+            <i class="check-btn-icon"></i>
+            <label>已完成</label>
+          </div>
+        </div>
+        <div class="verify-wrap" v-else-if="!isOverd && !isVerifed">
+          <div class="input-box">
+            <input type="text" v-model="verifyCode" placeholder="輸入驗證碼">
+          </div>
+          <div class="submit-btn" @click="handleVerify">
+            <label>確認</label>
+          </div>
+        </div>
+        <div class="comfirm-wrap" v-else>
+          <div class="all-select">
+            <i :class="['radius-circle', allSelected ? 'radius-check' : '']"></i>
+            <span>全選</span>
+          </div>
+          <div class="info-wrap">
+            <p class="total-count">合計：$38</p>
+            <p class="detail-count">總額:$76  剩餘:$38</p>
+          </div>
+          <div class="submit-btn" @click="handleComfirm">
+            <label>確認</label>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -73,12 +102,25 @@
 export default {
   data () {
     return {
-
+      isOverd: false, // 訂單狀態是否為結束狀態
+      isVerifed: false, // 訂單在為結束狀態下是否驗證過
+      verifyCode: '', // 驗證碼
+      allSelected: false, // 是否全選
+      selectCart: {}
     }
   },
   methods: {
     linkjump (href) {
       this.$router.push(href)
+    },
+    handleVerify () {
+      if (this.verifyCode === '') {
+        return false
+      }
+      this.isVerifed = true
+    },
+    handleComfirm () {
+      this.isOverd = true
     }
   }
 }
@@ -95,6 +137,9 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 .7rem;
+    .radius-check {
+      background-image: url('../assets/images/check-seleted.png') !important;
+    }
     .order-wrap {
       width: 100%;
       box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
@@ -175,6 +220,14 @@ export default {
               color: #1CD0A3;
               margin-right: 1.8rem;
             }
+            .radius-circle {
+              width: 5rem;
+              height: 2rem;
+              margin-right: 1.8rem;
+              @include backImg('../assets/images/check-item.png');
+              background-position: center center;
+              background-size: 1.8rem 1.8rem;
+            }
             .good-img {
               width: 6.25rem;
               height: 6.25rem;
@@ -252,7 +305,98 @@ export default {
         }
       }
     }
-    
+    .bottom-block-wrap {
+      padding-bottom: 3.5rem;
+      .verify-wrap {
+        padding-top: 2.3rem;
+        width: 100%;
+        @extend .flex-box;
+        height: 4.1rem;
+        .input-box {
+          width: 50%;
+          height: 4rem;
+          background: #FFFFFF;
+          box-shadow: 0 .3rem 1rem 0 rgba(0,0,0,0.10);
+          box-sizing: border-box;
+          padding: .9rem 1.3rem;
+          input {
+            display: block;
+            height: 100%;
+          }
+        }
+        .submit-btn {
+          display: block;
+          width: 42.8%;
+          height: 4.1rem;
+          @extend .theme-color;
+          border-radius: 1.25rem;
+          text-align: center;
+          line-height: 4.1rem;
+          color: #ffffff;
+          font-size: 1.8rem;
+        }
+      }
+      .comfirm-wrap {
+        padding-top: 1.8rem;
+        width: 100%;
+        @extend .flex-box;
+        height: 4.4rem;
+        .all-select {
+          font-size: 1.4rem;
+          color: #444444;
+          padding-left: .8rem;
+          @extend .flex-box;
+          .radius-circle {
+            width: 1.8rem;
+            height: 1.8rem;
+            @include backImg('../assets/images/check-item.png');
+            margin-right: 1rem;
+          }
+        }
+        .info-wrap {
+          .total-count {
+            font-size: 1.8rem;
+            color: #444444;
+            font-weight: bold;
+          }
+          .detail-count {
+            font-size: 1.4rem;
+            color: #444444;
+          }
+        }
+        .submit-btn {
+          width: 8.5rem;
+          height: 4.1rem;
+          @extend .theme-color;
+          border-radius: 1.25rem;
+          text-align: center;
+          line-height: 4.1rem;
+          color: #ffffff;
+          font-size: 1.8rem;
+        }
+      }
+      .status-wrap {
+        padding-top: 2.9rem;
+        display: flex;
+        justify-content: center;
+        .finish-btn {
+          width: 11.1rem;
+          height: 3rem;
+          box-sizing: border-box;
+          padding: 0 2rem 0 2.5rem;
+          border-radius: .2rem;
+          border: 1px solid #152935;
+          font-size: 1.4rem;
+          color: #444444;
+          @extend .flex-box;
+          .check-btn-icon {
+            width: .93rem;
+            height: .75rem;
+            @include backImg('../assets/images/checkmark.png');
+          }
+        }
+      }
+    }
   }
 }
 </style>

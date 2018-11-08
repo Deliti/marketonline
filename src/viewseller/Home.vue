@@ -13,7 +13,14 @@
       <img src="../assets/images/mine-local.png" alt="" class="enter-icon">
       <h3 class="enter-title">財務匯總</h3>
     </div>
-    
+    <div class="input-code-wrap">
+      <div class="input-box">
+        <input type="text" v-model="verifyCode" placeholder="輸入驗證碼">
+      </div>
+      <div class="submit-btn">
+        <label>確認</label>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,7 +28,7 @@
 export default {
   data () {
     return {
-
+      verifyCode: ''
     }
   },
   methods: {
@@ -35,6 +42,8 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   background: #ffffff;
+  width: 100%;
+  height: 100%;
   position: relative;
   .top-bg {
     width: 100%;
@@ -45,7 +54,7 @@ export default {
   }
   .page-title {
     position: relative;
-    margin-bottom: 6.7rem;
+    margin-bottom: 2rem;
   }
   .enter-wrap {
     position: relative;
@@ -73,6 +82,32 @@ export default {
     background: url('../assets/images/enter-right-bg.png') no-repeat right 0;
     background-size: 86% 100%;
   }
-  
+  .input-code-wrap {
+    padding: 2rem 0 0;
+    .input-box {
+      width: 15.5rem;
+      height: 4rem;
+      margin: 0 auto 3rem;
+      background: #FFFFFF;
+      box-shadow: 0 .3rem 1rem 0 rgba(0,0,0,0.10);
+      box-sizing: border-box;
+      padding: .9rem 1.3rem;
+      input {
+
+      }
+    }
+    .submit-btn {
+      display: block;
+      width: 15.5rem;
+      height: 4.1rem;
+      margin: 0 auto 3rem;
+      @extend .theme-color;
+      border-radius: 1.25rem;
+      text-align: center;
+      line-height: 4.1rem;
+      color: #ffffff;
+      font-size: 1.8rem;
+    }
+  }
 }
 </style>

@@ -39,16 +39,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input::input-placeholder, textarea::input-placeholder {
-  color: #B2B2B2;
-}
-input,textarea {
-  border: none;
-  outline: none;
-  font-size: 1.4rem;
-  color: #000000;
-  background: transparent;
-}
 .page-wrap {
   background: #F6F6F6;
   width: 100%;

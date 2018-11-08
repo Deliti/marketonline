@@ -8,7 +8,7 @@
       <div class="option-wrap">
         <collapse-item>
           <div slot="title">花蒂玛塘区</div>
-          <div v-for="(item, index) in addr" 
+          <div v-for="(item, index) in addr"
               :key="index"
               @click="chooseAddr(item)">
             {{item.name}}
@@ -57,7 +57,7 @@ export default {
   mounted () {
     // MessageBox('提示', '操作成功');
     MessageBox({
-      message: '两次密码输入不同，请重新设置',
+      message: '两次密码输入不同，<br/>请重新设置',
       buttons: [{
         text: '取消',
         callBack: () => {

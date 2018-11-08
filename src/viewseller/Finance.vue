@@ -20,29 +20,35 @@
           </div>
         </div>
       </div>
-      <section class="order-wrap" @click="linkjump('orderDetail')">
-        <div class="order-title-box">
-          <div class="flex-box">
-            <p class="order-text-1">江先生  96XXXXXX</p>
-            <a class="tel-text">聯繫團員</a>
+      <div class="order-container">
+        <section class="order-wrap" @click="linkjump('orderDetail')">
+          <div class="order-title-box">
+            <div class="flex-box">
+              <p class="order-text-1">江先生  96XXXXXX</p>
+              <a class="tel-text">聯繫團員</a>
+            </div>
+            <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
           </div>
-          <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
-        </div>
-        <div class="order-content-box">
-          <div class="good-item">
-            <span class="order-text-2">商品總額</span>
-            <span class="order-text-3">$ 150</span>
+          <div class="order-content-box">
+            <div class="good-item">
+              <span class="order-text-2">商品總額</span>
+              <span class="order-text-3">$ 150</span>
+            </div>
+            <div class="good-item">
+              <span class="order-text-2">商品件數</span>
+              <span class="order-text-3">3 件</span>
+            </div>
+            <div class="order-info-box">
+              <span class="order-no">訂單編號：1000043</span>
+              <div class="order-get"><span>提成金額：</span><b>$38</b></div>
+            </div>
           </div>
-          <div class="good-item">
-            <span class="order-text-2">商品件數</span>
-            <span class="order-text-3">3 件</span>
-          </div>
-          <div class="order-info-box">
-            <span class="order-no">訂單編號：1000043</span>
-            <span class="order-get">提成金額：$38</span>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
+      <div class="total-wrap">
+        <span class="good-total">商品總額：$450</span>
+        <div class="order-get"><span>提成金額：</span><b>$38</b></div>
+      </div>
     </div>
     <mt-popup
       v-model="otherMonthVisible"
@@ -237,6 +243,13 @@ export default {
         .order-get {
           font-size: 1.4rem;
           color: #444444;
+          align-items: center;
+          display: flex;
+          height: 3.3rem;
+          b {
+            font-size: 2.4rem;
+            color: #1CD0A3;
+          }
         }
         .suggest-btn {
           width: 7.25rem;
@@ -271,6 +284,29 @@ export default {
             height: .75rem;
             @include backImg('../assets/images/checkmark.png');
           }
+        }
+      }
+    }
+    .total-wrap {
+      position: fixed;
+      left: 0;bottom: 0;
+      width: 100%;
+      height: 5rem;
+      @extend .flex-box;
+      box-sizing: border-box;
+      padding: 0 1.4rem;
+      background: #3D3D3D;
+      color: #ffffff;
+      .good-total {
+        font-size: 1.4rem;
+      }
+      .order-get {
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        font-size: 1.4rem;
+        b {
+          font-size: 1.8rem;
         }
       }
     }

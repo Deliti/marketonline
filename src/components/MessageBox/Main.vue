@@ -4,7 +4,7 @@
     <div class="content-box">
       <header class="title" v-if="title !== ''">{{title}}</header>
       <div class="content">
-        <span>{{message}}</span>
+        <span v-html="message"></span>
       </div>
       <footer class="button-wrap">
         <div class="f-button cancel" @click="cancle">{{buttons[0].text}}</div>

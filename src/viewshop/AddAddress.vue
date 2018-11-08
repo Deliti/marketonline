@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="submit-button">
-        <label>提交反饋</label>
+        <label>保存新地址</label>
       </div>
     </div>
   </div>
