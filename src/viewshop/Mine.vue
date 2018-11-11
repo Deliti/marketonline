@@ -13,29 +13,20 @@
       <img src="../assets/images/mine-local.png" alt="" class="enter-icon">
       <h3 class="enter-title">地址管理</h3>
     </div>
-    <footer class="common-footer">
-      <div class="footer-wrap">
-        <router-link to="home" class="enter-footer">
-          首頁
-        </router-link>
-        <div class="enter-footer active-footer">
-          個人中心
-        </div>
-      </div>
-      <router-link to="shopCart" class="cart-wrap">
-        <div class="cart-bg"></div>
-        <i class="cart-num">1</i>
-      </router-link>
-    </footer>
+    <common-footer :activeTab="'mine'"></common-footer>
   </div>
 </template>
 
 <script>
+import { CommonFooter } from 'components'
 export default {
   data () {
     return {
 
     }
+  },
+  components: {
+    CommonFooter
   },
   methods: {
     linkJump (href) {
@@ -85,56 +76,6 @@ export default {
   .right-enter {
     background: url('../assets/images/enter-right-bg.png') no-repeat right 0;
     background-size: 86% 100%;
-  }
-  .common-footer {
-    width: 100%;
-    position: fixed;
-    left: 0;bottom: 0;
-    display: flex;
-    align-items: flex-end;
-    .footer-wrap {
-      flex: 1;
-      height: 5rem;
-      display: flex;
-      .enter-footer {
-        flex: 1;
-        height: 100%;
-        text-align: center;
-        line-height: 5rem;
-        font-size: 1.4rem;
-        color: #444444;
-        background: #FFFFFF;
-      }
-      .active-footer {
-        background: #E5E5E5;
-      }
-    }
-    .cart-wrap {
-      width: 7.5rem;
-      height: 7.5rem;
-      position: relative;
-      border-radius: 1.35rem 0px 0px 0px;
-      @extend .theme-color;
-      .cart-bg {
-        width: 100%;
-        height: 100%;
-        @include backImg('../assets/images/cart.png');
-        background-position: center center;
-        background-size: 5rem 5rem;
-      }
-      .cart-num {
-        width: 1.9rem;
-        height: 1.9rem;
-        position: absolute;
-        border-radius: 50%;
-        right: .9rem;top: .9rem;
-        background: #ffffff;
-        text-align: center;
-        line-height: 1.9rem;
-        font-size: 1.4rem;
-        color: #0DC6B5;
-      }
-    }
   }
 }
 </style>

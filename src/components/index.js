@@ -9,6 +9,8 @@
 import MessageBox from './MessageBox'
 import MyAside from './MyAside.vue'
 import CollapseItem from './MyCollapse/CollapseItem.vue'
+import TimeDown from './TimeDown.vue'
+import CommonFooter from './CommonFooter.vue'
 
 export {
   // JianPan,
@@ -16,7 +18,9 @@ export {
   // Tips,
   MessageBox,
   MyAside,
-  CollapseItem
+  CollapseItem,
+  TimeDown,
+  CommonFooter
   // Button,
   // TextInput,
   // KeyBoard,

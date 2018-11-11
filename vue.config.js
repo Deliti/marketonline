@@ -22,6 +22,7 @@ module.exports = {
       .set('assets', resolve('src/assets'))
       .set('components', resolve('src/components'))
       .set('utils', resolve('src/utils'))
+      .set('$', resolve(__dirname, '../node_modules/jquery/src/jquery'),)
   },
   devServer: {
     port: 8000,

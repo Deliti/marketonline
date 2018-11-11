@@ -1,82 +1,207 @@
 <template>
   <div class="page-wrap">
-    商城注册页
-    <div @click="showLeader">选择团长</div>
-    <div @click="showAddr">填写地址</div>
+    <div class="page-title">
+      <i class="return-icon"></i>
+      <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
+    </div>
+    <div class="page-content">
+      <h1 class="program-title">品牌名字</h1>
+      <h3 class="center-title">註冊</h3>
+      <div class="input-wrap">
+        <div class="input-box">
+          <input type="text" class="input" placeholder="註冊時用的手機號碼" v-model="username">
+        </div>
+        <hr>
+        <div class="input-box verify-box">
+          <input type="text" class="input" placeholder="輸入驗證碼" v-model="verifycode">
+          <time-down ref="timedown" class="verifybtn" @sendCode="sendCode"/>
+        </div>
+      </div>
+      <div class="input-wrap">
+        <div class="input-box">
+          <input type="password" class="input" placeholder="設置密碼（6-12位）" v-model="password">
+        </div>
+        <hr>
+        <div class="input-box">
+          <input type="password" class="input" placeholder="再次確認密碼" v-model="passwordAgain">
+        </div>
+      </div>
+      <div class="leader-wrap">
+        <div class="leader-no-selected" 
+            v-if="!leader.id"
+            @click="showLeader">
+          <i class="left-icon"></i>
+          <b>選擇團長</b>
+          <span>（即購買商品後的取貨地點）</span>
+        </div>
+        <div class="leader-seleted-box" v-else>
+          <div class="seleted-title">已選團長：</div>
+          <div class="leader-info-wrap">
+            <p class="seleted-text" v-if="leader.id">{{leader.addr}}<br>團長：{{leader.name}}{{leader.phone}}</p>
+            <div class="reset-btn" @click="showLeader">重置</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-wrap">
+        <div class="input-box">
+          <input type="text" class="input" placeholder="填寫你的名字" v-model="realname">
+        </div>
+        <hr>
+        <div class="input-box area-box">
+          <textarea class="input-area"
+                  placeholder="填寫個人收貨地址（即配送上門地址）"
+                  v-model="addrText">
+          </textarea>
+        </div>
+      </div>
+      <div class="bottom-setion">
+        <div class="enter-text"><label @click="linkjump('login')">已有帳號？點擊登入</label></div>
+        <div class="submit-btn" @click="submit"><label>註冊新帳戶</label></div>
+      </div>
+    </div>
     <my-aside :show="leaderShow" @hide="hideLeader">
+      <div class="option-seleted">
+        <div class="seleted-title">已選團長：</div>
+        <p class="seleted-text" v-if="leader.id">{{leader.addr}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
+        <p class="no-seleted" v-else>—— 無 ——</p>
+      </div>
       <div class="option-wrap">
         <collapse-item>
           <div slot="title" class="option-title">花蒂玛塘区</div>
           <div v-for="(item, index) in leaders"
               :key="index"
+              class="option-item"
               @click="chooseLeader(item)">
-            {{item.name}}
+            <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
+            <div class="option-box">
+              <p class="option-text">XX馬路XX號XX樓XX棟XX房</p>
+              <p class="option-text">團長：江先生  96XXXXXX</p>
+            </div>
           </div>
         </collapse-item>
         <collapse-item>
-          <div slot="title" class="option-title">清华去</div>
+          <div slot="title" class="option-title">秦淮区</div>
           <div v-for="(item, index) in leaders"
               :key="index"
               @click="chooseLeader(item)">
             {{item.name}}
           </div>
         </collapse-item>
-      </div>
-    </my-aside>
-    <my-aside :show="addrShow" @hide="hideAddr">
-      <div class="option-wrap">
-        <div v-for="(item, index) in addrs"
-            :key="index"
-            @click="chooseAddr(item)">
-          {{item.name}}
-        </div>
       </div>
     </my-aside>
   </div>
 </template>
 
 <script>
-import { MessageBox, MyAside, CollapseItem } from 'components/index.js'
-
+import { MessageBox, MyAside, CollapseItem, TimeDown } from 'components/index.js'
+import { validateInput } from 'utils/utils'
+import { Toast } from 'mint-ui'
 export default {
   data () {
     return {
+      username: '',
+      password: '',
+      passwordAgain: '',
+      verifycode: '',
+      realname: '',
+      addrText: '',
       leaderShow: false,
       leaders: [
         {
-          name: '蒋先生'
+          id: 1,
+          name: '蒋先生',
+          addr: 'xx馬路xx號xx樓xx棟xx房',
+          phone: '17312344321'
         },
         {
-          name: '林先生'
+          id: 2,
+          name: '林先生',
+          addr: 'xx馬路xx號xx樓xx棟xx房',
+          phone: '17312344321'
         },
         {
-          name: '懂先生'
+          id: 3,
+          name: '懂先生',
+          addr: 'xx馬路xx號xx樓xx棟xx房',
+          phone: '17312344321'
         }
       ],
-      leader: {},
-      addrShow: false,
-      addrs: [
-        {
-          name: 'xxx马路'
-        },
-        {
-          name: 'mmm马路'
-        },
-        {
-          name: 'lll马路'
-        }
-      ],
-      addr: {},
+      leader: {}
     }
   },
   components: {
     MyAside,
-    CollapseItem
+    CollapseItem,
+    TimeDown
   },
   mounted () {
 
   },
+  beforeDestroy () {
+    this.$refs.timedown.clearInterVal()
+  },
   methods: {
+    linkjump (href) {
+      this.$router.push(href)
+    },
+    sendCode (countdown) {
+      console.log('發送驗證碼')
+      const verifyUsername = validateInput({
+        value: this.username,
+        emptyTxt: '請輸入手機號碼',
+        length: 11,
+        lengthTxt: '手機號碼長度不正確',
+        regStr: /^1(3|4|5|7|8|9)\d{9}$/,
+        novalidStr: '請輸入正確的手機號碼'
+      })
+      if (verifyUsername) {
+        countdown()
+      }
+    },
+    submit () {
+      if (!this.verifyFrom()) {
+        return false
+      }
+      Toast('註冊成功，已為您自動登錄')
+      this.linkjump('home')
+    },
+    verifyFrom () {
+      const verifyUsername = validateInput({
+        value: this.username,
+        emptyTxt: '請輸入手機號碼',
+        length: 11,
+        lengthTxt: '手機號碼長度不正確',
+        regStr: /^1(3|4|5|7|8|9)\d{9}$/,
+        novalidStr: '請輸入正確的手機號碼'
+      })
+      if (!verifyUsername) {
+        return false
+      }
+      const verifyVCode = validateInput({
+        value: this.verifycode,
+        emptyTxt: '請輸入驗證碼'
+      })
+      if (!verifyVCode) {
+        return false
+      }
+      const verifyPwd = validateInput({
+        value: this.password,
+        emptyTxt: '請輸入重置密碼',
+        minLen: 6,
+        maxLen: 12,
+        lengthTxt: '密碼長度不正確',
+        // regStr: /^1(3|4|5|7|8|9)\d{9}$/,
+        // novalidStr: '請輸入正確的手機號碼'
+      })
+      if (!verifyPwd) {
+        return false
+      }
+      if (this.passwordAgain !== this.password) {
+        Toast('兩次密碼不一致')
+        return false
+      }
+      return true
+    },
     showLeader () {
       this.leaderShow = true
     },
@@ -85,22 +210,223 @@ export default {
     },
     chooseLeader (leader) {
       this.leader = leader
-    },
-    showAddr () {
-      this.addrShow = true
-    },
-    hideAddr () {
-      this.addrShow = false
-    },
-    chooseAddr (addr) {
-      this.addr = addr
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.option-title {
-  font-size: 1.6rem;
+.page-wrap {
+  width: 100%;
+  padding-bottom: 4.3rem;
+  position: relative;
+  @include backImg('../assets/images/rectangle.png');
+  .page-title {
+    .about-us {
+      height: 3rem;
+      padding-right: 1.8rem;
+      position: absolute;
+      right: 2.6rem;top: 2.2rem;
+      line-height: 3rem;
+      font-size: 1.7rem;
+      color: #FFFFFF;
+      @include backImg('../assets/images/link-arrow.png');
+      background-size: .7rem 1.2rem;
+      background-position: right center;
+    }
+  }
+  .page-content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 4.3rem;
+    .program-title {
+      width: 100%;
+      font-size: 3.6rem;
+      line-height: 5rem;
+      color: #FFFFFF;
+      text-align: center;
+      margin-bottom: 2.3rem;
+    }
+    .center-title {
+      font-size: 2.4rem;
+      line-height: 3.4rem;
+      color: #FFFFFF;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .input-wrap {
+      width: 100%;
+      margin-bottom: 1rem;
+      .input-box {
+        width: 100%;
+        height: 4.4rem;
+        background: #FFFFFF;
+        box-sizing: border-box;
+        border-radius: .2rem .2rem 0 0;
+        padding: 0 1.5rem;
+        @extend .flex-box;
+        .input {
+          height: 2rem;
+          min-width: 30%;
+          flex: 1;
+        }
+        .verifybtn {
+          text-align: center;
+          height: 3rem;
+          line-height: 3rem;
+          padding: 0 1rem;
+          box-sizing: border-box;
+          border: 1px solid #152935;
+          border-radius: .2rem;
+          font-size: 1.4rem;
+          color: #444444;
+          margin-left: 1rem;
+        }
+      }
+      .area-box {
+        height: 8rem;
+        padding: 1rem 1.5rem;
+        .input-area {
+          flex: 1;
+          height: 100%;
+        }
+      }
+      .verify-box {
+        padding-right: 1.2rem;
+      }
+      hr {
+        background: #E5E5E5;
+      }
+    }
+    .leader-wrap {
+      margin: 2.2rem 0 1.8rem 0;
+      width: 100%;
+      .leader-no-selected {
+        height: 2.4rem;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        color: #FFFFFF;
+        font-size: 1.4rem;
+        .left-icon {
+          width: .7rem;
+          height: 1.2rem;
+          @include backImg('../assets/images/link-arrow.png');
+          transform: rotate(180deg);
+          margin-right: 1rem;
+        }
+        b {
+          font-size: 1.8rem;
+        }
+      }
+      .leader-seleted-box {
+        .seleted-title {
+          font-size: 1.4rem;
+          color: #ffffff;
+          margin-bottom: .6rem;
+        }
+        .leader-info-wrap {
+          @extend .flex-box;
+          .seleted-text {
+            max-width: 80%;
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #ffffff;
+          }
+          .reset-btn {
+            height: 2.4rem;
+            padding-right: 1.8rem;
+            line-height: 2.4rem;
+            font-size: 1.7rem;
+            color: #FFFFFF;
+            @include backImg('../assets/images/link-arrow.png');
+            background-size: .7rem 1.2rem;
+            background-position: right center;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    .bottom-setion {
+      width: 100%;
+      padding-top: .8rem;
+      .enter-text {
+        font-size: 1.8rem;
+        color: #FFFFFF;
+        text-align: center;
+        line-height: 2.5rem;
+        margin-bottom: 1.1rem;
+        position: relative;
+        &::after {
+          content: '';
+          position: absolute;
+          left: 50%;bottom: 0;
+          transform: translateX(-50%);
+          width: 9.2rem;
+          height: .1rem;
+          background: #FFFFFF;
+        }
+      }
+      .submit-btn {
+        width: 100%;
+        height: 4.1rem;
+        @extend .theme-color;
+        border-radius: 1.25rem;
+        text-align: center;
+        line-height: 4.1rem;
+        color: #ffffff;
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
+.option-seleted {
+  .seleted-title {
+    font-size: 1.4rem;
+    color: #444444;
+  }
+  .seleted-text {
+    font-size: 1.4rem;
+    color: #000000;
+    margin-bottom: 2rem;
+  }
+  .no-seleted {
+    font-size: 1.8rem;
+    color: #000000;
+  }
+}
+.option-wrap {
+  .option-title {
+    font-size: 1.8rem;
+    color: #444444;
+  }
+  .option-item {
+    padding-top: 1rem;
+    display: flex;
+    .radius-icon{
+      width: 1.4rem;
+      height: 1.4rem;
+      margin-right: .9rem;
+      @include backImg('../assets/images/radius-item.png');
+    }
+    .radius-disable {
+      @include backImg('../assets/images/radius-item-disabled.png');
+    }
+    .radius-seleted {
+      @include backImg('../assets/images/radius-seleted.png');
+    }
+    .option-box {
+      font-size: 1.4rem;
+      color: #444444;
+    }
+  }
+  .option-item-disable {
+    .radius-icon {
+      @include backImg('../assets/images/radius-item-disabled.png');
+    }
+    .option-box {
+      color: #A4A4A4;
+    }
+  }
 }
 </style>

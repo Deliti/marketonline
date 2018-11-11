@@ -93,7 +93,8 @@ export default {
       box-sizing: border-box;
       padding: .9rem 1.3rem;
       input {
-
+        width: 100%;
+        height: 100%;
       }
     }
     .submit-btn {

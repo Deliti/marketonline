@@ -39,10 +39,33 @@
       </div>
       <div class="order-detail-wrap">
         <div class="detail-title">
-          <label>2件商品 / 總計 $76.00</label>
+          <label v-show="shopCart.length>0">{{goodCount}}件商品 / 總計 ${{cartMoney}}</label>
         </div>
         <section class="detail-content">
-          <div class="order-item">
+          <div class="order-item"
+                v-for="(item, index) in shopCart"
+                :key="index">
+            <div class="order-item-flex">
+              <img src="" alt="" class="good-img">
+              <div class="order-item-detail">
+                <div class="name-box">
+                  <p class="good-name">進口百香果 90G-110G/個</p>
+                  <i class="close-icon" @click="deleteGoodCart(item)"></i>
+                </div>
+                <div class="flex-box">
+                  <div class="count-box">
+                    <span class="change-btn" @click.stop="desGoodCart(item)">-</span>
+                    <span>{{item.count}}</span>
+                    <span class="change-btn" @click.stop="addGoodCart(item)">+</span>
+                  </div>
+                  <label class="good-price">$38</label>
+                </div>
+              </div>
+            </div>
+            <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
+            <div class="solid-hr" v-show="index !== shopCart.length-1"></div>
+          </div>
+          <!-- <div class="order-item">
             <div class="order-item-flex">
               <img src="" alt="" class="good-img">
               <div class="order-item-detail">
@@ -61,33 +84,12 @@
               </div>
             </div>
             <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
-          </div>
-          <div class="solid-hr"></div>
-          <div class="order-item">
-            <div class="order-item-flex">
-              <img src="" alt="" class="good-img">
-              <div class="order-item-detail">
-                <div class="name-box">
-                  <p class="good-name">進口百香果 90G-110G/個</p>
-                  <i class="close-icon"></i>
-                </div>
-                <div class="flex-box">
-                  <div class="count-box">
-                    <span class="change-btn">-</span>
-                    <span>1</span>
-                    <span class="change-btn">+</span>
-                  </div>
-                  <label class="good-price">$38</label>
-                </div>
-              </div>
-            </div>
-            <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
-          </div>
+          </div> -->
           <div class="dash-hr"></div>
         </section>
         <div class="total-wrap">
           <label>商品總計</label>
-          <span class="total-price">$76.00</span>
+          <span class="total-price">${{cartMoney}}</span>
         </div>
       </div>
       <div class="submit-button" @click="comfirmOrder">
@@ -137,6 +139,7 @@
 
 <script>
 import { MessageBox, MyAside } from 'components'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -174,10 +177,15 @@ export default {
       addr: {}
     }
   },
+  computed: {
+    ...mapState(['shopCart']),
+    ...mapGetters(['goodCount', 'cartMoney'])
+  },
   components: {
     MyAside
   },
   methods: {
+    ...mapMutations(['ADDGOOD', 'DESGOOD', 'DELETEGOOD']),
     showLeader () {
       this.leaderShow = true
     },
@@ -198,6 +206,29 @@ export default {
       this.addr = addr
       this.hideAddr()
     },
+    addGoodCart (goodInfo) {
+      this.ADDGOOD(goodInfo)
+    },
+    desGoodCart (goodInfo) {
+      this.DESGOOD(goodInfo.id)
+    },
+    deleteGoodCart (goodInfo) {
+      this.DELETEGOOD(goodInfo.id)
+    },
+    isHasGood (goodId) {
+      return this.shopCart.some(item => {
+        return item.id === goodId
+      })
+    },
+    getGoodCount (goodId) {
+      let count = 0
+      this.shopCart.some(item => {
+        if (item.id === goodId) {
+          count = item.count
+        }
+      })
+      return count
+    },
     comfirmOrder () {
       MessageBox({
         message: '<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長（取貨）地址：<br/><br/>XX馬路XX號XX樓XX棟XX房</div>',
@@ -213,7 +244,7 @@ export default {
           }
         }]
       })
-    },
+    }
   }
 }
 </script>
@@ -347,16 +378,17 @@ export default {
                 .count-box {
                   width: 10.7rem;
                   height: 3rem;
-                  @extend .theme-color;
-                  @extend .flex-box;
                   border-radius: .5rem;
                   box-sizing: border-box;
-                  padding: 0 1.6rem;
+                  @extend .theme-color;
+                  @extend .flex-box;
                   font-size: 1.4rem;
                   color: #FFFFFF;
                   .change-btn {
-                    width: 1rem;
+                    width: 30%;
                     height: 100%;
+                    line-height: 3rem;
+                    text-align: center;
                   }
                 }
                 .good-price {

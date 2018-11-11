@@ -28,7 +28,7 @@
                 </div>
               </div>
             </div>
-            <section class="order-wrap" @click="linkjump('orderDetail')">
+            <section class="order-wrap" @click="linkjump('orderDetail/orderid')">
               <div class="order-title-box">
                 <div class="flex-box">
                   <p class="order-text-1">江先生  96XXXXXX</p>
@@ -212,7 +212,7 @@ export default {
                 font-size: 1.4rem;
                 height: 1.6rem;
                 line-height: 1.6rem;
-                border-bottom: 1px solid #eeeeee;
+                border-bottom: 1px solid #E5E5E5;
               }
             }
           }

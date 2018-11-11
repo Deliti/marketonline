@@ -83,16 +83,25 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-
+      
     }
   },
+  mounted () {
+    
+  },
+  computed: {
+    ...mapState(['shopCart'])
+  },
   methods: {
+    
     linkjump (href) {
       this.$router.push(href)
-    }
+    },
+    
   }
 }
 </script>

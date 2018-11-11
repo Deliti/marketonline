@@ -29,6 +29,11 @@ export default new Router({
       component: () => import('../viewshop/Register.vue')
     },
     {
+      path: '/findpwd',
+      name: 'findpwd',
+      component: () => import('../viewshop/FindPwd.vue')
+    },
+    {
       path: '/aboutus',
       name: 'aboutus',
       component: () => import('../viewshop/Aboutus.vue')
@@ -39,7 +44,7 @@ export default new Router({
       component: () => import('../viewshop/AddAddress.vue')
     },
     {
-      path: '/goodDetail',
+      path: '/goodDetail/:goodId',
       name: 'goodDetail',
       component: () => import('../viewshop/GoodDetail.vue')
     },
@@ -59,7 +64,7 @@ export default new Router({
       component: () => import('../viewshop/Orders.vue')
     },
     {
-      path: '/orderDetail',
+      path: '/orderDetail/:orderId',
       name: 'orderDetail',
       component: () => import('../viewshop/OrderDetail.vue')
     },

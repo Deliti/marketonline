@@ -24,7 +24,7 @@ export default new Router({
       component: () => import('../viewseller/Orders.vue')
     },
     {
-      path: '/orderDetail',
+      path: '/orderDetail/:orderId',
       name: 'orderDetail',
       component: () => import('../viewseller/OrderDetail.vue')
     },

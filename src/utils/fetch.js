@@ -6,6 +6,7 @@ import {
 
 export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 	type = type.toUpperCase();
+	const token = localStorage['token'] || ''
 	let url = `${basePath}${baseUrl}${path}`;
 	const ERR_OK = 0;
 	const ERR_Reload = 10;
@@ -26,7 +27,8 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			method: type,
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'token': token
 			},
 			mode: "cors",
 			cache: "force-cache"
@@ -68,6 +70,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 		requestObj.open(type, url, true);
 		requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		requestObj.setRequestHeader("Accept", "application/json");
+		requestObj.setRequestHeader("token", "token");
 		requestObj.send(sendData);
 		return new Promise(function(resolve,reject){
 			requestObj.onreadystatechange = () => {

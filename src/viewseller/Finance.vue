@@ -168,7 +168,7 @@ export default {
               font-size: 1.4rem;
               height: 1.6rem;
               line-height: 1.6rem;
-              border-bottom: 1px solid #eeeeee;
+              border-bottom: 1px solid #E5E5E5;
             }
           }
         }
