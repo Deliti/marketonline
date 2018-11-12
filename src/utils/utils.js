@@ -35,6 +35,7 @@ export const setRem = () => {
   })(document, window);
 }
 
+// 校验input
 export const validateInput = ({
   value,
   emptyTxt,
@@ -71,3 +72,20 @@ export const validateInput = ({
   }
   return true;
 }
+
+// formate倒计时
+export const formateTime = time => {
+  const date = {
+    day: 0,
+    hour: 0,
+    minute: 0,
+    second: 0
+  }
+  date.day = Math.floor(time / 86400);
+  date.hour = Math.floor(time % 86400 / 3600);
+  date.minute = Math.floor(time % 86400 % 3600 / 60);
+  date.second = Math.floor(time % 86400 % 3600 % 60);
+  return date
+}
+
+export const timeText = (time, text) => time>0 ? time+text : ''

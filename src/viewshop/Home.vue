@@ -50,7 +50,7 @@
             <p class="get-good-time">取貨時間：11月3日（星期六）</p>
           </div>
         </div>
-        <div class="list-item">
+        <div class="list-item list-over">
           <div class="item-banner-wrap">
             <img src="//m.360buyimg.com/mobilecms/s750x750_jfs/t30121/9/45509898/135153/faa4fc0f/5be64c1fNa331afae.jpg!q80.dpg.webp" alt="" class="item-banner">
             <p class="time-tips">x小時xx分鐘後截單</p>
@@ -81,10 +81,16 @@
 import { Swipe, SwipeItem } from 'mint-ui';
 import { CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
+import { formateTime, timeText } from 'utils/utils'
 import $ from 'jquery'
+
+let pageInterVal = null
 export default {
   data () {
     return {
+      goodTypeIndex: 0,
+      goodType: [],
+      goodList: [],
       goodInfo: {
         id: 'goodid',
         oldPrice: 50,
@@ -101,11 +107,16 @@ export default {
     CommonFooter
   },
   mounted () {
+    this.init()
     this.addEvent()
   },
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
+    init () {
+
+    },
     addEvent () {
+      const that = this
       $("#scrollBox").off().on('click', '.item', function(){
         var moveX = $(this).position().left+$(this).parent().scrollLeft();
         var pageX = document.documentElement.clientWidth;//设备的宽度
@@ -140,6 +151,18 @@ export default {
         }
       })
       return count
+    },
+    updateTime () {
+      clearInterval(pageInterVal)
+      pageInterVal = setInterval(() => {
+        this.goodList.map(item => {
+          item.lessTime < 0 ? 0 : item.lessTime -= 1000
+        })
+      }, 1000)
+    },
+    formateTime (time) {
+      const timeObj = formateTime(time)
+      return timeText(date.day, '天') + timeText(date.hour, '时') + timeText(date.minute, '分') + timeText(date.second, '秒')
     }
   }
 }
@@ -241,6 +264,7 @@ export default {
           .time-tips {
             position: absolute;
             left: .7rem;top: .7rem;
+            z-index: 1;
             padding: 0 2.5rem;
             height: 2.5rem;
             font-size: 1.3rem;
@@ -336,6 +360,17 @@ export default {
             color: #1CD0A3;
             line-height: 2rem;
           }
+        }
+      }
+      .list-over {
+        position: relative;
+        &::after {
+          content: '';
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0;top: 0;
+          background: rgba(255, 255, 255, .6);
         }
       }
     }
