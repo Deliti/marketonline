@@ -20,6 +20,9 @@
           </div>
         </div>
       </div>
+      <section class="no-order-wrap">
+        <label>所選時段還沒有訂單哦</label>
+      </section>
       <section class="order-wrap" @click="linkjump('orderDetail/orderid')">
         <div class="order-title-box">
           <div class="flex-box">
@@ -173,6 +176,13 @@ export default {
           }
         }
       }
+    }
+    .no-order-wrap {
+      width: 100%;
+      padding-top: 2.5rem;
+      text-align: center;
+      font-size: 1.8rem;
+      color: #7C7C7C;
     }
     .order-wrap {
       width: 100%;

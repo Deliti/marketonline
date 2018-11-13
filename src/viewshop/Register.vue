@@ -27,8 +27,8 @@
         </div>
       </div>
       <div class="leader-wrap">
-        <div class="leader-no-selected" 
-            v-if="!leader.id"
+        <div class="leader-no-selected"
+            v-if="!leader.userId"
             @click="showLeader">
           <i class="left-icon"></i>
           <b>選擇團長</b>
@@ -37,7 +37,7 @@
         <div class="leader-seleted-box" v-else>
           <div class="seleted-title">已選團長：</div>
           <div class="leader-info-wrap">
-            <p class="seleted-text" v-if="leader.id">{{leader.addr}}<br>團長：{{leader.name}}{{leader.phone}}</p>
+            <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}{{leader.phone}}</p>
             <div class="reset-btn" @click="showLeader">重置</div>
           </div>
         </div>
@@ -62,29 +62,22 @@
     <my-aside :show="leaderShow" @hide="hideLeader">
       <div class="option-seleted">
         <div class="seleted-title">已選團長：</div>
-        <p class="seleted-text" v-if="leader.id">{{leader.addr}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
+        <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
         <p class="no-seleted" v-else>—— 無 ——</p>
       </div>
       <div class="option-wrap">
-        <collapse-item>
-          <div slot="title" class="option-title">花蒂玛塘区</div>
-          <div v-for="(item, index) in leaders"
+        <collapse-item v-for="(childLeaders, districtKey) in leaders"
+                        :key="districtKey">
+          <div slot="title" class="option-title">{{districtKey}}</div>
+          <div v-for="(item, index) in childLeaders"
               :key="index"
               class="option-item"
               @click="chooseLeader(item)">
-            <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
+            <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
             <div class="option-box">
-              <p class="option-text">XX馬路XX號XX樓XX棟XX房</p>
-              <p class="option-text">團長：江先生  96XXXXXX</p>
+              <p class="option-text">{{item.address}}</p>
+              <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
             </div>
-          </div>
-        </collapse-item>
-        <collapse-item>
-          <div slot="title" class="option-title">秦淮区</div>
-          <div v-for="(item, index) in leaders"
-              :key="index"
-              @click="chooseLeader(item)">
-            {{item.name}}
           </div>
         </collapse-item>
       </div>
@@ -96,36 +89,18 @@
 import { MessageBox, MyAside, CollapseItem, TimeDown } from 'components/index.js'
 import { validateInput } from 'utils/utils'
 import { Toast } from 'mint-ui'
+import { login, register, getLeaderList } from 'utils/getData'
 export default {
   data () {
     return {
-      username: '',
-      password: '',
-      passwordAgain: '',
-      verifycode: '',
-      realname: '',
-      addrText: '',
+      username: '', // 註冊手機號碼
+      password: '', // 密碼
+      passwordAgain: '', // 確認密碼
+      verifycode: '', // 驗證碼
+      realname: '', // 真實姓名
+      addrText: '', // 住址
       leaderShow: false,
-      leaders: [
-        {
-          id: 1,
-          name: '蒋先生',
-          addr: 'xx馬路xx號xx樓xx棟xx房',
-          phone: '17312344321'
-        },
-        {
-          id: 2,
-          name: '林先生',
-          addr: 'xx馬路xx號xx樓xx棟xx房',
-          phone: '17312344321'
-        },
-        {
-          id: 3,
-          name: '懂先生',
-          addr: 'xx馬路xx號xx樓xx棟xx房',
-          phone: '17312344321'
-        }
-      ],
+      leaders: {},
       leader: {}
     }
   },
@@ -135,7 +110,7 @@ export default {
     TimeDown
   },
   mounted () {
-
+    this.init()
   },
   beforeDestroy () {
     this.$refs.timedown.clearInterVal()
@@ -143,6 +118,16 @@ export default {
   methods: {
     linkjump (href) {
       this.$router.push(href)
+    },
+    init () {
+      this.getAllLeader()
+    },
+    async getAllLeader () {
+      const data = await getLeaderList()
+      if (data.code == 0) {
+        console.log(data)
+        this.leaders = data.data
+      }
     },
     sendCode (countdown) {
       console.log('發送驗證碼')
@@ -158,12 +143,31 @@ export default {
         countdown()
       }
     },
-    submit () {
+    async submit () {
       if (!this.verifyFrom()) {
         return false
       }
-      Toast('註冊成功，已為您自動登錄')
-      this.linkjump('home')
+      const params = {
+        "phone": this.username,
+        "password": this.password,
+        "authCode": this.verifycode,
+        "agentId": this.leader.userId,
+        "name": this.realname,
+        "address": this.addrText
+      }
+      const data = await register(params)
+      if (data.code == 0) {
+        const loginParams = {
+          phone: this.username,
+          password: this.password
+        }
+        const loginData = await login(loginParams)
+        if (loginData.code == 0) {
+          Toast('註冊成功，已為您自動登錄')
+          localStorage['token'] = loginData.token
+          this.linkjump('home')
+        }
+      }
     },
     verifyFrom () {
       const verifyUsername = validateInput({
@@ -198,6 +202,24 @@ export default {
       }
       if (this.passwordAgain !== this.password) {
         Toast('兩次密碼不一致')
+        return false
+      }
+      if (!this.leader.userId) {
+        Toast('請選擇團長')
+        return false
+      }
+      const verifyRealName = validateInput({
+        value: this.realname,
+        emptyTxt: '請填寫你的名字'
+      })
+      if (!verifyRealName) {
+        return false
+      }
+      const verifyAddr = validateInput({
+        value: this.addrText,
+        emptyTxt: '請填寫收貨地址'
+      })
+      if (!verifyAddr) {
         return false
       }
       return true

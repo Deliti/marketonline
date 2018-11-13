@@ -28,7 +28,6 @@ const defaultPosition = {
 if (process.env.NODE_ENV == 'development') {
 	basePath = ''
 	baseUrl = '/api';
-
 }else{
 	basePath = '';
 	baseUrl = 'http://106.15.93.184:8087';

@@ -40,11 +40,11 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			Object.defineProperty(requestConfig, 'body', {
 				value: sendConfig
 			})
-		}
+    }
 
 		try {
 			var response = await fetch(url, requestConfig);
-			var responseJson = await response.json();
+      var responseJson = await response.json();
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -52,7 +52,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			// window.location.href = `/#/login`;
 			// removeStore('userInfo');
 		}
-		if(responseJson.result != ERR_OK) return responseJson.resultNote;
+    if(responseJson.code != ERR_OK) return responseJson.resultNote;
 		return responseJson
 	} else {
 		let requestObj;
@@ -70,8 +70,8 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 		requestObj.open(type, url, true);
 		requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		requestObj.setRequestHeader("Accept", "application/json");
-		requestObj.setRequestHeader("token", "token");
-		requestObj.send(sendData);
+		requestObj.setRequestHeader("token", token);
+    requestObj.send(sendData);
 		return new Promise(function(resolve,reject){
 			requestObj.onreadystatechange = () => {
 				if (requestObj.readyState == 4) {
@@ -84,7 +84,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 							// window.location.href = `/shop/login`;
 							// removeStore('userInfo');
 						}
-						if(obj.result != ERR_OK) reject(new Error(obj.resultNote));
+            if(obj.result != ERR_OK) reject(new Error(obj.resultNote));
 						resolve(obj);
 					} else {
 						reject(new Error(requestObj.status));

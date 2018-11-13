@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="order-detail-wrap">
+      <div class="order-detail-wrap" v-if="shopCart.length > 0">
         <div class="detail-title">
           <label v-show="shopCart.length>0">{{goodCount}}件商品 / 總計 ${{cartMoney}}</label>
         </div>
@@ -91,6 +91,14 @@
           <label>商品總計</label>
           <span class="total-price">${{cartMoney}}</span>
         </div>
+      </div>
+      <div class="no-order-wrap" v-else>
+        <div class="no-order-bg"></div>
+        <div class="zero-box">
+          <b>0</b>
+          <span>件商品</span>
+        </div>
+        <p class="no-order-text">購物車裡還沒東西⋯</p>
       </div>
       <div class="submit-button" @click="comfirmOrder">
         <label>確認訂單</label>
@@ -427,6 +435,47 @@ export default {
           font-size: 2.4rem;
           color: #1CD0A3;
         }
+      }
+    }
+    .no-order-wrap {
+      width: 20.3rem;
+      position: relative;
+      margin: 0 auto;
+      margin-bottom: 6rem;
+      .no-order-bg {
+        width: 100%;
+        height: 20.3rem;
+        margin-bottom: 2.4rem;
+        border-radius: 50%;
+        @include backImg('../assets/images/empty-cart.png');
+        background-position: center center;
+        background-size: 10.5rem 10.5rem;
+        background-color: #D8D8D8;
+      }
+      .zero-box {
+        position: absolute;
+        right: -1.6rem;top: .9rem;
+        width: 6.6rem;
+        height: 6.6rem;
+        border-radius: 50%;
+        background: #ffffff;
+        box-sizing: border-box;
+        border: 1px dashed #444444;
+        text-align: center;
+        padding-top: .5rem;
+        font-size: 1rem;
+        color: #444444;
+        b {
+          font-size: 2.8rem;
+          color: #1CD0A3;
+          display: block;
+          line-height: 3.9rem;
+        }
+      }
+      .no-order-text {
+        font-size: 1.8rem;
+        color: #D8D8D8;
+        text-align: center;
       }
     }
     .submit-button {

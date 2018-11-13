@@ -29,6 +29,8 @@
 
 <script>
 import { validateInput } from 'utils/utils'
+import { Toast } from 'mint-ui'
+import { login } from 'utils/getData'
 export default {
   data () {
     return {
@@ -40,11 +42,20 @@ export default {
     linkjump (href) {
       this.$router.push(href)
     },
-    login () {
+    async login () {
       if (!this.verifyFrom()) {
         return false
       }
-      this.linkjump('home')
+      const params = {
+        phone: this.username,
+        password: this.password
+      }
+      const data = await login(params)
+      if (data.code == 0) {
+        Toast('登錄成功')
+        localStorage['token'] = data.token
+        this.linkjump('home')
+      }
     },
     verifyFrom () {
       const verifyUsername = validateInput({
