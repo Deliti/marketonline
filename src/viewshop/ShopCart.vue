@@ -193,39 +193,39 @@ export default {
         pageNo: 0,
         pageSize: 100
       }
-      // const data = await getMyLeader(params)
-      const data = {
-        code: 0,
-        page: {
-          list: [{
-            address: "雨花台区",
-            closeTime: "2018-11-11 09:16:47",
-            createAt: "2018-11-13 09:19:14",
-            deliveryFee: 1,
-            id: 1,
-            isDelete: 0,
-            agentName: "張團長",
-            agentPhone: 13812341234,
-            region: "南京市",
-            userId: 1,
-            username: null,
-            status: 0
-          },{
-            address: "雨花台区",
-            closeTime: "2018-11-11 09:16:47",
-            createAt: "2018-11-13 09:19:14",
-            deliveryFee: 1,
-            id: 2,
-            isDelete: 0,
-            agentName: "李團長",
-            agentPhone: 13812341234,
-            region: "南京市",
-            userId: 2,
-            username: null,
-            status: 1
-          }]
-        }
-      }
+      const data = await getMyLeader(params)
+      // const data = {
+      //   code: 0,
+      //   page: {
+      //     list: [{
+      //       address: "雨花台区",
+      //       closeTime: "2018-11-11 09:16:47",
+      //       createAt: "2018-11-13 09:19:14",
+      //       deliveryFee: 1,
+      //       id: 1,
+      //       isDelete: 0,
+      //       agentName: "張團長",
+      //       agentPhone: 13812341234,
+      //       region: "南京市",
+      //       userId: 1,
+      //       username: null,
+      //       status: 0
+      //     },{
+      //       address: "雨花台区",
+      //       closeTime: "2018-11-11 09:16:47",
+      //       createAt: "2018-11-13 09:19:14",
+      //       deliveryFee: 1,
+      //       id: 2,
+      //       isDelete: 0,
+      //       agentName: "李團長",
+      //       agentPhone: 13812341234,
+      //       region: "南京市",
+      //       userId: 2,
+      //       username: null,
+      //       status: 1
+      //     }]
+      //   }
+      // }
       if (data.code == 0) {
         this.leader = data.page.list.filter(item => item.status === 0)[0]
         this.myLeaders = data.page.list

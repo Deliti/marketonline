@@ -30,7 +30,7 @@ if (process.env.NODE_ENV == 'development') {
 	baseUrl = '/api';
 }else{
 	basePath = '';
-	baseUrl = 'http://106.15.93.184:8087';
+	baseUrl = 'http://134.175.241.207:8080';
 }
 
 export {

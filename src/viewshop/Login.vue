@@ -53,7 +53,7 @@ export default {
       const data = await login(params)
       if (data.code == 0) {
         Toast('登錄成功')
-        localStorage['token'] = data.token
+        localStorage['token'] = data.data.token
         this.linkjump('home')
       }
     },
@@ -87,6 +87,7 @@ export default {
   position: relative;
   @include backImg('../assets/images/rectangle.png');
   .page-title {
+    background: none;
     .about-us {
       height: 3rem;
       padding-right: 1.8rem;

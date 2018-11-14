@@ -53,7 +53,7 @@
         <div class="list-item list-over">
           <div class="item-banner-wrap">
             <img src="//m.360buyimg.com/mobilecms/s750x750_jfs/t30121/9/45509898/135153/faa4fc0f/5be64c1fNa331afae.jpg!q80.dpg.webp" alt="" class="item-banner">
-            <p class="time-tips">x小時xx分鐘後截單</p>
+            <p class="time-tips">已截單</p>
             <div class="add-wrap"></div>
           </div>
           <div class="item-detail-wrap">

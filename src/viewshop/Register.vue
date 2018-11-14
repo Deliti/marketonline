@@ -164,7 +164,7 @@ export default {
         const loginData = await login(loginParams)
         if (loginData.code == 0) {
           Toast('註冊成功，已為您自動登錄')
-          localStorage['token'] = loginData.token
+          localStorage['token'] = loginData.data.token
           this.linkjump('home')
         }
       }
@@ -244,6 +244,7 @@ export default {
   position: relative;
   @include backImg('../assets/images/rectangle.png');
   .page-title {
+    background: none;
     .about-us {
       height: 3rem;
       padding-right: 1.8rem;

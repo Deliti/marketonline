@@ -44,6 +44,7 @@ export default {
   width: 100%;
   position: fixed;
   left: 0;bottom: 0;
+  z-index: 11;
   display: flex;
   align-items: flex-end;
   .footer-wrap {

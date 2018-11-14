@@ -136,6 +136,7 @@ export default {
   position: relative;
   @include backImg('../assets/images/rectangle.png');
   .page-title {
+    background: none;
     .about-us {
       height: 3rem;
       padding-right: 1.8rem;

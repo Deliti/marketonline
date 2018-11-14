@@ -9,7 +9,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 	const token = localStorage['token'] || ''
 	let url = `${basePath}${baseUrl}${path}`;
 	const ERR_OK = 0;
-	const ERR_Reload = 10;
+	const ERR_Reload = 401;
 	if (type == 'GET') {
 		let dataStr = ''; //数据拼接字符串
 		Object.keys(data).forEach(key => {
@@ -48,8 +48,8 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 		} catch (error) {
 			throw new Error(error)
 		}
-		if(responseJson.result == ERR_Reload){
-			// window.location.href = `/#/login`;
+		if(responseJson.code == ERR_Reload){
+			window.location.href = `/shop/#/login`;
 			// removeStore('userInfo');
 		}
     if(responseJson.code != ERR_OK) {
@@ -82,11 +82,11 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 						if (typeof obj !== 'object') {
 							obj = JSON.parse(obj);
 						}
-						if(obj.result == ERR_Reload){
+						if(obj.code == ERR_Reload){
 							// window.location.href = `/shop/login`;
 							// removeStore('userInfo');
 						}
-            if(obj.result != ERR_OK) reject(new Error(obj.resultNote));
+            if(obj.code != ERR_OK) Toast(responseJson.msg);
 						resolve(obj);
 					} else {
 						reject(new Error(requestObj.status));

@@ -49,6 +49,7 @@ export default {
   }
   .page-title {
     position: relative;
+    background: none;
     margin-bottom: 6.7rem;
   }
   .enter-wrap {
