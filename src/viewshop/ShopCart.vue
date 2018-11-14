@@ -18,7 +18,7 @@
           <div class="info-content">
             <span>XXX街XX號XXX舖</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span>陳XX 961XXXX</span>
+            <span>{{leader.agentName}}  {{leader.agentPhone}}</span>
           </div>
         </div>
         <div class="person-info">
@@ -107,18 +107,18 @@
     <my-aside :show="leaderShow" @hide="hideLeader">
       <div class="option-seleted">
         <div class="seleted-title">已選團長：</div>
-        <p class="seleted-text">XX馬路XX號XX樓XX棟XX房<br>團長：江先生  96XXXXXX</p>
+        <p class="seleted-text">XX馬路XX號XX樓XX棟XX房<br>團長：{{leader.agentName}}  {{leader.agentPhone}}</p>
         <p class="no-seleted">—— 無 ——</p>
       </div>
       <div class="option-wrap">
-        <div v-for="(item, index) in leaders"
+        <div v-for="(item, index) in myLeaders"
               :key="index"
-              class="option-item"
+              :class="['option-item', isMyLeaers(item.userId) ? 'option-item-disable' : '']"
               @click="chooseLeader(item)">
-          <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
+          <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
           <div class="option-box">
             <p class="option-text">XX馬路XX號XX樓XX棟XX房</p>
-            <p class="option-text">團長：江先生  96XXXXXX</p>
+            <p class="option-text">團長：{{item.agentName}}  {{item.agentPhone}}</p>
           </div>
         </div>
       </div>
@@ -148,25 +148,13 @@
 <script>
 import { MessageBox, MyAside } from 'components'
 import { mapState, mapGetters, mapMutations } from 'vuex'
+import { getMyLeader } from 'utils/getData'
 export default {
   data () {
     return {
       leaderShow: false,
       addrShow: false,
-      leaders: [
-        {
-          id: 1,
-          name: '蒋先生'
-        },
-        {
-          id: 2,
-          name: '林先生'
-        },
-        {
-          id: 3,
-          name: '懂先生'
-        }
-      ],
+      myLeaders: [],
       addrs: [
         {
           id: 1,
@@ -192,8 +180,60 @@ export default {
   components: {
     MyAside
   },
+  mounted () {
+    this.init()
+  },
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD', 'DELETEGOOD']),
+    init () {
+      this.getMyLeader()
+    },
+    async getMyLeader () {
+      const params = {
+        pageNo: 0,
+        pageSize: 100
+      }
+      // const data = await getMyLeader(params)
+      const data = {
+        code: 0,
+        page: {
+          list: [{
+            address: "雨花台区",
+            closeTime: "2018-11-11 09:16:47",
+            createAt: "2018-11-13 09:19:14",
+            deliveryFee: 1,
+            id: 1,
+            isDelete: 0,
+            agentName: "張團長",
+            agentPhone: 13812341234,
+            region: "南京市",
+            userId: 1,
+            username: null,
+            status: 0
+          },{
+            address: "雨花台区",
+            closeTime: "2018-11-11 09:16:47",
+            createAt: "2018-11-13 09:19:14",
+            deliveryFee: 1,
+            id: 2,
+            isDelete: 0,
+            agentName: "李團長",
+            agentPhone: 13812341234,
+            region: "南京市",
+            userId: 2,
+            username: null,
+            status: 1
+          }]
+        }
+      }
+      if (data.code == 0) {
+        this.leader = data.page.list.filter(item => item.status === 0)[0]
+        this.myLeaders = data.page.list
+      }
+    },
+    isMyLeaers (leaderId) {
+      return this.leader.userId === leaderId
+    },
     showLeader () {
       this.leaderShow = true
     },
@@ -201,6 +241,9 @@ export default {
       this.leaderShow = false
     },
     chooseLeader (leader) {
+      if (this.isMyLeaers(leader.userId)) {
+        return false
+      }
       this.leader = leader
       this.hideLeader()
     },
@@ -271,6 +314,7 @@ export default {
   .page-title {
     position: relative;
     color: #ffffff;
+    background: none;
     .cart-icon {
       display: inline-block;
       vertical-align: middle;

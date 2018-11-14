@@ -12,13 +12,15 @@
       <tab-container v-model="selected">
         <tab-container-item id="1">
           <div class="cell-wrap">
-            <section class="cell-item">
+            <section class="cell-item"
+                      v-for="(item, index) in myLeaders"
+                      :key="index">
               <div class="order-title-box">
                 <div class="flex-box">
-                  <p class="order-text-1">團長：江先生  96XXXXXX</p>
-                  <i class="close-icon" @click="deleteLeader"></i>
+                  <p class="order-text-1">團長：{{item.agentName}}  {{item.agentPhone}}</p>
+                  <i class="close-icon" @click="deleteLeader(item)"></i>
                 </div>
-                <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
+                <p class="order-text-1">{{item.agentName}}</p>
               </div>
             </section>
           </div>
@@ -49,20 +51,21 @@
     <my-aside :show="leaderShow" @hide="hideLeader">
       <div class="option-seleted">
         <div class="seleted-title">已選團長：</div>
-        <p class="seleted-text">XX馬路XX號XX樓XX棟XX房<br>團長：江先生  96XXXXXX</p>
-        <p class="no-seleted">—— 無 ——</p>
+        <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
+        <p class="no-seleted" v-else>—— 無 ——</p>
       </div>
       <div class="option-wrap">
-        <collapse-item>
-          <div slot="title" class="option-title">花蒂玛塘区</div>
-          <div v-for="(item, index) in leaders"
+        <collapse-item v-for="(childLeaders, districtKey) in leaders"
+                        :key="districtKey">
+          <div slot="title" class="option-title">{{districtKey}}</div>
+          <div v-for="(item, index) in childLeaders"
               :key="index"
-              class="option-item option-item-disable"
+              :class="['option-item', isMyLeaers(item.userId) ? 'option-item-disable' : '']"
               @click="chooseLeader(item)">
-            <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
+            <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
             <div class="option-box">
-              <p class="option-text">XX馬路XX號XX樓XX棟XX房</p>
-              <p class="option-text">團長：江先生  96XXXXXX</p>
+              <p class="option-text">{{item.address}}</p>
+              <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
             </div>
           </div>
         </collapse-item>
@@ -74,25 +77,15 @@
 <script>
 import { Navbar, TabItem, TabContainer, TabContainerItem } from 'mint-ui'
 import { MessageBox, MyAside, CollapseItem } from 'components'
+import { Toast } from 'mint-ui'
+import { getMyLeader, getLeaderList } from 'utils/getData'
 export default {
   data () {
     return {
       selected: "1",
       leaderShow: false,
-      leaders: [
-        {
-          id: 1,
-          name: '蒋先生'
-        },
-        {
-          id: 2,
-          name: '林先生'
-        },
-        {
-          id: 3,
-          name: '懂先生'
-        }
-      ],
+      leaders: {},
+      myLeaders: [],
       leader: {},
     }
   },
@@ -104,7 +97,56 @@ export default {
     MyAside,
     CollapseItem
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.getMyLeader()
+      this.getAllLeaders()
+    },
+    async getMyLeader () {
+      const params = {
+        pageNo: 0,
+        pageSize: 100
+      }
+      // const data = await getMyLeader(params)
+      const data = {
+        code: 0,
+        page: {
+          list: [{
+            address: "雨花台区",
+            closeTime: "2018-11-11 09:16:47",
+            createAt: "2018-11-13 09:19:14",
+            deliveryFee: 1,
+            id: 1,
+            isDelete: 0,
+            agentName: "張團長",
+            agentPhone: 13812341234,
+            region: "南京市",
+            userId: 1,
+            username: null
+          }]
+        }
+      }
+      if (data.code == 0) {
+        console.log(data)
+        this.myLeaders = data.page.list
+      }
+    },
+    async getAllLeaders () {
+      const data = await getLeaderList()
+      if (data.code == 0) {
+        console.log(data)
+        this.leaders = data.data
+      }
+    },
+    async getMyAddr () {
+
+    },
+    isMyLeaers (leaderId) {
+      return this.myLeaders.filter(item => item.userId == leaderId).length > 0 ? true : false
+    },
     showLeader () {
       this.leaderShow = true
     },
@@ -112,9 +154,12 @@ export default {
       this.leaderShow = false
     },
     chooseLeader (leader) {
+      if (this.isMyLeaers(leader.userId)) {
+        return false
+      }
       this.leader = leader
     },
-    deleteLeader () {
+    deleteLeader (leaderInfo) {
       MessageBox({
         message: '確定刪除我的團長嗎？',
         buttons: [{
@@ -148,6 +193,15 @@ export default {
           }
         }]
       })
+    }
+  },
+  watch: {
+    selected (newV, oldV) {
+      if (newV == 1) {
+        this.getMyLeader()
+      } else {
+        this.getMyAddr()
+      }
     }
   }
 }

@@ -3,7 +3,7 @@ import {
 	basePath
 } from './env'
 // import { removeStore } from './mUtils'
-
+import { Toast } from 'mint-ui'
 export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 	type = type.toUpperCase();
 	const token = localStorage['token'] || ''
@@ -52,7 +52,9 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			// window.location.href = `/#/login`;
 			// removeStore('userInfo');
 		}
-    if(responseJson.code != ERR_OK) return responseJson.resultNote;
+    if(responseJson.code != ERR_OK) {
+      Toast(responseJson.msg)
+    }
 		return responseJson
 	} else {
 		let requestObj;

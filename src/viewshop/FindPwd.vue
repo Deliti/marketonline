@@ -37,6 +37,7 @@
 import { validateInput } from 'utils/utils'
 import { TimeDown } from 'components'
 import { Toast } from 'mint-ui'
+import { resetPwd } from 'utils/getData'
 export default {
   data () {
     return {
@@ -70,12 +71,21 @@ export default {
         countdown()
       }
     },
-    submit () {
+    async submit () {
       if (!this.verifyFrom()) {
         return false
       }
-      Toast('修改密碼成功，請重新登錄')
-      this.linkjump('login')
+      const params = {
+        "phone": this.username,
+        "password": this.password,
+        "authCode": this.verifycode
+      }
+      const data = await resetPwd(params)
+      if (data.code == 0) {
+        Toast('修改密碼成功，請重新登錄')
+        this.linkjump('login')
+      }
+
     },
     verifyFrom () {
       const verifyUsername = validateInput({
