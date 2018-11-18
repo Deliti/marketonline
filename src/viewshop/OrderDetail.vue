@@ -1,46 +1,48 @@
 <template>
   <div class="page-wrap">
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>訂單詳情</h1>
     </div>
     <div class="page-content">
       <div class="order-wrap">
         <div class="order-title-box">
           <div class="flex-box">
-            <p class="order-text-1">團長：江先生  96XXXXXX</p>
-            <a class="tel-text">聯繫團長</a>
+            <p class="order-text-1">團長：{{orderInfo.agentName}}  {{orderInfo.agentPhone}}</p>
+            <a class="tel-text" :href="'tel:'+orderInfo.agentPhone">聯繫團長</a>
           </div>
-          <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
+          <p class="order-text-1">{{orderInfo.agentAddress}}</p>
         </div>
          <div class="order-info-box">
-          <span class="order-no">訂單編號：1000043</span>
+          <span class="order-no">訂單編號：{{orderId}}</span>
         </div>
       </div>
       <div class="order-detail-wrap">
         <div class="detail-title">
-          <label>2件商品 / 總計 $76.00</label>
+          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ orderInfo.price}}</label>
         </div>
         <section class="detail-content">
-          <div class="order-item over-order">
+          <div v-for="(prodItem, index) in orderInfo.productList"
+                :key="index"
+                :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
-              <label class="order-item-status">已取</label>
-              <img src="" alt="" class="good-img">
+              <label class="order-item-status">{{prodItem.isPick == 1?'已取':'未取貨'}}</label>
+              <img :src="prodItem.pic" alt="" class="good-img">
               <div class="order-item-detail">
-                <p class="good-name">進口百香果 90G-110G/個</p>
+                <p class="good-name">{{prodItem.productName}}</p>
                 <div class="flex-box">
                   <div class="count-box">
                     <span>數量</span>
-                    <span>1</span>
+                    <span>{{prodItem.num}}</span>
                   </div>
-                  <label class="good-price">$38</label>
+                  <label class="good-price">{{'$'+prodItem.price}}</label>
                 </div>
               </div>
             </div>
-            <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
+            <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr + '後'}}</div>
+            <div class="solid-hr" v-show="index !== orderInfo.productList.length-1"></div>
           </div>
-          <div class="solid-hr"></div>
-          <div class="order-item">
+          <!-- <div class="order-item">
             <div class="order-item-flex">
               <label class="order-item-status">未取貨</label>
               <img src="" alt="" class="good-img">
@@ -56,52 +58,79 @@
               </div>
             </div>
             <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
-          </div>
+          </div> -->
           <div class="dash-hr"></div>
         </section>
         <div class="total-wrap">
           <label>商品總計</label>
-          <span class="total-price">$76.00</span>
+          <span class="total-price">{{'$'+orderInfo.price}}</span>
         </div>
       </div>
-      <div class="code-info">
-        <div class="code-box">
-          取貨驗證碼<br>
-          <span>450088</span>
-        </div>
-        <div class="qrcode"></div>
-      </div>
-      <div class="over-wrap">
+      <div class="over-wrap" v-if="orderInfo.status == 4">
         <button class="suggest-btn" @click="linkjump('suggest')">反饋意見</button>
         <div class="finish-btn">
           <i class="check-btn-icon"></i>
           <label>已完成</label>
         </div>
       </div>
+      <div class="code-info" v-else>
+        <div class="code-box">
+          取貨驗證碼<br>
+          <span>{{orderInfo.pickCode}}</span>
+        </div>
+        <div class="qrcode" ref="qrCodeUrl"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import qrCode from 'qrcodejs2'
 import { mapState, mapMutations } from 'vuex'
+import { getOrderDetail } from 'utils/getData'
+
 export default {
   data () {
     return {
-      
+      orderId: this.$route.params.orderId,
+      orderInfo: {}
     }
   },
   mounted () {
-    
+    this.init()
   },
   computed: {
     ...mapState(['shopCart'])
   },
   methods: {
-    
     linkjump (href) {
       this.$router.push(href)
     },
-    
+    historyBack () {
+      history.go(-1)
+    },
+    init () {
+      this.getOrderDetail()
+    },
+    async getOrderDetail () {
+      const params = {
+        orderId: this.orderId
+      }
+      const data = await getOrderDetail(params)
+      if (data.code == 0) {
+        this.orderInfo = data.data
+        if (this.orderInfo.status != 4) {
+          this.qrcode(this.orderInfo.pickCode)
+        }
+      }
+    },
+    qrcode (text) {
+      var qrcode = new qrCode(this.$refs.qrCodeUrl, {
+        text: text,
+        width: '107.5',
+        height: '107.5'
+      })
+    }
   }
 }
 </script>
@@ -215,7 +244,7 @@ export default {
               .flex-box {
                 width: 100%;
                 .count-box {
-                  width: 10.7rem;
+                  width: 7.7rem;
                   height: 3rem;
                   @extend .theme-color;
                   @extend .flex-box;
@@ -226,7 +255,7 @@ export default {
                   color: #FFFFFF;
                 }
                 .good-price {
-                  font-size: 2.4rem;
+                  font-size: 1.6rem;
                   color: #1CD0A3;
                 }
               }
@@ -289,6 +318,11 @@ export default {
         height: 10.75rem;
         margin: .5rem auto 0;
         padding-bottom: 3.3rem;
+        text-align: center;
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
     .over-wrap {

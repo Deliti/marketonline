@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="top-bg"></div>
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>
         <i class="cart-icon"></i>
         <label>購物車</label>
@@ -16,7 +16,7 @@
             <span class="edit-btn" @click="showLeader">更改</span>
           </div>
           <div class="info-content">
-            <span>XXX街XX號XXX舖</span>
+            <span>{{leader.agentAddress}}</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <span>{{leader.agentName}}  {{leader.agentPhone}}</span>
           </div>
@@ -24,16 +24,16 @@
         <div class="person-info">
           <div class="info-title">
             <label class="info-tip">我的地址</label>
-            <p class="deliver-info">
-              <i class="radius-circle radius-seleted"></i>
-              <span>送貨上門 (配送費+$20)</span>
+            <p class="deliver-info" @click="changePickWay">
+              <i :class="['radius-circle', selfPick ? 'radius-seleted' : '']"></i>
+              <span>送貨上門 (配送費+${{leader.deliveryFee}})</span>
             </p>
             <span class="edit-btn" @click="showAddr">更改</span>
           </div>
           <div class="info-content">
-            <span>XXX街XX號XXX樓XX房</span>
+            <span>{{addr.address}}</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span>陳XX 961XXXX</span>
+            <span>{{addr.name}} {{addr.phone}}</span>
           </div>
         </div>
       </div>
@@ -49,20 +49,18 @@
               <img src="" alt="" class="good-img">
               <div class="order-item-detail">
                 <div class="name-box">
-                  <p class="good-name">進口百香果 90G-110G/個</p>
+                  <p class="good-name">{{item.productName}}</p>
                   <i class="close-icon" @click="deleteGoodCart(item)"></i>
                 </div>
-                <div class="flex-box">
-                  <div class="count-box">
-                    <span class="change-btn" @click.stop="desGoodCart(item)">-</span>
-                    <span>{{item.count}}</span>
-                    <span class="change-btn" @click.stop="addGoodCart(item)">+</span>
-                  </div>
-                  <label class="good-price">$38</label>
+                <div class="count-box">
+                  <span class="change-btn" @click.stop="desGoodCart(item)">-</span>
+                  <span>{{item.count}}</span>
+                  <span class="change-btn" @click.stop="addGoodCart(item)">+</span>
                 </div>
               </div>
             </div>
-            <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
+            <label class="good-price">${{item.money}}</label>
+            <div class="get-time">取貨時間：{{item.takeTime}}後</div>
             <div class="solid-hr" v-show="index !== shopCart.length-1"></div>
           </div>
           <!-- <div class="order-item">
@@ -101,23 +99,23 @@
         <p class="no-order-text">購物車裡還沒東西⋯</p>
       </div>
       <div class="submit-button" @click="comfirmOrder">
-        <label>確認訂單</label>
+        <label>{{shopCart.length == 0 ? '去落單' : '確認訂單'}}</label>
       </div>
     </div>
     <my-aside :show="leaderShow" @hide="hideLeader">
       <div class="option-seleted">
         <div class="seleted-title">已選團長：</div>
-        <p class="seleted-text">XX馬路XX號XX樓XX棟XX房<br>團長：{{leader.agentName}}  {{leader.agentPhone}}</p>
-        <p class="no-seleted">—— 無 ——</p>
+        <p class="seleted-text" v-if="leader.agentId">{{leader.agentAddress}}<br>團長：{{leader.agentName}}  {{leader.agentPhone}}</p>
+        <p class="no-seleted" v-else>—— 無 ——</p>
       </div>
       <div class="option-wrap">
         <div v-for="(item, index) in myLeaders"
               :key="index"
-              :class="['option-item', isMyLeaers(item.userId) ? 'option-item-disable' : '']"
+              :class="['option-item', isMyLeaers(item.agentId) ? 'option-item-disable' : '']"
               @click="chooseLeader(item)">
-          <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
+          <i :class="['radius-icon', leader.agentId == item.agentId?'radius-seleted':'']"></i>
           <div class="option-box">
-            <p class="option-text">XX馬路XX號XX樓XX棟XX房</p>
+            <p class="option-text">{{item.agentAddress}}</p>
             <p class="option-text">團長：{{item.agentName}}  {{item.agentPhone}}</p>
           </div>
         </div>
@@ -126,8 +124,8 @@
     <my-aside :show="addrShow" @hide="hideAddr">
       <div class="option-seleted">
         <div class="seleted-title">已選地址：</div>
-        <p class="seleted-text">XX馬路XX號XX樓XX棟XX房<br>梁女士  96XXXXXX</p>
-        <p class="no-seleted">—— 無 ——</p>
+        <p class="seleted-text" v-if="addr.id">{{addr.address}}<br>{{addr.name}}  {{addr.phone}}</p>
+        <p class="no-seleted" v-else>—— 無 ——</p>
       </div>
       <div class="option-wrap">
         <div v-for="(item, index) in addrs"
@@ -136,8 +134,8 @@
               @click="chooseAddr(item)">
           <i :class="['radius-icon', addr.id == item.id?'radius-seleted':'']"></i>
           <div class="option-box">
-            <p class="option-text">XX馬路XX號XX樓XX棟XX房</p>
-            <p class="option-text">梁女士  96XXXXXX</p>
+            <p class="option-text">{{item.address}}</p>
+            <p class="option-text">{{item.username}}  {{item.phone}}</p>
           </div>
         </div>
       </div>
@@ -148,29 +146,19 @@
 <script>
 import { MessageBox, MyAside } from 'components'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { getMyLeader } from 'utils/getData'
+import { getMyLeader, getMyAddr, getAllCartList, updateCart, playOrder } from 'utils/getData'
+
+let loading = false
 export default {
   data () {
     return {
       leaderShow: false,
       addrShow: false,
       myLeaders: [],
-      addrs: [
-        {
-          id: 1,
-          name: '蒋先生'
-        },
-        {
-          id: 2,
-          name: '林先生'
-        },
-        {
-          id: 3,
-          name: '懂先生'
-        }
-      ],
+      addrs: [],
       leader: {},
-      addr: {}
+      addr: {},
+      selfPick: false 
     }
   },
   computed: {
@@ -184,9 +172,14 @@ export default {
     this.init()
   },
   methods: {
-    ...mapMutations(['ADDGOOD', 'DESGOOD', 'DELETEGOOD']),
+    ...mapMutations(['UPDATECART', 'ADDGOOD', 'DESGOOD', 'DELETEGOOD', 'CLEARCART']),
     init () {
+      this.getAllCartList()
       this.getMyLeader()
+      this.getMyAddr()
+    },
+    historyBack () {
+      history.go(-1)
     },
     async getMyLeader () {
       const params = {
@@ -194,45 +187,20 @@ export default {
         pageSize: 100
       }
       const data = await getMyLeader(params)
-      // const data = {
-      //   code: 0,
-      //   page: {
-      //     list: [{
-      //       address: "雨花台区",
-      //       closeTime: "2018-11-11 09:16:47",
-      //       createAt: "2018-11-13 09:19:14",
-      //       deliveryFee: 1,
-      //       id: 1,
-      //       isDelete: 0,
-      //       agentName: "張團長",
-      //       agentPhone: 13812341234,
-      //       region: "南京市",
-      //       userId: 1,
-      //       username: null,
-      //       status: 0
-      //     },{
-      //       address: "雨花台区",
-      //       closeTime: "2018-11-11 09:16:47",
-      //       createAt: "2018-11-13 09:19:14",
-      //       deliveryFee: 1,
-      //       id: 2,
-      //       isDelete: 0,
-      //       agentName: "李團長",
-      //       agentPhone: 13812341234,
-      //       region: "南京市",
-      //       userId: 2,
-      //       username: null,
-      //       status: 1
-      //     }]
-      //   }
-      // }
       if (data.code == 0) {
         this.leader = data.page.list.filter(item => item.status === 0)[0]
         this.myLeaders = data.page.list
       }
     },
+    async getMyAddr () {
+      const data = await getMyAddr()
+      if (data.code == 0) {
+        this.addr = data.page.list.length > 0 ? data.page.list[0] : {}
+        this.addrs = data.page.list
+      }
+    },
     isMyLeaers (leaderId) {
-      return this.leader.userId === leaderId
+      return this.leader.agentId === leaderId
     },
     showLeader () {
       this.leaderShow = true
@@ -241,7 +209,7 @@ export default {
       this.leaderShow = false
     },
     chooseLeader (leader) {
-      if (this.isMyLeaers(leader.userId)) {
+      if (this.isMyLeaers(leader.agentId)) {
         return false
       }
       this.leader = leader
@@ -257,30 +225,110 @@ export default {
       this.addr = addr
       this.hideAddr()
     },
-    addGoodCart (goodInfo) {
-      this.ADDGOOD(goodInfo)
+    async addGoodCart (goodInfo) {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
+      if (thisGood.length > 0) {
+        const count = thisGood[0].count
+        const params = {
+          productId: goodInfo.id,
+          num: count+1
+        } 
+        const data = await updateCart(params)
+        if (data.code == 0) {
+          this.ADDGOOD(goodInfo)
+        }
+        loading = false
+      } else {
+        const params = {
+          productId: goodInfo.id,
+          num: 1
+        }
+        const data = await addCart(params)
+        if (data.code == 0) {
+          this.ADDGOOD(goodInfo)
+        }
+        loading = false
+      }
     },
-    desGoodCart (goodInfo) {
-      this.DESGOOD(goodInfo.id)
+    async getAllCartList () {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const params = {}
+      const data = await getAllCartList(params)
+      if (data.code == 0) {
+        this.UPDATECART(data.data)
+      }
+      loading = false
+    },
+    async desGoodCart (goodInfo) {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
+      if (thisGood.length > 0) {
+        const count = thisGood[0].count
+        const params = {
+          productId: goodInfo.id,
+          num: count-1
+        } 
+        const data = await updateCart(params)
+        if (data.code == 0) {
+          this.DESGOOD(goodInfo.id)
+        }
+        loading = false
+      }
     },
     deleteGoodCart (goodInfo) {
-      this.DELETEGOOD(goodInfo.id)
+      MessageBox({
+        message: '是否删除该商品',
+        buttons: [{
+          text: '取消',
+          callBack: () => {
+            console.log(123)
+          }
+        },{
+          text: '確認',
+          callBack: async () => {
+            if (loading) {
+              return false
+            }
+            loading = true
+            const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
+            if (thisGood.length > 0) {
+              const params = {
+                productId: goodInfo.id,
+                num: 0
+              } 
+              const data = await updateCart(params)
+              loading = false
+              if (data.code == 0) {
+                this.getAllCartList()
+              }
+            }
+          }
+        }]
+      })
     },
     isHasGood (goodId) {
       return this.shopCart.some(item => {
         return item.id === goodId
       })
     },
-    getGoodCount (goodId) {
-      let count = 0
-      this.shopCart.some(item => {
-        if (item.id === goodId) {
-          count = item.count
-        }
-      })
-      return count
+    changePickWay () {
+      this.selfPick = !this.selfPick
     },
     comfirmOrder () {
+      if (this.shopCart.length == 0) {
+        this.$router.push('home')
+        return false
+      }
       MessageBox({
         message: '<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長（取貨）地址：<br/><br/>XX馬路XX號XX樓XX棟XX房</div>',
         buttons: [{
@@ -291,10 +339,29 @@ export default {
         },{
           text: '確認',
           callBack: () => {
-            console.log(321)
+            this.playOrder()
           }
         }]
       })
+    },
+    async playOrder () {
+      const productList = this.shopCart.map(item => {
+        return {
+          productId: item.productId,
+          num: item.count
+        }
+      })
+      const params = {
+        "pickWay": this.selfPick?1:2,
+        "addressId": this.addr.id,
+        "agentId": this.leader.agentId,
+        "productList": productList
+      }
+      const data = await playOrder(params)
+      if (data.code == 0) {
+        this.CLEARCART()
+        this.$router.push(`orderDetail/${data.orderId}`)
+      }
     }
   }
 }
@@ -328,7 +395,7 @@ export default {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    padding: 0 4.5rem;
+    padding: 0 3.3rem;
     .person-info-wrap {
       width: 100%;
       margin-bottom: 1.8rem;
@@ -425,30 +492,28 @@ export default {
                   margin-left: .5rem;
                 }
               }
-              .flex-box {
-                width: 100%;
-                .count-box {
-                  width: 10.7rem;
-                  height: 3rem;
-                  border-radius: .5rem;
-                  box-sizing: border-box;
-                  @extend .theme-color;
-                  @extend .flex-box;
-                  font-size: 1.4rem;
-                  color: #FFFFFF;
-                  .change-btn {
-                    width: 30%;
-                    height: 100%;
-                    line-height: 3rem;
-                    text-align: center;
-                  }
-                }
-                .good-price {
-                  font-size: 2.4rem;
-                  color: #1CD0A3;
+              .count-box {
+                height: 3rem;
+                border-radius: .5rem;
+                box-sizing: border-box;
+                @extend .theme-color;
+                @extend .flex-box;
+                font-size: 1.4rem;
+                color: #FFFFFF;
+                .change-btn {
+                  width: 30%;
+                  height: 100%;
+                  line-height: 3rem;
+                  text-align: center;
                 }
               }
             }
+          }
+          .good-price {
+            display: block;
+            font-size: 1.6rem;
+            color: #1CD0A3;
+            text-align: right;
           }
           .get-time {
             font-size: 1.2rem;

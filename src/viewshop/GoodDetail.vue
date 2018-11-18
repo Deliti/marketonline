@@ -1,8 +1,8 @@
 <template>
   <div class="page-wrap">
     <div class="banner-wrap">
-      <img src="//m.360buyimg.com/mobilecms/s750x750_jfs/t30121/9/45509898/135153/faa4fc0f/5be64c1fNa331afae.jpg!q80.dpg.webp" alt="" class="banner">
-      <div class="add-wrap">
+      <img :src="goodInfo.pic" alt="" class="banner">
+      <div class="add-wrap" v-show="goodInfo.lessTime != -1">
         <div class="add-cart" v-if="!isHasGood" @click.stop="addGoodCart">
           <i class="cart-icon"></i><label>購買</label>
         </div>
@@ -14,22 +14,23 @@
       </div>
     </div>
     <div class="detail-wrap">
-      <p class="title-desc">清香超甜 物美價廉</p>
-      <p class="good-name">進口百香果 90G-110G/個</p>
+      <p class="title-desc">{{goodInfo.titleOne}}</p>
+      <p class="good-name">{{goodInfo.name}}</p>
       <div class="info-box">
         <div class="time-wrap">
-          <p class="time-tips">x小時xx分鐘後截單</p>
-          <p class="get-good-time">取貨時間：11月3日（星期六）</p>
+          <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime}}後截單</p>
+          <p class="time-tips" v-else>已截單</p>
+          <div class="old-price">原購價 ${{goodInfo.price}}</div>
         </div>
         <div class="price-wrap">
-          <div class="old-price">原購價 $50</div>
+          <p class="get-good-time">取貨時間：{{goodInfo.takeTimeStr}}</p>
           <div class="cheap-price-box">
             <span class="cheap-tips">團購價</span>
-            <span class="cheap-price">$<b>38</b></span>
+            <span class="cheap-price">$<b>{{goodInfo.discountPrice}}</b></span>
           </div>
         </div>
       </div>
-      <p class="good-desc">熱情果，又叫百香果，係熱情果科熱情果屬嘅爬藤草本植物，亦係種生果，原產南美洲熱帶地區，通常用嚟整果汁</p>
+      <p class="good-desc">{{goodInfo.remark}}</p>
     </div>
     <common-footer :activeTab="'none'"></common-footer>
   </div>
@@ -38,15 +39,15 @@
 <script>
 import { CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
+import { formateTime, timeText } from 'utils/utils'
+import { productInfo, addCart, updateCart } from 'utils/getData'
+let pageInterVal = null
+let loading = false
 export default {
   data () {
     return {
       goodId: this.$route.params.goodId,
-      goodInfo: {
-        id: 'goodid',
-        oldPrice: 50,
-        cheapPrice: 38
-      }
+      goodInfo: {}
     }
   },
   computed: {
@@ -54,31 +55,122 @@ export default {
     goodCount () {
       let count = 0
       this.shopCart.some(item => {
-        if (item.id === this.goodId) {
+        if (item.id == this.goodId) {
           count = item.count
         }
       })
       return count
     },
     isHasGood () {
-      return this.shopCart.some(item => {
-        return item.id === this.goodId
-      })
+      return this.shopCart.filter(item => item.id == this.goodId).length > 0
     }
   },
   mounted () {
-    console.log()
+    this.getProdInfo()
+  },
+  beforeDestroy () {
+    clearInterval(pageInterVal)
   },
   components: {
     CommonFooter
   },
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
-    addGoodCart () {
-      this.ADDGOOD(this.goodInfo)
+    async addGoodCart () {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const thisGood = this.shopCart.filter(item => item.id == this.goodInfo.id)
+      if (thisGood.length > 0) {
+        const count = thisGood[0].count
+        const params = {
+          productId: this.goodInfo.id,
+          num: count+1
+        } 
+        const data = await updateCart(params)
+        if (data.code == 0) {
+          this.ADDGOOD(this.goodInfo)
+        }
+        loading = false
+      } else {
+        const params = {
+          productId: this.goodInfo.id,
+          num: 1
+        }
+        const data = await addCart(params)
+        if (data.code == 0) {
+          this.ADDGOOD(this.goodInfo)
+        }
+        loading = false
+      }
     },
-    desGoodCart () {
-      this.DESGOOD(this.goodId)
+    async desGoodCart () {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const thisGood = this.shopCart.filter(item => item.id == this.goodInfo.id)
+      if (thisGood.length > 0) {
+        const count = thisGood[0].count
+        const params = {
+          productId: this.goodInfo.id,
+          num: count-1
+        } 
+        const data = await updateCart(params)
+        if (data.code == 0) {
+          this.DESGOOD(this.goodInfo.id)
+        }
+        loading = false
+      }
+    },
+    async getProdInfo () {
+      if (loading) {
+        return false
+      }
+      loading = true
+      if (!this.goodId) {
+        loading = false
+        return false
+      }
+      const params = {
+        id: this.goodId
+      }
+      const data = await productInfo(params)
+      if (data.code == 0) {
+        this.goodInfo = data.data
+        this.updateTime()
+      }
+      loading = false
+    },
+    updateTime () {
+      clearInterval(pageInterVal)
+      this.goodInfo.lessTime = this.formateTime(this.goodInfo.todayDeadline)
+      this.goodInfo = Object.assign({}, this.goodInfo)
+      if (this.goodInfo.lessTime == -1) {
+        console.log('已结束')
+        clearInterval(pageInterVal)
+        return false
+      }
+      pageInterVal = setInterval(() => {
+        this.goodInfo.lessTime = this.formateTime(this.goodInfo.todayDeadline)
+        this.goodInfo = Object.assign({}, this.goodInfo)
+        if (this.goodInfo.lessTime == -1) {
+          console.log('已结束')
+          clearInterval(pageInterVal)
+          return false
+        }
+      }, 6000)
+    },
+    formateTime (timeString) {
+      timeString = timeString.replace(/-/g,"/");
+      const time = new Date(timeString).getTime()
+      const timeObj = formateTime(time)
+      const { day, hour, minute, second } = timeObj
+      if (day + hour + minute + second == 0) {
+        return -1
+      }
+      return timeText(timeObj.day, '天') + timeText(timeObj.hour, '小時') + timeText(timeObj.minute, '分鐘')
     }
   }
 }
@@ -101,7 +193,8 @@ export default {
       width: 10.7rem;
       height: 3rem;
       position: absolute;
-      right: 1.1rem;bottom: -1.5rem;
+      right: .1rem;bottom: -2.5rem;
+      margin: 1rem;
       @extend .theme-color;
       border-radius: .5rem;
       .add-cart {
@@ -151,10 +244,10 @@ export default {
       text-align: left;
     }
     .info-box {
-      @extend .flex-box;
       padding-bottom: 2.5rem;
       border-bottom: 1px solid #E5E5E5;
       .time-wrap {
+        @extend .flex-box;
         .time-tips {
           padding: 0 2.5rem;
           height: 2.5rem;
@@ -165,21 +258,24 @@ export default {
           border-radius: 5rem;
           margin-bottom: .5rem;
         }
-        .get-good-time {
-          font-size: 1.4rem;
-          color: #1CD0A3;
-          line-height: 2rem;
-        }
-      }
-      .price-wrap {
-        text-align: right;
         .old-price {
+          text-align: right;
           font-size: 1.4rem;
           line-height: 2rem;
           color: #444444;
           margin-bottom: .5rem;
         }
+      }
+      .price-wrap {
+        @extend .flex-box;
+        align-items: flex-start;
+        .get-good-time {
+          font-size: 1.4rem;
+          color: #1CD0A3;
+          line-height: 2rem;
+        }
         .cheap-price-box {
+          text-align: right;
           height: 2.25rem;
           @extend .flex-box;
           .cheap-tips {

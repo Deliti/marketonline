@@ -48,6 +48,7 @@ export default {
   }
   .aside-content {
     width: 27.9rem;
+    max-width: 85%;
     height: 100%;
     box-sizing: border-box;
     padding: 3.5rem 2.4rem 0 3.5rem;

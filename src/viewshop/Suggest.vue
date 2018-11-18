@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>地址管理</h1>
     </div>
     <div class="page-content">
@@ -34,6 +34,11 @@ export default {
       name: '',
       phone: ''
     }
+  },
+  methods: {
+    historyBack () {
+      history.go(-1)
+    }
   }
 }
 </script>
@@ -46,7 +51,7 @@ export default {
     background: #ffffff;
   }
   .page-content {
-    padding: 6rem 4.3rem 3.5rem;
+    padding: 6rem 3.3rem 3.5rem;
     width: 100%;
     box-sizing: border-box;
     .suggest-wrap {

@@ -5,9 +5,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    shopCart: []
+    shopCart: [],
+    userAgent: localStorage['userAgent'] == 'PC' ? localStorage['userAgent'] : 'PHONE'
   },
   mutations: {
+    UPDATECART (state, cartList) {
+      state.shopCart = []
+      cartList.forEach(item => {
+        item.count = item.num
+        item.id = item.productId
+        state.shopCart.push(item)
+      })
+      console.log(state.shopCart)
+    },
+    CLEARCART (state) {
+      state.shopCart = []
+    },
     ADDGOOD (state, goodInfo) {
       const { id } = goodInfo
       let isHas = state.shopCart.some(item => {
@@ -26,7 +39,7 @@ export default new Vuex.Store({
     DESGOOD (state, goodId) {
       const len = state.shopCart.length
       for (let i = 0; i < len; i++) {
-        if (state.shopCart[i].id === goodId) {
+        if (state.shopCart[i].id == goodId) {
           state.shopCart[i].count --
           if (state.shopCart[i].count === 0) {
             state.shopCart.splice(i, 1)
@@ -56,7 +69,7 @@ export default new Vuex.Store({
     },
     cartMoney: state => {
       let money = 0
-      state.shopCart.map(item => money += item.count*item.oldPrice)
+      state.shopCart.map(item => money += item.count*item.money)
       return money
     }
   }

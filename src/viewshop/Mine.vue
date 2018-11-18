@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="top-bg"></div>
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>我的訂單</h1>
     </div>
     <div class="enter-wrap left-enter" @click="linkJump('orders')">
@@ -31,6 +31,9 @@ export default {
   methods: {
     linkJump (href) {
       this.$router.push(href)
+    },
+    historyBack () {
+      history.go(-1)
     }
   }
 }

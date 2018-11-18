@@ -28,6 +28,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
+				"Access-Control-Allow-Origin": "*",
 				'token': token
 			},
 			mode: "cors",
@@ -72,6 +73,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 		requestObj.open(type, url, true);
 		requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		requestObj.setRequestHeader("Accept", "application/json");
+		requestObj.setRequestHeader("Access-Control-Allow-Origin", "*");
 		requestObj.setRequestHeader("token", token);
     requestObj.send(sendData);
 		return new Promise(function(resolve,reject){

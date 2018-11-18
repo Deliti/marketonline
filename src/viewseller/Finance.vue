@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>財務匯總</h1>
     </div>
     <div class="page-content">
@@ -103,6 +103,9 @@ export default {
   methods: {
     linkjump (href) {
       this.$router.push(href)
+    },
+    historyBack () {
+      history.go(-1)
     },
     toggleShowTime () {
       this.timeshow = !this.timeshow

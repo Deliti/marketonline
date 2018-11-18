@@ -1,11 +1,17 @@
 <template>
   <div class="page-wrap">
     <div class="banner-wrap">
-      <div class="leader-btn" @click="hrefJump('/seller#home')">團長入口</div>
+      <div v-show="isAgent == 1" class="leader-btn" @click="hrefJump('/seller#home')">團長入口</div>
       <mt-swipe :auto="4000" class="banner-box">
-        <mt-swipe-item class="banner-item">1</mt-swipe-item>
-        <mt-swipe-item class="banner-item-1">2</mt-swipe-item>
-        <mt-swipe-item class="banner-item-2">3</mt-swipe-item>
+        <mt-swipe-item class="banner-item">
+          <img src="../assets/images/banner1.jpg" alt="">
+        </mt-swipe-item>
+        <mt-swipe-item class="banner-item">
+          <img src="../assets/images/banner2.jpg" alt="">
+        </mt-swipe-item>
+        <mt-swipe-item class="banner-item">
+          <img src="../assets/images/banner3.jpg" alt="">
+        </mt-swipe-item>
       </mt-swipe>
     </div>
     <div class="page-content">
@@ -13,19 +19,23 @@
       <div class="head-nav-class">
         <div class="scroll-view" id="scrollBox">
           <div class="item">全部</div>
-          <div class="item active">水果</div>
+          <div class="item active">生果</div>
           <div class="item">蔬菜</div>
           <div class="item">日用品</div>
           <div class="item">其他</div>
         </div>
       </div>
       <section class="list-container">
-        <div class="list-item" @click="linkJump(`goodDetail/${goodInfo.id}`)">
+        <div v-for="(goodInfo, index) in goodList"
+              :key="index"
+              :class="['list-item', goodInfo.lessTime == -1 ? 'list-over' : '']" 
+              @click="linkJump(`goodDetail/${goodInfo.id}`)">
           <div class="item-banner-wrap">
-            <img src="//m.360buyimg.com/mobilecms/s750x750_jfs/t30121/9/45509898/135153/faa4fc0f/5be64c1fNa331afae.jpg!q80.dpg.webp" alt="" class="item-banner">
-            <p class="time-tips">x小時xx分鐘後截單</p>
-            <div class="add-wrap">
-              <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo)">
+            <img :src='goodInfo.pic' alt="" class="item-banner">
+            <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime+'後截單'}}</p>
+            <p class="time-tips" v-else>已截單</p>
+            <div class="add-wrap" @click.stop="" v-show="goodInfo.lessTime != -1">
+              <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo, 'first')">
                 <i class="cart-icon"></i><label>購買</label>
               </div>
               <div class="count-box" v-else>
@@ -36,21 +46,21 @@
             </div>
           </div>
           <div class="item-detail-wrap">
-            <p class="item-desc">清香超甜 物美價廉</p>
+            <p class="item-desc">{{goodInfo.titleOne}}</p>
             <div class="item-info-box">
-              <label class="item-name">進口百香果 90G-110G/個</label>
+              <label class="item-name">{{goodInfo.name}}</label>
               <div class="item-price-wrap">
-                <div class="old-price">原購價 $50</div>
+                <div class="old-price">原購價 ${{goodInfo.price}}</div>
                 <div class="cheap-price-box">
                   <span class="cheap-tips">團購價</span>
-                  <span class="cheap-price">$38</span>
+                  <span class="cheap-price">${{goodInfo.discountPrice}}</span>
                 </div>
               </div>
             </div>
-            <p class="get-good-time">取貨時間：11月3日（星期六）</p>
+            <p class="get-good-time">取貨時間：{{goodInfo.takeTimeStr}}</p>
           </div>
         </div>
-        <div class="list-item list-over">
+        <!-- <div class="list-item list-over">
           <div class="item-banner-wrap">
             <img src="//m.360buyimg.com/mobilecms/s750x750_jfs/t30121/9/45509898/135153/faa4fc0f/5be64c1fNa331afae.jpg!q80.dpg.webp" alt="" class="item-banner">
             <p class="time-tips">已截單</p>
@@ -70,7 +80,7 @@
             </div>
             <p class="get-good-time">取貨時間：11月3日（星期六）</p>
           </div>
-        </div>
+        </div> -->
       </section>
     </div>
     <common-footer :activeTab="'home'"></common-footer>
@@ -83,19 +93,19 @@ import { CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText } from 'utils/utils'
 import $ from 'jquery'
+import { productList, addCart, updateCart } from 'utils/getData'
 
 let pageInterVal = null
+let loading = false
 export default {
   data () {
     return {
+      isAgent: localStorage['isAgent'],
       goodTypeIndex: 0,
       goodType: [],
       goodList: [],
-      goodInfo: {
-        id: 'goodid',
-        oldPrice: 50,
-        cheapPrice: 38
-      }
+      pageNo: 0,
+      pageSize: 10
     }
   },
   computed: {
@@ -110,13 +120,15 @@ export default {
     this.init()
     this.addEvent()
   },
+  beforeDestroy () {
+    clearInterval(pageInterVal)
+  },
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
     init () {
-
+      this.getProdList()
     },
     addEvent () {
-      const that = this
       $("#scrollBox").off().on('click', '.item', function(){
         var moveX = $(this).position().left+$(this).parent().scrollLeft();
         var pageX = document.documentElement.clientWidth;//设备的宽度
@@ -132,16 +144,56 @@ export default {
     linkJump (href) {
       this.$router.push(href)
     },
-    addGoodCart (goodInfo) {
-      this.ADDGOOD(goodInfo)
+    async addGoodCart (goodInfo) {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
+      if (thisGood.length > 0) {
+        const count = thisGood[0].count
+        const params = {
+          productId: goodInfo.id,
+          num: count+1
+        } 
+        const data = await updateCart(params)
+        if (data.code == 0) {
+          this.ADDGOOD(goodInfo)
+        }
+        loading = false
+      } else {
+        const params = {
+          productId: goodInfo.id,
+          num: 1
+        }
+        const data = await addCart(params)
+        if (data.code == 0) {
+          this.ADDGOOD(goodInfo)
+        }
+        loading = false
+      }
     },
-    desGoodCart (goodInfo) {
-      this.DESGOOD(goodInfo.id)
+    async desGoodCart (goodInfo) {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
+      if (thisGood.length > 0) {
+        const count = thisGood[0].count
+        const params = {
+          productId: goodInfo.id,
+          num: count-1
+        } 
+        const data = await updateCart(params)
+        if (data.code == 0) {
+          this.DESGOOD(goodInfo.id)
+        }
+        loading = false
+      }
     },
     isHasGood (goodId) {
-      return this.shopCart.some(item => {
-        return item.id === goodId
-      })
+      return this.shopCart.filter(item => item.id == goodId).length > 0
     },
     getGoodCount (goodId) {
       let count = 0
@@ -152,17 +204,37 @@ export default {
       })
       return count
     },
+    async getProdList () {
+      loading = true
+      const params = {}
+      const data = await productList(params)
+      if (data.code == 0) {
+        this.goodList = data.page.list
+        this.updateTime()
+        loading = false
+      }
+    },
     updateTime () {
       clearInterval(pageInterVal)
+      this.goodList.map(item => {
+        this.$set(item, 'lessTime', this.formateTime(item.todayDeadline))
+      })
       pageInterVal = setInterval(() => {
+        console.log('---')
         this.goodList.map(item => {
-          item.lessTime < 0 ? 0 : item.lessTime -= 1000
+          this.$set(item, 'lessTime', this.formateTime(item.todayDeadline))
         })
-      }, 1000)
+      }, 6000)
     },
-    formateTime (time) {
+    formateTime (timeString) {
+      timeString = timeString.replace(/-/g,"/")
+      const time = new Date(timeString).getTime()
       const timeObj = formateTime(time)
-      return timeText(date.day, '天') + timeText(date.hour, '时') + timeText(date.minute, '分') + timeText(date.second, '秒')
+      const { day, hour, minute, second } = timeObj
+      if (day + hour + minute + second == 0) {
+        return -1
+      }
+      return timeText(timeObj.day, '天') + timeText(timeObj.hour, '小時') + timeText(timeObj.minute, '分鐘')
     }
   }
 }
@@ -192,13 +264,18 @@ export default {
       width: 100%;
       height: 100%;
       .banner-item {
-        background: red;
+        // background: red;
+        img {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
       }
       .banner-item-1 {
-        background: blue;
+        // background: blue;
       }
       .banner-item-2 {
-        background: green;
+        // background: green;
       }
     }
   }
@@ -277,7 +354,8 @@ export default {
             width: 10.7rem;
             height: 3rem;
             position: absolute;
-            right: 1.1rem;bottom: -1.5rem;
+            right: .1rem;bottom: -2.5rem;
+            margin: 1rem;
             @extend .theme-color;
             border-radius: .5rem;
             .add-cart {
@@ -320,6 +398,7 @@ export default {
           }
           .item-info-box {
             @extend .flex-box;
+            align-items: flex-start;
             margin-bottom: 1.2rem;
             .item-name {
               width: 50%;

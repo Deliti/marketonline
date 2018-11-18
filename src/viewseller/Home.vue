@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="top-bg"></div>
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>團長首頁</h1>
     </div>
     <div class="input-code-wrap">
@@ -38,6 +38,9 @@ export default {
   methods: {
     linkJump (href) {
       this.$router.push(href)
+    },
+    historyBack () {
+      history.go(-1)
     }
   }
 }
@@ -57,6 +60,7 @@ export default {
     left: 0;top: 0;
   }
   .page-title {
+    background: none;
     position: relative;
     margin-bottom: 2rem;
   }

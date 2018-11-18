@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
     </div>
     <div class="page-content">
@@ -56,6 +56,9 @@ export default {
   methods: {
     linkjump (href) {
       this.$router.push(href)
+    },
+    historyBack () {
+      history.go(-1)
     },
     sendCode (countdown) {
       console.log('發送驗證碼')
@@ -153,7 +156,7 @@ export default {
   .page-content {
     width: 100%;
     box-sizing: border-box;
-    padding: 0 4.3rem;
+    padding: 0 3.3rem;
     .program-title {
       width: 100%;
       font-size: 3.6rem;

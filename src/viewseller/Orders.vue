@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>訂單管理</h1>
     </div>
     <div class="page-content">
@@ -28,10 +28,11 @@
                 </div>
               </div>
             </div>
-            <section class="no-order-wrap">
-              <label>所選時段還沒有訂單哦</label>
-            </section>
-            <section class="order-wrap" @click="linkjump('orderDetail/orderid')">
+            <section v-if="orderListOne.length != 0" 
+                      v-for="(item, index) in orderListOne"
+                      :key="index"
+                      class="order-wrap" 
+                      @click="linkjump('orderDetail/orderid')">
               <div class="order-title-box">
                 <div class="flex-box">
                   <p class="order-text-1">江先生  96XXXXXX</p>
@@ -59,6 +60,9 @@
                 </div>
               </div>
             </section>
+            <section class="no-order-wrap" v-else>
+              <label>所選時段還沒有訂單哦</label>
+            </section>
           </div>
         </tab-container-item>
         <tab-container-item id="2"></tab-container-item>
@@ -85,6 +89,7 @@
 <script>
 import { Navbar, TabItem, TabContainer, TabContainerItem, Popup, Picker } from 'mint-ui'
 import { MessageBox, MyAside, CollapseItem } from 'components'
+import { agentOrders } from 'utils/getData'
 export default {
   data () {
     return {
@@ -92,6 +97,14 @@ export default {
       otherMonthVisible: false,
       timeshow: false,
       currentTime: 0,
+      orderPage: {
+        pageOne: 0,
+        pageTwo: 0,
+        pageThr: 0
+      },
+      orderListOne: [],
+      orderListTwo: [],
+      orderListThr: []
     }
   },
   computed: {
@@ -121,6 +134,9 @@ export default {
   methods: {
     linkjump (href) {
       this.$router.push(href)
+    },
+    historyBack () {
+      history.go(-1)
     },
     toggleShowTime () {
       this.timeshow = !this.timeshow

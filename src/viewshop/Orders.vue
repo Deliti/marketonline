@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-title">
-      <i class="return-icon"></i>
+      <i class="return-icon" @click="historyBack"></i>
       <h1>我的訂單</h1>
     </div>
     <div class="page-content">
@@ -12,45 +12,52 @@
             <b class="time-now"  @click="toggleShowTime">{{currentTime}}</b>
             <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
             <div class="time-option-wrap" v-show="timeshow">
-              <div class="time-option">今日</div>
-              <div class="time-option">本週</div>
-              <div class="time-option">本月</div>
+              <div class="time-option" 
+                    v-for="(item, index) in timeConf"
+                    :key="index"
+                    @click="item.click"
+                    >{{item.text}}</div>
               <div class="time-option" @click="showMonthPop">其他月份</div>
             </div>
           </div>
         </div>
       </div>
-      <section class="no-order-wrap">
+      <div v-if="orderList.length > 0">
+        <section v-for="(orderItem, index) in orderList"
+                  :key="index"
+                  class="order-wrap" 
+                  @click="linkjump(`orderDetail/${orderItem.id}`)">
+          <div class="order-title-box">
+            <div class="flex-box">
+              <p class="order-text-1">團長：{{orderItem.agentName}}  {{orderItem.agentPhone}}</p>
+              <a class="tel-text" :href="'tel:'+orderItem.agentPhone">聯繫團長</a>
+            </div>
+            <p class="order-text-1">{{orderItem.agentAddress}}</p>
+          </div>
+          <div class="order-content-box">
+            <div class="good-item">
+              <span class="order-text-2">商品總額</span>
+              <span class="order-text-3">{{'$ '+ orderItem.price}}</span>
+            </div>
+            <div class="good-item">
+              <span class="order-text-2">商品件數</span>
+              <span class="order-text-3">{{orderItem.totalNum + ' 件'}}</span>
+            </div>
+            <div class="order-info-box">
+              <span class="order-no">訂單編號：{{orderItem.id}}</span>
+              <button class="suggest-btn" v-if="orderItem.status == 4" @click.stop="linkjump('suggest')">反饋意見</button>
+              <span class="order-get" v-else>{{'已取 '+orderItem.pickNum+' 件'}}</span>
+              <button class="finish-btn" v-if="orderItem.status == 4">
+                <i class="check-btn-icon"></i>
+                <label>已完成</label>
+              </button>
+              <button class="status-btn" v-else>取貨</button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section v-else class="no-order-wrap">
         <label>所選時段還沒有訂單哦</label>
-      </section>
-      <section class="order-wrap" @click="linkjump('orderDetail/orderid')">
-        <div class="order-title-box">
-          <div class="flex-box">
-            <p class="order-text-1">團長：江先生  96XXXXXX</p>
-            <a class="tel-text">聯繫團長</a>
-          </div>
-          <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
-        </div>
-        <div class="order-content-box">
-          <div class="good-item">
-            <span class="order-text-2">商品總額</span>
-            <span class="order-text-3">$ 150</span>
-          </div>
-          <div class="good-item">
-            <span class="order-text-2">商品件數</span>
-            <span class="order-text-3">3 件</span>
-          </div>
-          <div class="order-info-box">
-            <span class="order-no">訂單編號：1000043</span>
-            <span class="order-get hide">已取 0 件</span>
-            <button class="suggest-btn" @click.stop="linkjump('suggest')">反饋意見</button>
-            <button class="status-btn hide">取貨</button>
-            <button class="finish-btn">
-              <i class="check-btn-icon"></i>
-              <label>已完成</label>
-            </button>
-          </div>
-        </div>
       </section>
     </div>
     <mt-popup
@@ -72,14 +79,68 @@
 
 <script>
 import { Popup, Picker } from 'mint-ui'
+import { getCurrentMonth } from 'utils/utils'
+import { getMyOrders } from 'utils/getData'
+
 const timeTextConf = []
+const pageLimit = '10'
+let totalPage = 1
+let loading = false
 export default {
   data () {
     return {
-      currentTime: 0,
+      currentTime: '今日',
       timeTextConf: timeTextConf,
       timeshow: false,
-      otherMonthVisible: false
+      otherMonthVisible: false,
+      timeConf: [
+        {
+          text: '今日',
+          click: () => {
+            this.pageNo = '1'
+            this.timeshow = false
+            this.currentTime = '今日'
+            const params = {
+              "page": this.pageNo,
+              "limit": pageLimit,
+              "startTime": "2018-11-18 00:00:00",
+              "endTime": "2018-11-19 00:00:00"
+            }
+            this.getOrderList(params)
+          }
+        },{
+          text: '本週',
+          click: () => {
+            this.pageNo = '1'
+            this.timeshow = false
+            this.currentTime = '本週'
+            const params = {
+              "page": this.pageNo,
+              "limit": pageLimit,
+              "startTime": "2018-11-12 00:00:00",
+              "endTime": "2018-11-19 00:00:00"
+            }
+            this.getOrderList(params)
+          }
+        },{
+          text: '本月',
+          click: () => {
+            this.pageNo = '1'
+            this.timeshow = false
+            this.currentTime = '本月'
+            const currentM = getCurrentMonth()
+            const params = {
+              "page": this.pageNo,
+              "limit": pageLimit,
+              "startTime": currentM.start,
+              "endTime": currentM.end
+            }
+            this.getOrderList(params)
+          }
+        }
+      ],
+      pageNo: 1,
+      orderList: []
     }
   },
   computed: {
@@ -100,9 +161,15 @@ export default {
     mtPopup: Popup,
     mtPicker: Picker
   },
+  mounted () {
+    this.timeConf[0].click()
+  },
   methods: {
     linkjump (href) {
       this.$router.push(href)
+    },
+    historyBack () {
+      history.go(-1)
     },
     toggleShowTime () {
       this.timeshow = !this.timeshow
@@ -116,7 +183,21 @@ export default {
     },
     timeConfirm () {
       this.currentTime = this.$refs.picker.getValues()[0]
+      
       this.otherMonthVisible = false
+    },
+    async getOrderList (params) {
+      if (loading) {
+        return false
+      }
+      loading = true
+      const data = await getMyOrders(params)
+      if (data.code == 0) {
+        this.orderList = data.data.list
+        totalPage = data.totalPage
+        
+      }
+      loading = false
     }
   }
 }
@@ -256,6 +337,7 @@ export default {
         }
         .suggest-btn {
           width: 7.25rem;
+          font-size: 1.2rem;
           height: 3rem;
           background: #F2917C;
           border-radius: .2rem;
@@ -297,6 +379,7 @@ export default {
   .picker-button-wrap {
     width: 100%;
     height: 3rem;
+    font-size: 1.6rem;
     @extend .flex-box;
     span {
 
