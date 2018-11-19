@@ -1,5 +1,8 @@
 <template>
   <div class="page-wrap">
+    <div class="page-title">
+      <i class="return-icon" @click="historyBack"></i>
+    </div>
     <div class="banner-wrap">
       <img :src="goodInfo.pic" alt="" class="banner">
       <div class="add-wrap" v-show="goodInfo.lessTime != -1">
@@ -76,6 +79,9 @@ export default {
   },
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
+    historyBack () {
+      history.go(-1)
+    },
     async addGoodCart () {
       if (loading) {
         return false
@@ -180,6 +186,9 @@ export default {
 .page-wrap {
   background: #ffffff;
   position: relative;
+  .page-title {
+    background: none;
+  }
   .banner-wrap {
     position: relative;
     width: 100%;

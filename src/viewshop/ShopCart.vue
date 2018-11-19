@@ -39,7 +39,7 @@
       </div>
       <div class="order-detail-wrap" v-if="shopCart.length > 0">
         <div class="detail-title">
-          <label v-show="shopCart.length>0">{{goodCount}}件商品 / 總計 ${{cartMoney}}</label>
+          <label v-show="shopCart.length>0">{{goodCount}}件商品 / 總計 ${{selfPick?cartMoney+leader.deliveryFee:cartMoney}}</label>
         </div>
         <section class="detail-content">
           <div class="order-item"
@@ -88,6 +88,10 @@
         <div class="total-wrap">
           <label>商品總計</label>
           <span class="total-price">${{cartMoney}}</span>
+        </div>
+        <div class="total-wrap" v-if="selfPick">
+          <label>配送费</label>
+          <span class="total-price">${{leader.deliveryFee}}</span>
         </div>
       </div>
       <div class="no-order-wrap" v-else>
@@ -330,7 +334,7 @@ export default {
         return false
       }
       MessageBox({
-        message: '<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長（取貨）地址：<br/><br/>XX馬路XX號XX樓XX棟XX房</div>',
+        message: `<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長：${this.leader.agentName}<br/><br/>（取貨）地址：${this.leader.agentAddress}</div>`,
         buttons: [{
           text: '取消',
           callBack: () => {
@@ -446,6 +450,7 @@ export default {
       @include backImg('../assets/images/rectangletip.png');
       box-shadow: .5rem 0px .5rem -.5rem rgba(0,0,0,0.11), -.5rem 0px .5rem -.5rem rgba(0,0,0,0.11);
       margin-bottom: 4.1rem;
+      padding-bottom: 3rem;
       .detail-title {
         width: 100%;
         height: 4.9rem;
@@ -518,11 +523,11 @@ export default {
           .get-time {
             font-size: 1.2rem;
             color: #444444;
+            margin: .85rem;
           }
         }
         .solid-hr {
-          width: 90%;
-          margin-left: 5%;
+          width: 100%;
           border-bottom: 1px solid #E2E2E2;
         }
         .dash-hr {
@@ -535,8 +540,8 @@ export default {
       .total-wrap {
         width: 100%;
         box-sizing: border-box;
-        padding: 0 1.7rem 0 2rem;
-        height: 6.7rem;
+        padding: 0 1.7rem 0rem 2rem;
+        height:  4.7rem;
         @extend .flex-box;
         font-size: 1.8rem;
         color: #444444;

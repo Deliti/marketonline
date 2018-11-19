@@ -72,8 +72,8 @@
 <script>
 import { validateInput } from 'utils/utils'
 import { Toast } from 'mint-ui'
-import { login } from 'utils/getData'
-import { mapState } from 'vuex'
+import { login, getAllCartList } from 'utils/getData'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -85,6 +85,7 @@ export default {
     ...mapState(['userAgent'])
   },
   methods: {
+    ...mapMutations(['UPDATECART']),
     linkjump (href) {
       this.$router.push(href)
     },
@@ -104,6 +105,7 @@ export default {
         Toast('登錄成功')
         localStorage['token'] = data.data.token
         localStorage['isAgent'] = data.data.isAgent
+        this.getAllCartList()
         this.linkjump('home')
       }
     },
@@ -124,6 +126,13 @@ export default {
         emptyTxt: '請輸入密碼'
       })
       return verifyUsername && verifyPassword
+    },
+    async getAllCartList () {
+      const params = {}
+      const data = await getAllCartList(params)
+      if (data.code == 0) {
+        this.UPDATECART(data.data)
+      }
     }
   }
 }
