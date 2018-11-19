@@ -8,39 +8,45 @@
       <div class="order-wrap">
         <div class="order-title-box">
           <div class="flex-box">
-            <p class="order-text-1">江先生  96XXXXXX</p>
-            <a class="tel-text">聯繫團員</a>
+            <p class="order-text-1">{{orderInfo.name}}  {{orderInfo.phone}}</p>
+            <a class="tel-text" :href="'tel:'+orderInfo.phone" @click.stop="">聯繫團員</a>
           </div>
-          <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
+          <p class="order-text-1">{{orderInfo.address}}</p>
         </div>
          <div class="order-info-box">
-          <span class="order-no">訂單編號：1000043</span>
+          <span class="order-no">訂單編號：{{orderInfo.id}}</span>
         </div>
       </div>
       <div class="order-detail-wrap">
         <div class="detail-title">
-          <label>2件商品 / 總計 $76.00</label>
+          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ orderInfo.price+orderInfo.deliverFee}}</label>
         </div>
         <section class="detail-content">
-          <div class="order-item over-order">
+          <div v-for="(prodItem, index) in orderInfo.productList"
+                :key="index"
+                :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
-              <label class="order-item-status">已取</label>
-              <img src="" alt="" class="good-img">
+              <label class="order-item-status" v-if="prodItem.isPick == 1">已取</label>
+              <label class="order-item-status" v-else-if="!isVerifed">未取貨</label>
+              <i :class="['radius-circle', isVerifed && selectCart.indexOf(prodItem.productId) != -1 ? 'radius-check' : '']"
+                  @click="checkItem(prodItem.productId)"
+                  v-else></i>
+              <img :src="prodItem.pic" alt="" class="good-img">
               <div class="order-item-detail">
-                <p class="good-name">進口百香果 90G-110G/個</p>
+                <p class="good-name">{{prodItem.productName}}</p>
                 <div class="flex-box">
                   <div class="count-box">
                     <span>數量</span>
-                    <span>1</span>
+                    <span>{{prodItem.num}}</span>
                   </div>
-                  <label class="good-price">$38</label>
+                  <label class="good-price">{{'$'+prodItem.price}}</label>
                 </div>
               </div>
             </div>
-            <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
+            <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr + '後'}}</div>
+            <div class="solid-hr" v-show="index !== orderInfo.productList.length-1"></div>
           </div>
-          <div class="solid-hr"></div>
-          <div class="order-item">
+          <!-- <div class="order-item">
             <div class="order-item-flex">
               <label class="order-item-status" v-if="!isOverd && !isVerifed">未取貨</label>
               <i class="radius-circle" v-else></i>
@@ -57,31 +63,35 @@
               </div>
             </div>
             <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
-          </div>
+          </div> -->
           <div class="dash-hr"></div>
         </section>
         <div class="total-wrap">
           <label>商品總計</label>
-          <span class="total-price">$76.00</span>
+          <span class="total-price">{{'$'+orderInfo.price}}</span>
+        </div>
+        <div class="total-wrap" v-if="orderInfo.pickWay == 2">
+          <label>配送费</label>
+          <span class="total-price">${{orderInfo.deliverFee}}</span>
         </div>
       </div>
       <section class="bottom-block-wrap">
-        <div class="status-wrap" v-if="isOverd">
+        <div class="status-wrap" v-if="orderInfo.status == 4">
           <div class="finish-btn">
             <i class="check-btn-icon"></i>
             <label>已完成</label>
           </div>
         </div>
-        <div class="verify-wrap" v-else-if="!isOverd && !isVerifed">
+        <div class="verify-wrap" v-else-if="orderInfo.status != 4 && !isVerifed">
           <div class="input-box">
-            <input type="text" v-model="verifyCode" placeholder="輸入驗證碼">
+            <input type="text" v-model="pickCode" placeholder="輸入驗證碼">
           </div>
           <div class="submit-btn" @click="handleVerify">
             <label>確認</label>
           </div>
         </div>
         <div class="comfirm-wrap" v-else>
-          <div class="all-select">
+          <div class="all-select" @click="allSelect">
             <i :class="['radius-circle', allSelected ? 'radius-check' : '']"></i>
             <span>全選</span>
           </div>
@@ -99,31 +109,110 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui'
+import { getOrderDetail, checkPickCode, agentComfirm } from 'utils/getData'
 export default {
   data () {
     return {
-      isOverd: false, // 訂單狀態是否為結束狀態
       isVerifed: false, // 訂單在為結束狀態下是否驗證過
-      verifyCode: '', // 驗證碼
-      allSelected: false, // 是否全選
-      selectCart: {}
+      pickCode: '', // 驗證碼
+      selectCart: [],
+      orderInfo: {},
+      orderId: this.$route.params.orderId,
     }
   },
+  computed: {
+    allSelected () {
+      let flag = true
+      for (let i = 0;i < this.orderInfo.productList.length; i++) {
+        if (this.orderInfo.productList[i].isPick == 1) {
+          continue
+        }
+        if (this.selectCart.indexOf(this.orderInfo.productList[i].productId) == -1) {
+          flag = false
+          break
+        }
+      }
+      return flag
+    }
+  },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.getOrderDetail()
+      if (this.$route.query.pickCode) {
+        this.pickCode = this.$route.query.pickCode
+        this.handleVerify()
+      }
+    },
     linkjump (href) {
       this.$router.push(href)
     },
     historyBack () {
       history.go(-1)
     },
-    handleVerify () {
-      if (this.verifyCode === '') {
+    async handleVerify () {
+      if (this.pickCode === '') {
+        Toast('請輸入驗證碼')
         return false
       }
-      this.isVerifed = true
+      const params = {
+        pickCode: this.pickCode
+      }
+      const data = await checkPickCode(params)
+      if (data.code == 0) {
+        this.isVerifed = true
+      }
     },
-    handleComfirm () {
-      this.isOverd = true
+    async handleComfirm () {
+      if (this.selectCart.length == 0) {
+        Toast('請選擇需要確認的商品')
+        return false
+      }
+      const params = {
+        orderId: this.orderId,
+        productIds: this.selectCart
+      }
+      const data = await agentComfirm(params)
+      if (data.code == 0) {
+        this.getOrderDetail()
+      }
+    },
+    async getOrderDetail () {
+      const params = {
+        orderId: this.orderId
+      }
+      const data = await getOrderDetail(params)
+      if (data.code == 0) {
+        this.orderInfo = data.data
+      }
+    },
+    allSelect () {
+      if (this.selectCart.length != 0) {
+        this.selectCart = []
+      } else {
+        this.selectCart = []
+        this.orderInfo.productList.map(item => {
+          if (item.isPick == 1 ) {
+            return false
+          }
+          this.selectCart.push(item.productId)
+        })
+      }
+    },
+    checkItem (orderId) {
+      if (this.selectCart.indexOf(orderId) == -1) {
+        this.selectCart.push(orderId)
+      } else {
+        for (let i = 0; i < this.selectCart.length; i++) {
+          if (this.selectCart[i] === orderId) {
+            this.selectCart.splice(i, 1)
+            break
+          }
+        }
+      }
     }
   }
 }
@@ -191,6 +280,7 @@ export default {
     }
     .order-detail-wrap {
       @include backImg('../assets/images/rectangletip.png');
+      padding-bottom: 3rem;
       .detail-title {
         width: 100%;
         height: 4.9rem;
@@ -249,7 +339,7 @@ export default {
               .flex-box {
                 width: 100%;
                 .count-box {
-                  width: 10.7rem;
+                  width: 7.7rem;
                   height: 3rem;
                   @extend .theme-color;
                   @extend .flex-box;
@@ -284,8 +374,7 @@ export default {
           }
         }
         .solid-hr {
-          width: 90%;
-          margin-left: 5%;
+          width: 100%;
           border-bottom: 1px solid #E2E2E2;
         }
         .dash-hr {
@@ -298,7 +387,7 @@ export default {
         width: 100%;
         box-sizing: border-box;
         padding: 0 1.7rem 0 2rem;
-        height: 6.7rem;
+        height:  4.7rem;
         @extend .flex-box;
         font-size: 1.8rem;
         color: #444444;

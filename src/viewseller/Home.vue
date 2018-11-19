@@ -7,9 +7,9 @@
     </div>
     <div class="input-code-wrap">
       <div class="input-box">
-        <input type="text" v-model="verifyCode" placeholder="輸入驗證碼">
+        <input type="text" v-model="pickCode" placeholder="輸入驗證碼">
       </div>
-      <div class="submit-btn">
+      <div class="submit-btn" @click="handleVerify">
         <label>確認</label>
       </div>
     </div>
@@ -29,10 +29,13 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui'
+import { checkPickCode } from 'utils/getData'
+
 export default {
   data () {
     return {
-      verifyCode: ''
+      pickCode: ''
     }
   },
   methods: {
@@ -41,16 +44,31 @@ export default {
     },
     historyBack () {
       history.go(-1)
+    },
+    async handleVerify () {
+      if (this.pickCode === '') {
+        Toast('請輸入驗證碼')
+        return false
+      }
+      const params = {
+        pickCode: this.pickCode
+      }
+      const data = await checkPickCode(params)
+      if (data.code == 0) {
+        this.$router.push(`orderDetail/${data.orderId}?pickCode=${this.pickCode}`)
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.page-wrap {
+body {
   background: #ffffff;
+}
+.page-wrap {
   width: 100%;
-  height: 100%;
+  padding-bottom: 3rem;
   position: relative;
   .top-bg {
     width: 100%;

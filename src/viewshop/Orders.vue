@@ -12,7 +12,7 @@
             <b class="time-now"  @click="toggleShowTime">{{currentTime}}</b>
             <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
             <div class="time-option-wrap" v-show="timeshow">
-              <div class="time-option" 
+              <div class="time-option"
                     v-for="(item, index) in timeConf"
                     :key="index"
                     @click="item.click"
@@ -25,12 +25,12 @@
       <div v-if="orderList.length > 0">
         <section v-for="(orderItem, index) in orderList"
                   :key="index"
-                  class="order-wrap" 
+                  class="order-wrap"
                   @click="linkjump(`orderDetail/${orderItem.id}`)">
           <div class="order-title-box">
             <div class="flex-box">
               <p class="order-text-1">團長：{{orderItem.agentName}}  {{orderItem.agentPhone}}</p>
-              <a class="tel-text" :href="'tel:'+orderItem.agentPhone">聯繫團長</a>
+              <a class="tel-text" :href="'tel:'+orderItem.agentPhone" @click.stop="">聯繫團長</a>
             </div>
             <p class="order-text-1">{{orderItem.agentAddress}}</p>
           </div>
@@ -79,10 +79,10 @@
 
 <script>
 import { Popup, Picker } from 'mint-ui'
-import { getCurrentMonth } from 'utils/utils'
+import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
 import { getMyOrders } from 'utils/getData'
 
-const timeTextConf = []
+const beforeMonth = getBeforeMonth(12)
 const pageLimit = '10'
 let totalPage = 1
 let loading = false
@@ -90,7 +90,6 @@ export default {
   data () {
     return {
       currentTime: '今日',
-      timeTextConf: timeTextConf,
       timeshow: false,
       otherMonthVisible: false,
       timeConf: [
@@ -100,11 +99,12 @@ export default {
             this.pageNo = '1'
             this.timeshow = false
             this.currentTime = '今日'
+            const currentD = getCurrentDay()
             const params = {
               "page": this.pageNo,
               "limit": pageLimit,
-              "startTime": "2018-11-18 00:00:00",
-              "endTime": "2018-11-19 00:00:00"
+              "startTime": currentD.start,
+              "endTime": currentD.end
             }
             this.getOrderList(params)
           }
@@ -114,11 +114,12 @@ export default {
             this.pageNo = '1'
             this.timeshow = false
             this.currentTime = '本週'
+            const currentW = getCurrentWeek()
             const params = {
               "page": this.pageNo,
               "limit": pageLimit,
-              "startTime": "2018-11-12 00:00:00",
-              "endTime": "2018-11-19 00:00:00"
+              "startTime": currentW.start,
+              "endTime": currentW.end
             }
             this.getOrderList(params)
           }
@@ -145,7 +146,7 @@ export default {
   },
   computed: {
     dataList () {
-      const monthList = ['2018/11','2018/10','2018/9','2018/8','2018/7','2018/6']
+      const monthList = beforeMonth.map(item => item.label.replace(/-/g,"/"))
       let dateSlots = [
         {
           flex: 1,
@@ -183,7 +184,17 @@ export default {
     },
     timeConfirm () {
       this.currentTime = this.$refs.picker.getValues()[0]
-      
+      const currentT = this.currentTime.replace(/\//g,"-")
+      const selectT = beforeMonth.filter(item => item.label == currentT)[0]
+      this.pageNo = '1'
+      this.timeshow = false
+      const params = {
+        "page": this.pageNo,
+        "limit": pageLimit,
+        "startTime": selectT.time.start,
+        "endTime": selectT.time.end
+      }
+      this.getOrderList(params)
       this.otherMonthVisible = false
     },
     async getOrderList (params) {
@@ -195,7 +206,7 @@ export default {
       if (data.code == 0) {
         this.orderList = data.data.list
         totalPage = data.totalPage
-        
+
       }
       loading = false
     }

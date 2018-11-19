@@ -6,67 +6,151 @@
     </div>
     <div class="page-content">
       <navbar v-model="selected" class="nav-tab-wrap">
-        <tab-item class="nav-tab-item" id="1">全部</tab-item>
-        <tab-item class="nav-tab-item" id="2">未取 / 部分取</tab-item>
-        <tab-item class="nav-tab-item" id="3">已完成</tab-item>
+        <tab-item class="nav-tab-item" id="one">全部</tab-item>
+        <tab-item class="nav-tab-item" id="two">未取 / 部分取</tab-item>
+        <tab-item class="nav-tab-item" id="thr">已完成</tab-item>
       </navbar>
-      <tab-container v-model="selected">
-        <tab-container-item id="1">
-          <div class="tab-container-wrap">
-            <div class="time-wrap">
-              <div class="time-content">
-                <span>篩選日期：</span>
-                <div class="time-box">
-                  <b class="time-now"  @click="toggleShowTime">{{currentTime}}</b>
-                  <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
-                  <div class="time-option-wrap" v-show="timeshow">
-                    <div class="time-option">今日</div>
-                    <div class="time-option">本週</div>
-                    <div class="time-option">本月</div>
-                    <div class="time-option" @click="showMonthPop">其他月份</div>
-                  </div>
-                </div>
-              </div>
+      <div class="time-wrap">
+        <div class="time-content">
+          <span>篩選日期：</span>
+          <div class="time-box">
+            <b class="time-now"  @click="toggleShowTime">{{currentTimeText}}</b>
+            <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
+            <div class="time-option-wrap" v-show="timeshow">
+              <div class="time-option"
+                  v-for="(item, index) in timeConf"
+                  :key="index"
+                  @click="item.click"
+                  >{{item.text}}</div>
+              <div class="time-option" @click="showMonthPop">其他月份</div>
             </div>
-            <section v-if="orderListOne.length != 0" 
-                      v-for="(item, index) in orderListOne"
-                      :key="index"
-                      class="order-wrap" 
-                      @click="linkjump('orderDetail/orderid')">
-              <div class="order-title-box">
-                <div class="flex-box">
-                  <p class="order-text-1">江先生  96XXXXXX</p>
-                  <a class="tel-text">聯繫團員</a>
+          </div>
+        </div>
+      </div>
+      <tab-container v-model="selected">
+        <tab-container-item id="one">
+          <div class="tab-container-wrap">
+            <div v-if="orderListone.length != 0">
+              <section v-for="(item, index) in orderListone"
+                        :key="index"
+                        class="order-wrap"
+                        @click="linkjump(`orderDetail/${item.id}`)">
+                <div class="order-title-box">
+                  <div class="flex-box">
+                    <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
+                    <a class="tel-text" :href="'tel:'+item.phone">聯繫團員</a>
+                  </div>
+                  <p class="order-text-1">{{item.address}}</p>
                 </div>
-                <p class="order-text-1">XX馬路XX號XX樓XX棟XX房</p>
-              </div>
-              <div class="order-content-box">
-                <div class="good-item">
-                  <span class="order-text-2">商品總額</span>
-                  <span class="order-text-3">$ 150</span>
-                </div>
-                <div class="good-item">
-                  <span class="order-text-2">商品件數</span>
-                  <span class="order-text-3">3 件</span>
-                </div>
-                <div class="order-info-box">
-                  <span class="order-no">訂單編號：1000043</span>
-                  <span class="order-get">已取 0 件</span>
-                  <button class="status-btn hide">取貨</button>
-                  <div class="finish-btn ">
-                    <i class="check-btn-icon"></i>
-                    <label>已完成</label>
+                <div class="order-content-box">
+                  <div class="good-item">
+                    <span class="order-text-2">商品總額</span>
+                    <span class="order-text-3">{{'$ '+ item.price}}</span>
+                  </div>
+                  <div class="good-item">
+                    <span class="order-text-2">商品件數</span>
+                    <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
+                  </div>
+                  <div class="order-info-box">
+                    <span class="order-no">訂單編號：{{item.id}}</span>
+                    <span class="order-get">{{'已取 '+item.pickNum+' 件'}}</span>
+                    <button class="status-btn" v-if="item.status != 4">取貨</button>
+                    <div class="finish-btn " v-else>
+                      <i class="check-btn-icon"></i>
+                      <label>已完成</label>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </div>
             <section class="no-order-wrap" v-else>
               <label>所選時段還沒有訂單哦</label>
             </section>
           </div>
         </tab-container-item>
-        <tab-container-item id="2"></tab-container-item>
-        <tab-container-item id="3"></tab-container-item>
+        <tab-container-item id="two">
+          <div class="tab-container-wrap">
+            <div v-if="orderListtwo.length != 0">
+              <section v-for="(item, index) in orderListtwo"
+                        :key="index"
+                        class="order-wrap"
+                        @click="linkjump(`orderDetail/${item.id}`)">
+                <div class="order-title-box">
+                  <div class="flex-box">
+                    <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
+                    <a class="tel-text" :href="'tel:'+item.phone">聯繫團員</a>
+                  </div>
+                  <p class="order-text-1">{{item.address}}</p>
+                </div>
+                <div class="order-content-box">
+                  <div class="good-item">
+                    <span class="order-text-2">商品總額</span>
+                    <span class="order-text-3">{{'$ '+ item.price}}</span>
+                  </div>
+                  <div class="good-item">
+                    <span class="order-text-2">商品件數</span>
+                    <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
+                  </div>
+                  <div class="order-info-box">
+                    <span class="order-no">訂單編號：{{item.id}}</span>
+                    <span class="order-get">{{'已取 '+item.pickNum+' 件'}}</span>
+                    <button class="status-btn" v-if="item.status != 4">取貨</button>
+                    <div class="finish-btn " v-else>
+                      <i class="check-btn-icon"></i>
+                      <label>已完成</label>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <section class="no-order-wrap" v-else>
+              <label>所選時段還沒有訂單哦</label>
+            </section>
+          </div>
+        </tab-container-item>
+        <tab-container-item id="thr">
+          <div class="tab-container-wrap">
+            <div v-if="orderListthr.length != 0"
+                  v-infinite-scroll="getOrderList"
+                  infinite-scroll-disabled="loading"
+                  infinite-scroll-distance="10">
+              <section v-for="(item, index) in orderListthr"
+                        :key="index"
+                        class="order-wrap"
+                        @click="linkjump(`orderDetail/${item.id}`)">
+                <div class="order-title-box">
+                  <div class="flex-box">
+                    <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
+                    <a class="tel-text" :href="'tel:'+item.phone">聯繫團員</a>
+                  </div>
+                  <p class="order-text-1">{{item.address}}</p>
+                </div>
+                <div class="order-content-box">
+                  <div class="good-item">
+                    <span class="order-text-2">商品總額</span>
+                    <span class="order-text-3">{{'$ '+ item.price}}</span>
+                  </div>
+                  <div class="good-item">
+                    <span class="order-text-2">商品件數</span>
+                    <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
+                  </div>
+                  <div class="order-info-box">
+                    <span class="order-no">訂單編號：{{item.id}}</span>
+                    <span class="order-get">{{'已取 '+item.pickNum+' 件'}}</span>
+                    <button class="status-btn" v-if="item.status != 4">取貨</button>
+                    <div class="finish-btn " v-else>
+                      <i class="check-btn-icon"></i>
+                      <label>已完成</label>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <section class="no-order-wrap" v-else>
+              <label>所選時段還沒有訂單哦</label>
+            </section>
+          </div>
+        </tab-container-item>
       </tab-container>
     </div>
     <mt-popup
@@ -89,27 +173,83 @@
 <script>
 import { Navbar, TabItem, TabContainer, TabContainerItem, Popup, Picker } from 'mint-ui'
 import { MessageBox, MyAside, CollapseItem } from 'components'
+import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
 import { agentOrders } from 'utils/getData'
+
+const currentD = getCurrentDay()
+const currentW = getCurrentWeek()
+const currentM = getCurrentMonth()
+const beforeMonth = getBeforeMonth(12)
+const pageLimit = '10'
+let totalPages = {
+  'one': 1,
+  'two': 1,
+  'thr': 1
+}
+let pageNos = {
+  'one': 0,
+  'two': 0,
+  'thr': 0
+}
+let statusConf = {
+  'one': '',
+  'two': 1,
+  'thr': 3
+}
+let loading = false
 export default {
   data () {
     return {
-      selected: "1",
+      selected: "one",
       otherMonthVisible: false,
       timeshow: false,
-      currentTime: 0,
-      orderPage: {
-        pageOne: 0,
-        pageTwo: 0,
-        pageThr: 0
+      currentTime: '今日',
+      current : {
+        'one': '0',
+        'two': '0',
+        'thr': '0'
       },
-      orderListOne: [],
-      orderListTwo: [],
-      orderListThr: []
+      timeConf: [
+        {
+          text: '今日',
+          click: () => {
+            pageNos[this.selected] = 0
+            totalPages[this.selected] = 1
+            this.orderList = []
+            this.$set(current, this.selected, '0')
+            this.timeshow = false
+            this.getOrderList()
+          }
+        },{
+          text: '本週',
+          click: () => {
+            pageNos[this.selected] = 0
+            totalPages[this.selected] = 1
+            this.orderList = []
+            this.$set(current, this.selected, '1')
+            this.timeshow = false
+            this.getOrderList()
+          }
+        },{
+          text: '本月',
+          click: () => {
+            pageNos[this.selected] = 0
+            totalPages[this.selected] = 1
+            this.orderList = []
+            this.$set(current, this.selected, '2')
+            this.timeshow = false
+            this.getOrderList()
+          }
+        }
+      ],
+      orderListone: [],
+      orderListtwo: [],
+      orderListthr: []
     }
   },
   computed: {
     dataList () {
-      const monthList = ['2018/11','2018/10','2018/9','2018/8','2018/7','2018/6']
+      const monthList = beforeMonth.map(item => item.label.replace(/-/g,"/"))
       let dateSlots = [
         {
           flex: 1,
@@ -119,6 +259,49 @@ export default {
         }
       ]
       return  dateSlots
+    },
+    currentTimeText () {
+      const cArr = this.current[this.selected].split('-')
+      console.log(cArr)
+      switch (cArr[0]) {
+        case '0':
+          return '今日'
+          break;
+        case '1':
+          return '本週'
+          break;
+        case '2':
+          return '本月'
+          break;
+        case '3':
+          if (cArr[1]) {
+            return beforeMonth[cArr[1]].label
+          }
+          break;
+        default:
+          return '今日'
+      }
+    },
+    currentTime () {
+      const cArr = this.current[this.selected].split('-')
+      switch (cArr[0]) {
+        case '0':
+          return currentD
+          break;
+        case '1':
+          return currentW
+          break;
+        case '2':
+          return currentM
+          break;
+        case '3':
+          if (cArr[1]) {
+            return beforeMonth[cArr[1]].time
+          }
+          break;
+        default:
+          return currentD
+      }
     }
   },
   components: {
@@ -130,6 +313,9 @@ export default {
     CollapseItem,
     mtPopup: Popup,
     mtPicker: Picker
+  },
+  mounted () {
+    this.timeConf[0].click()
   },
   methods: {
     linkjump (href) {
@@ -149,16 +335,62 @@ export default {
       this.otherMonthVisible = false
     },
     timeConfirm () {
-      this.currentTime = this.$refs.picker.getValues()[0]
+      const text = this.$refs.picker.getValues()[0]
+      const currentT = text.replace(/\//g,"-")
+      let index = 0
+      for(let i = 0; i < beforeMonth.length; i++) {
+        if (beforeMonth[i].label == currentT) {
+          index = i
+          break
+        }
+      }
+      pageNos[this.selected] = '1'
+      this.timeshow = false
+      this.$set(current, this.selected, `3-${index}`)
+      this.getOrderList()
       this.otherMonthVisible = false
+    },
+    async getOrderList () {
+      console.log('----', pageNos[this.selected], '----', totalPages[this.selected], '---', pageNos[this.selected] >= totalPages[this.selected])
+      if (pageNos[this.selected] >= totalPages[this.selected]) {
+        return false
+      }
+      if (loading) {
+        return false
+      }
+      const params = {
+        "page": pageNos[this.selected],
+        "limit": pageLimit,
+        "pickStatus": statusConf[this.selected],
+        "startTime": this.currentTime.start,
+        "endTime": this.currentTime.start.end
+      }
+      loading = true
+      const data = await agentOrders(params)
+      if (data.code == 0) {
+        this[`orderList${this.selected}`] = data.data.list
+        totalPages[this.selected] = data.totalPage
+      }
+      loading = false
+    }
+  },
+  watch: {
+    selected (newV, oldV) {
+      // if (this[`orderList${newV}`].length == 0) {
+      //   this.currentTime = '今日'
+      //   this.timeConf[0].click()
+      // }
+      this.getOrderList()
     }
   }
 }
 </script>
 
 <style lang="scss">
-.page-wrap {
+body {
   background: #F6F6F6;
+}
+.page-wrap {
   width: 100%;
   height: 100%;
   .page-title {
@@ -192,51 +424,51 @@ export default {
         }
       }
     }
-    .tab-container-wrap {
-      .time-wrap {
-        width: 100%;
-        box-sizing: border-box;
-        height: 6.1rem;
-        padding: 0 1.4rem;
-        .time-content {
-          font-size: 1.6rem;
-          color: #444444;
-          line-height: 6.1rem;
+    .time-wrap {
+      width: 100%;
+      box-sizing: border-box;
+      height: 6.1rem;
+      padding: 0 1.4rem;
+      .time-content {
+        font-size: 1.6rem;
+        color: #444444;
+        line-height: 6.1rem;
+        display: flex;
+        position: relative;
+        .time-box {
+          height: 100%;
           display: flex;
-          position: relative;
-          .time-box {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            .time-now {
-              color: #000000;
-              margin-right: 1.7rem;
-            }
-            .down-icon {
-              width: 1.1rem;
-              height: .6rem;
-              @include backImg('../assets/images/triangle4.png');
-              transition: all .3s;
-            }
-            .rotate-down {
-              transform: rotate(180deg);
-            }
-            .time-option-wrap {
-              position: absolute;
-              left: 6.5rem;top: 4.5rem;
-              z-index: 1;
-              border: 1px solid red;
-              background: #ffffff;
-              .time-option {
-                font-size: 1.4rem;
-                height: 1.6rem;
-                line-height: 1.6rem;
-                border-bottom: 1px solid #E5E5E5;
-              }
+          align-items: center;
+          .time-now {
+            color: #000000;
+            margin-right: 1.7rem;
+          }
+          .down-icon {
+            width: 1.1rem;
+            height: .6rem;
+            @include backImg('../assets/images/triangle4.png');
+            transition: all .3s;
+          }
+          .rotate-down {
+            transform: rotate(180deg);
+          }
+          .time-option-wrap {
+            position: absolute;
+            left: 6.5rem;top: 4.5rem;
+            z-index: 1;
+            border: 1px solid red;
+            background: #ffffff;
+            .time-option {
+              font-size: 1.4rem;
+              height: 1.6rem;
+              line-height: 1.6rem;
+              border-bottom: 1px solid #E5E5E5;
             }
           }
         }
       }
+    }
+    .tab-container-wrap {
       .no-order-wrap {
         width: 100%;
         padding-top: 2.5rem;

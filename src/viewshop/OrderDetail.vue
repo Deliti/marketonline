@@ -9,17 +9,17 @@
         <div class="order-title-box">
           <div class="flex-box">
             <p class="order-text-1">團長：{{orderInfo.agentName}}  {{orderInfo.agentPhone}}</p>
-            <a class="tel-text" :href="'tel:'+orderInfo.agentPhone">聯繫團長</a>
+            <a class="tel-text" :href="'tel:'+orderInfo.agentPhone" @click.stop="">聯繫團長</a>
           </div>
           <p class="order-text-1">{{orderInfo.agentAddress}}</p>
         </div>
          <div class="order-info-box">
-          <span class="order-no">訂單編號：{{orderId}}</span>
+          <span class="order-no">訂單編號：{{orderInfo.id}}</span>
         </div>
       </div>
       <div class="order-detail-wrap">
         <div class="detail-title">
-          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ orderInfo.price}}</label>
+          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ orderInfo.price+orderInfo.deliverFee}}</label>
         </div>
         <section class="detail-content">
           <div v-for="(prodItem, index) in orderInfo.productList"
@@ -64,6 +64,10 @@
         <div class="total-wrap">
           <label>商品總計</label>
           <span class="total-price">{{'$'+orderInfo.price}}</span>
+        </div>
+        <div class="total-wrap" v-if="orderInfo.pickWay == 2">
+          <label>配送费</label>
+          <span class="total-price">${{orderInfo.deliverFee}}</span>
         </div>
       </div>
       <div class="over-wrap" v-if="orderInfo.status == 4">
@@ -193,6 +197,7 @@ export default {
       }
     }
     .order-detail-wrap {
+      padding-bottom: 3rem;
       @include backImg('../assets/images/rectangletip.png');
       .detail-title {
         width: 100%;
@@ -279,8 +284,7 @@ export default {
           }
         }
         .solid-hr {
-          width: 90%;
-          margin-left: 5%;
+          width: 100%;
           border-bottom: 1px solid #E2E2E2;
         }
         .dash-hr {
@@ -293,7 +297,7 @@ export default {
         width: 100%;
         box-sizing: border-box;
         padding: 0 1.7rem 0 2rem;
-        height: 6.7rem;
+        height:  4.7rem;
         @extend .flex-box;
         font-size: 1.8rem;
         color: #444444;

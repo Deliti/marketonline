@@ -30,3 +30,6 @@ export const playOrder = params => fetch('post', '/merchant/app/order/playOrder'
 export const agentOrders = params => fetch('post', '/merchant/app/order/agentOrders', params)
 export const getMyOrders = params => fetch('post', '/merchant/app/order/myOrders', params)
 export const getOrderDetail = params => fetch('post', '/merchant/app/order/detail', params)
+
+export const checkPickCode = params => fetch('post', '/merchant/app/order/checkPickCode', params)
+export const agentComfirm = params => fetch('post', '/merchant/app/order/pickUp', params)
