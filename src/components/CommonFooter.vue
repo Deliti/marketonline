@@ -34,7 +34,7 @@ export default {
     ...mapGetters(['goodCount'])
   },
   methods: {
-    
+
   }
 }
 </script>
@@ -47,6 +47,9 @@ export default {
   z-index: 11;
   display: flex;
   align-items: flex-end;
+  @media screen and (min-width: $screenMid) {
+    display: none;
+  }
   .footer-wrap {
     flex: 1;
     height: 5rem;

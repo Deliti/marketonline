@@ -56,6 +56,9 @@ export default {
       height: .7rem;
       @include backImg('../../assets/images/up-arrow.png');
       transform: rotate(180deg);
+      @media screen and (min-width: $screenMid) {
+        @include backImg('../../assets/images/pc-up-arrow.png');
+      }
     }
     .el-icon-arrow-down {
       transform: rotate(0deg);

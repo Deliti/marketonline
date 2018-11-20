@@ -4,6 +4,7 @@ import fetch from './fetch'
 export const login = params => fetch('post', '/merchant/app/user/login', params)
 export const register = params => fetch('post', '/merchant/app/user/register', params)
 export const resetPwd = params => fetch('post', '/merchant/app/user/resetPwd', params)
+export const getUserInfo = params => fetch('post', '/merchant/app/user/info', params)
 export const getLeaderList = params => fetch('post', '/merchant/app/agent/select', params)
 export const getMyLeader = params => fetch('post', '/merchant/app/precedence/list', params)
 export const getMyAddr = params => fetch('post', '/merchant/app/address/list', params)
@@ -13,6 +14,7 @@ export const addAddr = params => fetch('post', '/merchant/app/address/save', par
 export const deleteAddr = params => fetch('post', '/merchant/app/address/delete', params)
 
 // 商品详情
+export const getBanner = params => fetch('post', '/merchant/app/user/banner', params)
 export const prodType = params => fetch('post', '/merchant/app/product/category', params)
 export const productList = params => fetch('post', '/merchant/app/product/list', params)
 export const productInfo = params => fetch('post', '/merchant/app/product/info', params)

@@ -66,4 +66,23 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+@media screen and (min-width: $screenMid) {
+  .aside-wrap {
+    position: relative;
+    width: 100%;
+    padding-left: 4rem;
+    .cover-wrap {
+      display: none;
+    }
+    .aside-content {
+      width: 37rem;
+      max-width: 85%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0 0 2rem 0;
+      background: none;
+      position: relative;
+    }
+  }
+}
 </style>

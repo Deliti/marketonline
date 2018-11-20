@@ -10,6 +10,7 @@ import MessageBox from './MessageBox'
 import MyAside from './MyAside.vue'
 import CollapseItem from './MyCollapse/CollapseItem.vue'
 import TimeDown from './TimeDown.vue'
+import CommonHeader from './CommonHeader.vue'
 import CommonFooter from './CommonFooter.vue'
 
 export {
@@ -20,6 +21,7 @@ export {
   MyAside,
   CollapseItem,
   TimeDown,
+  CommonHeader,
   CommonFooter
   // Button,
   // TextInput,

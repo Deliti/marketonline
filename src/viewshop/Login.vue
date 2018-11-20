@@ -1,32 +1,30 @@
 <template>
-  <div :class="['page-wrap', userAgent == 'PHONE'?'page-phone-wrap':'page-pc-wrap']">
-    <div class="page-phone" v-if="userAgent == 'PHONE'">
-      <div class="page-title">
-        <i class="return-icon" @click="historyBack"></i>
-        <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
-      </div>
-      <div class="page-content">
-        <h1 class="program-title">品牌名字</h1>
-        <h3 class="center-title">登入</h3>
-        <div class="input-wrap">
-          <div class="input-box">
-            <input type="text" class="input" placeholder="手機號碼" v-model="username">
-          </div>
-          <hr>
-          <div class="input-box">
-            <input type="password" class="input" placeholder="密碼" v-model="password">
-          </div>
+  <div class="page-wrap">
+    <div class="page-title">
+      <i class="return-icon" @click="historyBack"></i>
+      <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
+    </div>
+    <div class="page-content">
+      <h1 class="program-title">品牌名字</h1>
+      <h3 class="center-title">登入</h3>
+      <div class="input-wrap">
+        <div class="input-box">
+          <input type="text" class="input" placeholder="手機號碼" v-model="username">
         </div>
-        <div class="right-text">
-          <label @click="linkjump('findpwd')">忘記密碼？</label>
+        <hr>
+        <div class="input-box">
+          <input type="password" class="input" placeholder="密碼" v-model="password">
         </div>
       </div>
-      <div class="bottom-setion">
-        <div class="enter-text"><label @click="linkjump('register')">註冊新帳戶</label></div>
-        <div class="submit-btn" @click="login"><label>登錄</label></div>
+      <div class="right-text">
+        <label @click="linkjump('findpwd')">忘記密碼？</label>
       </div>
     </div>
-    <div class="page-pc" v-else>
+    <div class="bottom-setion">
+      <div class="enter-text"><label @click="linkjump('register')">註冊新帳戶</label></div>
+      <div class="submit-btn" @click="login"><label>登錄</label></div>
+    </div>
+    <!-- <div class="page-pc" v-else>
       <h1 class="page-pc-title">品牌名字</h1>
       <div class="page-container">
         <div class="login-wrap">
@@ -65,7 +63,7 @@
           <span class="link-item">反饋意見</span>
         </div>
       </section>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -105,6 +103,7 @@ export default {
         Toast('登錄成功')
         localStorage['token'] = data.data.token
         localStorage['isAgent'] = data.data.isAgent
+        this.getUserInfo()
         this.getAllCartList()
         this.linkjump('home')
       }
@@ -133,6 +132,12 @@ export default {
       if (data.code == 0) {
         this.UPDATECART(data.data)
       }
+    },
+    async getUserInfo () {
+      const data = await getUserInfo()
+      if (data.code == 0) {
+        localStorage['userInfo'] = JSON.stringify(data.data)
+      }
     }
   }
 }
@@ -143,7 +148,7 @@ export default {
   width: 100%;
   height: 100%;
 }
-.page-phone {
+.page-wrap {
   width: 100%;
   height: 100%;
   overflow: hidden;

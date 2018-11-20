@@ -14,12 +14,13 @@ export default {
     this.init()
   },
   beforeCreate () {
-    if (IsPC()) {
-      localStorage['userAgent'] = 'PC'
-    } else {
-      localStorage['userAgent'] = 'PHONE'
-      document.documentElement.style = "font-size: 2.6666667vw !important;"
-    }
+    // console.log(IsPC())
+    // if (IsPC()) {
+    //   localStorage['userAgent'] = 'PC'
+    // } else {
+    //   localStorage['userAgent'] = 'PHONE'
+    //   document.documentElement.style = "font-size: 2.6666667vw !important;"
+    // }
   },
   methods: {
     ...mapMutations(['UPDATECART']),
@@ -66,6 +67,11 @@ export default {
   }
   h1 {
     font-size: 1.8rem;
+  }
+}
+@media screen and (min-width: $screenMid) {
+  .page-title {
+    display: none;
   }
 }
 </style>

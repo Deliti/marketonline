@@ -1,16 +1,14 @@
 <template>
   <div class="page-wrap">
+    <common-header></common-header>
     <div class="banner-wrap">
       <div v-show="isAgent == 1" class="leader-btn" @click="hrefJump('/seller#home')">團長入口</div>
       <mt-swipe :auto="4000" class="banner-box">
-        <mt-swipe-item class="banner-item">
-          <img src="../assets/images/banner1.jpg" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item class="banner-item">
-          <img src="../assets/images/banner2.jpg" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item class="banner-item">
-          <img src="../assets/images/banner3.jpg" alt="">
+        <mt-swipe-item class="banner-item"
+                        v-for="(banner, index) in bannerList"
+                        :key="index"
+                        @click="linkJump(`goodDetail/${banner.id}`)">
+          <img :src='banner.paramValue' alt="">
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -30,7 +28,7 @@
                 infinite-scroll-distance="10">
         <div v-for="(goodInfo, index) in goodList"
               :key="index"
-              :class="['list-item', goodInfo.lessTime == -1 ? 'list-over' : '']" 
+              :class="['list-item', goodInfo.lessTime == -1 ? 'list-over' : '']"
               @click="linkJump(`goodDetail/${goodInfo.id}`)">
           <div class="item-banner-wrap">
             <img :src='goodInfo.pic' alt="" class="item-banner">
@@ -91,11 +89,11 @@
 
 <script>
 import { Swipe, SwipeItem } from 'mint-ui';
-import { CommonFooter } from 'components'
+import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText } from 'utils/utils'
 import $ from 'jquery'
-import { productList, prodType, addCart, updateCart } from 'utils/getData'
+import { getBanner, productList, prodType, addCart, updateCart } from 'utils/getData'
 
 let pageInterVal = null
 let pageNo = 0
@@ -106,9 +104,13 @@ export default {
   data () {
     return {
       isAgent: localStorage['isAgent'],
-      goodTypeIndex: 0,
-      categoryId: '',
-      goodType: [],
+      bannerList: [],
+      categoryId: '-1',
+      goodType: [{
+        "id": 1,
+        "status": 0,
+        "categoryName": "全部"
+      }],
       goodList: []
     }
   },
@@ -118,6 +120,7 @@ export default {
   components: {
     mtSwipe: Swipe,
     mtSwipeItem: SwipeItem,
+    CommonHeader,
     CommonFooter
   },
   mounted () {
@@ -130,6 +133,7 @@ export default {
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
     init () {
+      this.getBanner()
       this.getProdType()
     },
     addEvent () {
@@ -155,12 +159,17 @@ export default {
       this.goodList = []
       this.getProdList()
     },
+    async getBanner () {
+      const data = await getBanner()
+      if (data.code == 0) {
+        this.bannerList = data.data
+      }
+    },
     async getProdType () {
       const data = await prodType()
       if (data.code == 0) {
-        this.goodType.push(...data.data)
-        this.categoryId = this.goodType[0].id
-        this.getProdList()
+        this.goodType = data.data
+        console.log('this.cate', this.categoryId)
       }
     },
     async addGoodCart (goodInfo) {
@@ -174,7 +183,7 @@ export default {
         const params = {
           productId: goodInfo.id,
           num: count+1
-        } 
+        }
         const data = await updateCart(params)
         if (data.code == 0) {
           this.ADDGOOD(goodInfo)
@@ -203,7 +212,7 @@ export default {
         const params = {
           productId: goodInfo.id,
           num: count-1
-        } 
+        }
         const data = await updateCart(params)
         if (data.code == 0) {
           this.DESGOOD(goodInfo.id)
@@ -237,9 +246,10 @@ export default {
         page: pageNo,
         limit: pageLimit
       }
+      console.log(params)
       const data = await productList(params)
       if (data.code == 0) {
-        this.goodList.push(...data.page.list) 
+        this.goodList.push(...data.page.list)
         totalPage = data.page.totalPage
         this.updateTime()
         loading = false

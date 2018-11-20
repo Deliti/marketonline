@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <div class="page-bg-bottom"></div>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
       <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
@@ -29,18 +30,43 @@
       <div class="leader-wrap">
         <div class="leader-no-selected"
             v-if="!leader.userId"
-            @click="showLeader">
+            @click="toggleLeader">
           <i class="left-icon"></i>
+          <i :class="['down-icon', leaderShow?'rotate-down':'']"></i>
           <b>選擇團長</b>
           <span>（即購買商品後的取貨地點）</span>
         </div>
         <div class="leader-seleted-box" v-else>
+          <i :class="['down-icon', leaderShow?'rotate-down':'']" @click="toggleLeader"></i>
           <div class="seleted-title">已選團長：</div>
           <div class="leader-info-wrap">
             <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}{{leader.phone}}</p>
             <div class="reset-btn" @click="showLeader">重置</div>
           </div>
         </div>
+        <my-aside :show="leaderShow" @hide="hideLeader">
+          <div class="option-seleted">
+            <div class="seleted-title">已選團長：</div>
+            <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
+            <p class="no-seleted" v-else>—— 無 ——</p>
+          </div>
+          <div class="option-wrap">
+            <collapse-item v-for="(childLeaders, districtKey) in leaders"
+                            :key="districtKey">
+              <div slot="title" class="option-title">{{districtKey}}</div>
+              <div v-for="(item, index) in childLeaders"
+                  :key="index"
+                  class="option-item"
+                  @click="chooseLeader(item)">
+                <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
+                <div class="option-box">
+                  <p class="option-text">{{item.address}}</p>
+                  <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
+                </div>
+              </div>
+            </collapse-item>
+          </div>
+        </my-aside>
       </div>
       <div class="input-wrap">
         <div class="input-box">
@@ -59,29 +85,6 @@
         <div class="submit-btn" @click="submit"><label>註冊新帳戶</label></div>
       </div>
     </div>
-    <my-aside :show="leaderShow" @hide="hideLeader">
-      <div class="option-seleted">
-        <div class="seleted-title">已選團長：</div>
-        <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
-        <p class="no-seleted" v-else>—— 無 ——</p>
-      </div>
-      <div class="option-wrap">
-        <collapse-item v-for="(childLeaders, districtKey) in leaders"
-                        :key="districtKey">
-          <div slot="title" class="option-title">{{districtKey}}</div>
-          <div v-for="(item, index) in childLeaders"
-              :key="index"
-              class="option-item"
-              @click="chooseLeader(item)">
-            <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
-            <div class="option-box">
-              <p class="option-text">{{item.address}}</p>
-              <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
-            </div>
-          </div>
-        </collapse-item>
-      </div>
-    </my-aside>
   </div>
 </template>
 
@@ -233,6 +236,9 @@ export default {
     hideLeader () {
       this.leaderShow = false
     },
+    toggleLeader () {
+      this.leaderShow = !this.leaderShow
+    },
     chooseLeader (leader) {
       this.leader = leader
       this.leaderShow = false
@@ -244,9 +250,27 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   width: 100%;
+  min-height: 100%;
   padding-bottom: 4.3rem;
   position: relative;
   @include backImg('../assets/images/rectangle.png');
+  @media screen and (min-width: $screenMid) {
+    background: none;
+    padding-bottom: .43rem;
+  }
+  .page-bg-bottom {
+    display: none;
+    @media screen and (min-width: $screenMid) {
+      display: block;
+      position: absolute;
+      left: 0;top: 0;
+      width: 100%;
+      min-width: 76.8rem;
+      height: 100%;
+      min-height: 10.24rem;
+      @include backImg('../assets/images/pc-login-bg2.png');
+    }
+  }
   .page-title {
     background: none;
     .about-us {
@@ -263,9 +287,18 @@ export default {
     }
   }
   .page-content {
+    position: relative;
     width: 100%;
     box-sizing: border-box;
     padding: 0 3.3rem;
+    @media screen and (min-width: $screenMid) {
+      width: 61.4rem;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 5.3rem 7rem 3rem;
+      @include backImg('../assets/images/pc-login-bg1.png');
+      background-size: 100% 45rem;
+    }
     .program-title {
       width: 100%;
       font-size: 3.6rem;
@@ -273,6 +306,10 @@ export default {
       color: #FFFFFF;
       text-align: center;
       margin-bottom: 2.3rem;
+      @media screen and (min-width: $screenMid) {
+        line-height: 4.5rem;
+        margin-bottom: 4.8rem;
+      }
     }
     .center-title {
       font-size: 2.4rem;
@@ -280,6 +317,9 @@ export default {
       color: #FFFFFF;
       text-align: center;
       margin-bottom: 1rem;
+      @media screen and (min-width: $screenMid) {
+        line-height: 4.5rem;
+      }
     }
     .input-wrap {
       width: 100%;
@@ -328,6 +368,10 @@ export default {
     .leader-wrap {
       margin: 2.2rem 0 1.8rem 0;
       width: 100%;
+      @media screen and (min-width: $screenMid) {
+        margin-bottom: 1.4rem;
+        background: #444444;
+      }
       .leader-no-selected {
         height: 2.4rem;
         box-sizing: border-box;
@@ -335,18 +379,52 @@ export default {
         align-items: center;
         color: #FFFFFF;
         font-size: 1.4rem;
+        position: relative;
+        @media screen and (min-width: $screenMid) {
+          height: 4rem;
+          padding-left: 4rem;
+          border-radius: 6px;
+        }
         .left-icon {
           width: .7rem;
           height: 1.2rem;
           @include backImg('../assets/images/link-arrow.png');
           transform: rotate(180deg);
           margin-right: 1rem;
+          @media screen and (min-width: $screenMid) {
+            display: none;
+          }
         }
         b {
           font-size: 1.8rem;
         }
       }
+      .down-icon {
+        display: none;
+        width: 1.1rem;
+        height: .6rem;
+        position: absolute;
+        left: 1.5rem;top: 1.7rem;
+        @include backImg('../assets/images/pc-down-icon.png');
+        transition: all .3s;
+        @media screen and (min-width: $screenMid) {
+          display: block;
+        }
+      }
+      .rotate-down {
+        transform: rotate(180deg);
+      }
       .leader-seleted-box {
+        position: relative;
+        @media screen and (min-width: $screenMid) {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          box-sizing: border-box;
+          padding-left: 4rem;
+          border-radius: 6px;
+          height: 5rem;
+        }
         .seleted-title {
           font-size: 1.4rem;
           color: #ffffff;
@@ -354,11 +432,17 @@ export default {
         }
         .leader-info-wrap {
           @extend .flex-box;
+          @media screen and (min-width: $screenMid) {
+            flex: 1;
+          }
           .seleted-text {
             max-width: 80%;
             font-size: 1.7rem;
             font-weight: bold;
             color: #ffffff;
+            @media screen and (min-width: $screenMid) {
+              max-width: 100%;
+            }
           }
           .reset-btn {
             height: 2.4rem;
@@ -370,6 +454,9 @@ export default {
             background-size: .7rem 1.2rem;
             background-position: right center;
             text-decoration: underline;
+            @media screen and (min-width: $screenMid) {
+              display: none;
+            }
           }
         }
       }
@@ -407,7 +494,11 @@ export default {
     }
   }
 }
+
 .option-seleted {
+  @media screen and (min-width: $screenMid) {
+    display: none;
+  }
   .seleted-title {
     font-size: 1.4rem;
     color: #444444;
@@ -425,7 +516,9 @@ export default {
 .option-wrap {
   .option-title {
     font-size: 1.8rem;
-    color: #444444;
+    @media screen and (min-width: $screenMid) {
+      color: #ffffff;
+    }
   }
   .option-item {
     padding-top: 1rem;
@@ -444,7 +537,9 @@ export default {
     }
     .option-box {
       font-size: 1.4rem;
-      color: #444444;
+      @media screen and (min-width: $screenMid) {
+        color: #ffffff;
+      }
     }
   }
   .option-item-disable {
