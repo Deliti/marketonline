@@ -30,7 +30,10 @@
       <tab-container v-model="selected">
         <tab-container-item id="one">
           <div class="tab-container-wrap">
-            <div v-if="orderListone.length != 0">
+            <div v-if="orderListone.length != 0"
+                  v-infinite-scroll="getOrderList"
+                  infinite-scroll-disabled="loading"
+                  infinite-scroll-distance="10">
               <section v-for="(item, index) in orderListone"
                         :key="index"
                         class="order-wrap"
@@ -70,7 +73,10 @@
         </tab-container-item>
         <tab-container-item id="two">
           <div class="tab-container-wrap">
-            <div v-if="orderListtwo.length != 0">
+            <div v-if="orderListtwo.length != 0"
+                  v-infinite-scroll="getOrderList"
+                  infinite-scroll-disabled="loading"
+                  infinite-scroll-distance="10">
               <section v-for="(item, index) in orderListtwo"
                         :key="index"
                         class="order-wrap"
@@ -203,7 +209,6 @@ export default {
       selected: "one",
       otherMonthVisible: false,
       timeshow: false,
-      currentTime: '今日',
       current : {
         'one': '0',
         'two': '0',
@@ -215,8 +220,8 @@ export default {
           click: () => {
             pageNos[this.selected] = 0
             totalPages[this.selected] = 1
-            this.orderList = []
-            this.$set(current, this.selected, '0')
+            this[`orderList${this.selected}`] = []
+            this.$set(this.current, this.selected, '0')
             this.timeshow = false
             this.getOrderList()
           }
@@ -225,8 +230,8 @@ export default {
           click: () => {
             pageNos[this.selected] = 0
             totalPages[this.selected] = 1
-            this.orderList = []
-            this.$set(current, this.selected, '1')
+            this[`orderList${this.selected}`] = []
+            this.$set(this.current, this.selected, '1')
             this.timeshow = false
             this.getOrderList()
           }
@@ -235,8 +240,8 @@ export default {
           click: () => {
             pageNos[this.selected] = 0
             totalPages[this.selected] = 1
-            this.orderList = []
-            this.$set(current, this.selected, '2')
+            this[`orderList${this.selected}`] = []
+            this.$set(this.current, this.selected, '2')
             this.timeshow = false
             this.getOrderList()
           }
@@ -344,9 +349,11 @@ export default {
           break
         }
       }
-      pageNos[this.selected] = '1'
+      pageNos[this.selected] = 0
+      totalPages[this.selected] = 1
+      this[`orderList${this.selected}`] = []
       this.timeshow = false
-      this.$set(current, this.selected, `3-${index}`)
+      this.$set(this.current, this.selected, `3-${index}`)
       this.getOrderList()
       this.otherMonthVisible = false
     },
@@ -358,18 +365,19 @@ export default {
       if (loading) {
         return false
       }
+      pageNos[this.selected]++
       const params = {
         "page": pageNos[this.selected],
         "limit": pageLimit,
         "pickStatus": statusConf[this.selected],
         "startTime": this.currentTime.start,
-        "endTime": this.currentTime.start.end
+        "endTime": this.currentTime.end
       }
       loading = true
       const data = await agentOrders(params)
       if (data.code == 0) {
-        this[`orderList${this.selected}`] = data.data.list
-        totalPages[this.selected] = data.totalPage
+        this[`orderList${this.selected}`].push(...data.data.list)
+        totalPages[this.selected] = data.data.totalPage
       }
       loading = false
     }
@@ -380,6 +388,7 @@ export default {
       //   this.currentTime = '今日'
       //   this.timeConf[0].click()
       // }
+      this.timeshow = false
       this.getOrderList()
     }
   }
@@ -456,13 +465,19 @@ body {
             position: absolute;
             left: 6.5rem;top: 4.5rem;
             z-index: 1;
-            border: 1px solid red;
-            background: #ffffff;
+            border-radius: .4rem;
+            @extend .theme-color;
+            color: #ffffff;
             .time-option {
+              padding: 0 2rem;
               font-size: 1.4rem;
-              height: 1.6rem;
-              line-height: 1.6rem;
-              border-bottom: 1px solid #E5E5E5;
+              text-align: center;
+              height: 2.4rem;
+              line-height: 2.4rem;
+              border-bottom: 1px solid #ffffff;
+              &:last-child {
+                border: none;
+              }
             }
           }
         }

@@ -46,24 +46,6 @@
             <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr + '後'}}</div>
             <div class="solid-hr" v-show="index !== orderInfo.productList.length-1"></div>
           </div>
-          <!-- <div class="order-item">
-            <div class="order-item-flex">
-              <label class="order-item-status" v-if="!isOverd && !isVerifed">未取貨</label>
-              <i class="radius-circle" v-else></i>
-              <img src="" alt="" class="good-img">
-              <div class="order-item-detail">
-                <p class="good-name">進口百香果 90G-110G/個</p>
-                <div class="flex-box">
-                  <div class="count-box">
-                    <span>數量</span>
-                    <span>1</span>
-                  </div>
-                  <label class="good-price">$38</label>
-                </div>
-              </div>
-            </div>
-            <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
-          </div> -->
           <div class="dash-hr"></div>
         </section>
         <div class="total-wrap">
@@ -173,7 +155,7 @@ export default {
       }
       const params = {
         orderId: this.orderId,
-        productIds: this.selectCart
+        productIds: this.selectCart.join(",")
       }
       const data = await agentComfirm(params)
       if (data.code == 0) {

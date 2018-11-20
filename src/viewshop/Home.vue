@@ -18,14 +18,16 @@
       <div class="top-bg"></div>
       <div class="head-nav-class">
         <div class="scroll-view" id="scrollBox">
-          <div class="item">全部</div>
-          <div class="item active">生果</div>
-          <div class="item">蔬菜</div>
-          <div class="item">日用品</div>
-          <div class="item">其他</div>
+          <div v-for="(item, index) in goodType"
+                :key="index"
+                @click="chooseProd(item)"
+                :class="['item', categoryId == item.id?'active':'']" >{{item.categoryName}}</div>
         </div>
       </div>
-      <section class="list-container">
+      <section class="list-container"
+                v-infinite-scroll="getProdList"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="10">
         <div v-for="(goodInfo, index) in goodList"
               :key="index"
               :class="['list-item', goodInfo.lessTime == -1 ? 'list-over' : '']" 
@@ -93,19 +95,21 @@ import { CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText } from 'utils/utils'
 import $ from 'jquery'
-import { productList, addCart, updateCart } from 'utils/getData'
+import { productList, prodType, addCart, updateCart } from 'utils/getData'
 
 let pageInterVal = null
+let pageNo = 0
+const pageLimit = 10
+let totalPage = 1
 let loading = false
 export default {
   data () {
     return {
       isAgent: localStorage['isAgent'],
       goodTypeIndex: 0,
+      categoryId: '',
       goodType: [],
-      goodList: [],
-      pageNo: 0,
-      pageSize: 10
+      goodList: []
     }
   },
   computed: {
@@ -126,7 +130,7 @@ export default {
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
     init () {
-      this.getProdList()
+      this.getProdType()
     },
     addEvent () {
       $("#scrollBox").off().on('click', '.item', function(){
@@ -143,6 +147,21 @@ export default {
     },
     linkJump (href) {
       this.$router.push(href)
+    },
+    chooseProd (item) {
+      this.categoryId = item.id
+      pageNo = 0
+      totalPage = 1
+      this.goodList = []
+      this.getProdList()
+    },
+    async getProdType () {
+      const data = await prodType()
+      if (data.code == 0) {
+        this.goodType.push(...data.data)
+        this.categoryId = this.goodType[0].id
+        this.getProdList()
+      }
     },
     async addGoodCart (goodInfo) {
       if (loading) {
@@ -205,11 +224,23 @@ export default {
       return count
     },
     async getProdList () {
+      if (pageNo >= totalPage) {
+        return false
+      }
+      if (loading) {
+        return false
+      }
       loading = true
-      const params = {}
+      pageNo++
+      const params = {
+        categoryId: this.categoryId,
+        page: pageNo,
+        limit: pageLimit
+      }
       const data = await productList(params)
       if (data.code == 0) {
-        this.goodList = data.page.list
+        this.goodList.push(...data.page.list) 
+        totalPage = data.page.totalPage
         this.updateTime()
         loading = false
       }

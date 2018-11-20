@@ -9,7 +9,7 @@
         <div class="time-content">
           <span>篩選日期：</span>
           <div class="time-box">
-            <b class="time-now"  @click="toggleShowTime">{{currentTime}}</b>
+            <b class="time-now"  @click="toggleShowTime">{{currentTimeText}}</b>
             <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
             <div class="time-option-wrap" v-show="timeshow">
               <div class="time-option"
@@ -22,7 +22,10 @@
           </div>
         </div>
       </div>
-      <div v-if="orderList.length > 0">
+      <div v-if="orderList.length != 0"
+            v-infinite-scroll="getOrderList"
+            infinite-scroll-disabled="loading"
+            infinite-scroll-distance="10">
         <section v-for="(orderItem, index) in orderList"
                   :key="index"
                   class="order-wrap"
@@ -82,65 +85,53 @@ import { Popup, Picker } from 'mint-ui'
 import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
 import { getMyOrders } from 'utils/getData'
 
+const currentD = getCurrentDay()
+const currentW = getCurrentWeek()
+const currentM = getCurrentMonth()
 const beforeMonth = getBeforeMonth(12)
 const pageLimit = '10'
+let pageNo = 0
 let totalPage = 1
 let loading = false
 export default {
   data () {
     return {
-      currentTime: '今日',
+      current: '0',
       timeshow: false,
       otherMonthVisible: false,
       timeConf: [
         {
           text: '今日',
           click: () => {
-            this.pageNo = '1'
+            pageNo = 0
+            totalPage = 1
+            this.current = '0'
             this.timeshow = false
-            this.currentTime = '今日'
-            const currentD = getCurrentDay()
-            const params = {
-              "page": this.pageNo,
-              "limit": pageLimit,
-              "startTime": currentD.start,
-              "endTime": currentD.end
-            }
-            this.getOrderList(params)
+            this.orderList = []
+            this.getOrderList()
           }
         },{
           text: '本週',
           click: () => {
-            this.pageNo = '1'
+            pageNo = 0
+            totalPage = 1
+            this.current = '1'
             this.timeshow = false
-            this.currentTime = '本週'
-            const currentW = getCurrentWeek()
-            const params = {
-              "page": this.pageNo,
-              "limit": pageLimit,
-              "startTime": currentW.start,
-              "endTime": currentW.end
-            }
-            this.getOrderList(params)
+            this.orderList = []
+            this.getOrderList()
           }
         },{
           text: '本月',
           click: () => {
-            this.pageNo = '1'
+            pageNo = 0
+            totalPage = 1
+            this.current = '2'
             this.timeshow = false
-            this.currentTime = '本月'
-            const currentM = getCurrentMonth()
-            const params = {
-              "page": this.pageNo,
-              "limit": pageLimit,
-              "startTime": currentM.start,
-              "endTime": currentM.end
-            }
-            this.getOrderList(params)
+            this.orderList = []
+            this.getOrderList()
           }
         }
       ],
-      pageNo: 1,
       orderList: []
     }
   },
@@ -156,6 +147,48 @@ export default {
         }
       ]
       return  dateSlots
+    },
+    currentTimeText () {
+      const cArr = this.current.split('-')
+      switch (cArr[0]) {
+        case '0':
+          return '今日'
+          break;
+        case '1':
+          return '本週'
+          break;
+        case '2':
+          return '本月'
+          break;
+        case '3':
+          if (cArr[1]) {
+            return beforeMonth[cArr[1]].label
+          }
+          break;
+        default:
+          return '今日'
+      }
+    },
+    currentTime () {
+      const cArr = this.current.split('-')
+      switch (cArr[0]) {
+        case '0':
+          return currentD
+          break;
+        case '1':
+          return currentW
+          break;
+        case '2':
+          return currentM
+          break;
+        case '3':
+          if (cArr[1]) {
+            return beforeMonth[cArr[1]].time
+          }
+          break;
+        default:
+          return currentD
+      }
     }
   },
   components: {
@@ -163,7 +196,10 @@ export default {
     mtPicker: Picker
   },
   mounted () {
-    this.timeConf[0].click()
+    this.getOrderList()
+  },
+  beforeDestroy () {
+    this.resetPage()
   },
   methods: {
     linkjump (href) {
@@ -182,31 +218,50 @@ export default {
     hideMonthPop () {
       this.otherMonthVisible = false
     },
+    resetPage () {
+      pageNo = 0
+      totalPage = 1
+      this.orderList = []
+      this.current = 0
+    },
     timeConfirm () {
-      this.currentTime = this.$refs.picker.getValues()[0]
-      const currentT = this.currentTime.replace(/\//g,"-")
-      const selectT = beforeMonth.filter(item => item.label == currentT)[0]
-      this.pageNo = '1'
-      this.timeshow = false
-      const params = {
-        "page": this.pageNo,
-        "limit": pageLimit,
-        "startTime": selectT.time.start,
-        "endTime": selectT.time.end
+      const text = this.$refs.picker.getValues()[0]
+      const currentT = text.replace(/\//g,"-")
+      let index = 0
+      for(let i = 0; i < beforeMonth.length; i++) {
+        if (beforeMonth[i].label == currentT) {
+          index = i
+          break
+        }
       }
-      this.getOrderList(params)
+      this.current = `3-${index}`
+      this.timeshow = false
+      pageNo = 0
+      totalPage = 1
+      this.orderList = []
+      this.getOrderList()
       this.otherMonthVisible = false
     },
-    async getOrderList (params) {
+    async getOrderList () {
+      console.log('----', pageNo, '----', totalPage, '---', pageNo >= totalPage)
+      if (pageNo >= totalPage) {
+        return false
+      }
       if (loading) {
         return false
       }
       loading = true
+      pageNo++
+      const params = {
+        "page": pageNo,
+        "limit": pageLimit,
+        "startTime": this.currentTime.start,
+        "endTime": this.currentTime.end
+      }
       const data = await getMyOrders(params)
       if (data.code == 0) {
-        this.orderList = data.data.list
-        totalPage = data.totalPage
-
+        this.orderList.push(...data.data.list)
+        totalPage = data.data.totalPage
       }
       loading = false
     }
@@ -257,13 +312,19 @@ export default {
             position: absolute;
             left: 6.5rem;top: 4.5rem;
             z-index: 1;
-            border: 1px solid red;
-            background: #ffffff;
+            border-radius: .4rem;
+            @extend .theme-color;
+            color: #ffffff;
             .time-option {
+              padding: 0 2rem;
               font-size: 1.4rem;
-              height: 1.6rem;
-              line-height: 1.6rem;
-              border-bottom: 1px solid #E5E5E5;
+              text-align: center;
+              height: 2.4rem;
+              line-height: 2.4rem;
+              border-bottom: 1px solid #ffffff;
+              &:last-child {
+                border: none;
+              }
             }
           }
         }

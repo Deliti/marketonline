@@ -13,6 +13,7 @@ export const addAddr = params => fetch('post', '/merchant/app/address/save', par
 export const deleteAddr = params => fetch('post', '/merchant/app/address/delete', params)
 
 // 商品详情
+export const prodType = params => fetch('post', '/merchant/app/product/category', params)
 export const productList = params => fetch('post', '/merchant/app/product/list', params)
 export const productInfo = params => fetch('post', '/merchant/app/product/info', params)
 

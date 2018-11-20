@@ -55,7 +55,6 @@ export default {
   height: 7rem;
   position: relative;
   text-align: center;
-  font-size: 1.8rem;
   line-height: 7rem;
   color: #444444;
   .return-icon {
@@ -64,6 +63,9 @@ export default {
     position: absolute;
     left: 2.6rem;top: 2.2rem;
     @include backImg('../assets/images/return-icon.png');
+  }
+  h1 {
+    font-size: 1.8rem;
   }
 }
 </style>

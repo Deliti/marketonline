@@ -316,13 +316,19 @@ export default {
             position: absolute;
             left: 6.5rem;top: 4.5rem;
             z-index: 1;
-            border: 1px solid red;
-            background: #ffffff;
+            border-radius: .4rem;
+            @extend .theme-color;
+            color: #ffffff;
             .time-option {
+              padding: 0 2rem;
               font-size: 1.4rem;
-              height: 1.6rem;
-              line-height: 1.6rem;
-              border-bottom: 1px solid #E5E5E5;
+              text-align: center;
+              height: 2.4rem;
+              line-height: 2.4rem;
+              border-bottom: 1px solid #ffffff;
+              &:last-child {
+                border: none;
+              }
             }
           }
         }
