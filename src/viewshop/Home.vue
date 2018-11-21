@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <common-header></common-header>
     <div class="banner-wrap">
-      <div v-show="isAgent == 1" class="leader-btn" @click="hrefJump('/seller#home')">團長入口</div>
+      <div v-show="isAgent == 1" class="leader-btn" @click="linkJump('/agentHome')">團長入口</div>
       <mt-swipe :auto="4000" class="banner-box">
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
@@ -168,7 +168,7 @@ export default {
     async getProdType () {
       const data = await prodType()
       if (data.code == 0) {
-        this.goodType = data.data
+        this.goodType.push(...data.data)
         console.log('this.cate', this.categoryId)
       }
     },
@@ -289,6 +289,9 @@ export default {
     width: 100%;
     height: 21.9rem;
     position: relative;
+    @media screen and (min-width: $screenMid) {
+      height: 33rem;
+    }
     .leader-btn {
       position: absolute;
       left: 0;top: 0;
@@ -334,6 +337,11 @@ export default {
       width: 100%;
       height: 5rem;
       overflow: hidden;
+      @media screen and (min-width: $screenMid) {
+        width: $screenWidth;
+        height: 8rem;
+        margin: 0 auto;
+      }
       .scroll-view {
         height: 100%;
         white-space: nowrap;
@@ -352,6 +360,10 @@ export default {
           font-size: 1.7rem;
           color: #FFFFFF;
           line-height: 5rem;
+          @media screen and (min-width: $screenMid) {
+            height: 8rem;
+            cursor: pointer;
+          }
         }
         .active {
           font-weight: bold;
@@ -364,16 +376,32 @@ export default {
       width: 100%;
       box-sizing: border-box;
       padding: 0 1.6rem 9rem;
+      @media screen and (min-width: $screenMid) {
+        width: $screenWidth;
+        margin: 0 auto;
+        padding: 0 0 9rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
       .list-item {
         width: 100%;
         background: #FFFFFF;
         box-shadow: 0 .1rem .5rem 0 #00000029;
         border-radius: .3rem;
         margin-bottom: 1.5rem;
+        @media screen and (min-width: $screenMid) {
+          width: 20rem;
+          margin-bottom: 2.2rem;
+          cursor: pointer;
+        }
         .item-banner-wrap {
           position: relative;
           width: 100%;
           height: 18.6rem;
+          @media screen and (min-width: $screenMid) {
+            height: 11rem;
+          }
           .item-banner {
             width: 100%;
             height: 100%;
@@ -399,6 +427,11 @@ export default {
             margin: 1rem;
             @extend .theme-color;
             border-radius: .5rem;
+            @media screen and (min-width: $screenMid) {
+              width: 6.8rem;
+              height: 1.8rem;
+              bottom: -2rem;
+            }
             .add-cart {
               width: 100%;
               height: 100%;
@@ -407,6 +440,9 @@ export default {
               @extend .flex-box;
               font-size: 1.4rem;
               color: #FFFFFF;
+              @media screen and (min-width: $screenMid) {
+                padding: 0 1.3rem;
+              }
               .cart-icon {
                 width: 1.6rem;
                 height: 1.6rem;
@@ -425,6 +461,9 @@ export default {
                 height: 100%;
                 line-height: 3rem;
                 text-align: center;
+                @media screen and (min-width: $screenMid) {
+                  line-height: 1.8rem;
+                }
               }
             }
           }
@@ -432,15 +471,24 @@ export default {
         .item-detail-wrap {
           box-sizing: border-box;
           padding: 1.3rem 1.1rem .7rem 1.9rem;
+          @media screen and (min-width: $screenMid) {
+            padding: .7rem .7rem .3rem;
+          }
           .item-desc {
             font-size: 1.4rem;
             line-height: 2rem;
             color: #999999;
+            @media screen and (min-width: $screenMid) {
+              line-height: 1.8rem;
+            }
           }
           .item-info-box {
             @extend .flex-box;
             align-items: flex-start;
             margin-bottom: 1.2rem;
+            @media screen and (min-width: $screenMid) {
+              margin-bottom: 1rem;
+            }
             .item-name {
               width: 50%;
               font-size: 1.8rem;

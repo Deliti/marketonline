@@ -38,7 +38,7 @@
               <section v-for="(item, index) in orderListone"
                         :key="index"
                         class="order-wrap"
-                        @click="linkjump(`orderDetail/${item.id}`)">
+                        @click="linkjump(`agentOrderDetail/${item.id}`)">
                 <div class="order-title-box">
                   <div class="flex-box leader-info-box">
                     <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
@@ -83,7 +83,7 @@
               <section v-for="(item, index) in orderListtwo"
                         :key="index"
                         class="order-wrap"
-                        @click="linkjump(`orderDetail/${item.id}`)">
+                        @click="linkjump(`agentOrderDetail/${item.id}`)">
                 <div class="order-title-box">
                   <div class="flex-box leader-info-box">
                     <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
@@ -128,7 +128,7 @@
               <section v-for="(item, index) in orderListthr"
                         :key="index"
                         class="order-wrap"
-                        @click="linkjump(`orderDetail/${item.id}`)">
+                        @click="linkjump(`agentOrderDetail/${item.id}`)">
                 <div class="order-title-box">
                   <div class="flex-box leader-info-box">
                     <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
@@ -417,13 +417,19 @@ body {
     background: #ffffff;
   }
   .page-content {
+    width: 100%;
+    box-sizing: border-box;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      padding: 3rem 1.5rem 0;
+      margin: 0 auto;
+    }
     .nav-tab-wrap {
       height: 3.5rem;
       margin-bottom: 1rem;
       @media screen and (min-width: $screenMid) {
-        width: $screenWidth;
-        padding: 3rem 1.5rem 0;
-        margin: 0 auto;
+        box-sizing: border-box;
+        border-bottom: 1px solid #D5D5D5;
       }
       .nav-tab-item {
         height: 100%;
@@ -512,6 +518,10 @@ body {
         box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
         border-radius: .2rem;
         margin-bottom: 1.5rem;
+        @media screen and (min-width: $screenMid) {
+          box-sizing: border-box;
+          border: 1px solid #D5D5D5;
+        }
         .order-text-1 {
           text-align: left;
           font-size: 1.7rem;

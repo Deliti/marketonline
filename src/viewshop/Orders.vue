@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <common-header></common-header>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
       <h1>我的訂單</h1>
@@ -31,20 +32,22 @@
                   class="order-wrap"
                   @click="linkjump(`orderDetail/${orderItem.id}`)">
           <div class="order-title-box">
-            <div class="flex-box">
+            <div class="flex-box leader-info-box">
               <p class="order-text-1">團長：{{orderItem.agentName}}  {{orderItem.agentPhone}}</p>
               <a class="tel-text" :href="'tel:'+orderItem.agentPhone" @click.stop="">聯繫團長</a>
             </div>
             <p class="order-text-1">{{orderItem.agentAddress}}</p>
           </div>
           <div class="order-content-box">
-            <div class="good-item">
-              <span class="order-text-2">商品總額</span>
-              <span class="order-text-3">{{'$ '+ orderItem.price}}</span>
-            </div>
-            <div class="good-item">
-              <span class="order-text-2">商品件數</span>
-              <span class="order-text-3">{{orderItem.totalNum + ' 件'}}</span>
+            <div class="good-box">
+              <div class="good-item">
+                <span class="order-text-2">商品總額&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span class="order-text-3">{{'$ '+ orderItem.price}}</span>
+              </div>
+              <div class="good-item">
+                <span class="order-text-2">商品件數&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span class="order-text-3">{{orderItem.totalNum + ' 件'}}</span>
+              </div>
             </div>
             <div class="order-info-box">
               <span class="order-no">訂單編號：{{orderItem.id}}</span>
@@ -82,6 +85,7 @@
 
 <script>
 import { Popup, Picker } from 'mint-ui'
+import { CommonHeader } from 'components'
 import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
 import { getMyOrders } from 'utils/getData'
 
@@ -192,6 +196,7 @@ export default {
     }
   },
   components: {
+    CommonHeader,
     mtPopup: Popup,
     mtPicker: Picker
   },
@@ -273,6 +278,9 @@ export default {
 .page-wrap {
   background: #F6F6F6;
   min-height: 100%;
+  @media screen and (min-width: $screenMid) {
+    background: #ffffff;
+  }
   .page-title {
     background: #ffffff;
   }
@@ -280,6 +288,11 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 .7rem;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      padding: 3rem 1.5rem 0;
+      margin: 0 auto;
+    }
     .time-wrap {
       width: 100%;
       box-sizing: border-box;
@@ -342,6 +355,9 @@ export default {
       box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
       border-radius: .2rem;
       margin-bottom: 1.5rem;
+      @media screen and (min-width: $screenMid) {
+        border: 1px solid #D5D5D5;
+      }
       .order-text-1 {
         text-align: left;
         font-size: 1.7rem;
@@ -359,6 +375,9 @@ export default {
         color: #1CD0A3;
         font-size: 1.7rem;
         text-decoration: underline;
+        @media screen and (min-width: $screenMid) {
+          display: none;
+        }
       }
       .order-title-box {
         width: 100%;
@@ -367,6 +386,12 @@ export default {
         box-sizing: border-box;
         padding: 1.3rem 1.6rem 1.15rem 1.75rem;
         border-bottom: 1px solid #E6E6E6;
+        @media screen and (min-width: $screenMid) {
+          display: flex;
+          .leader-info-box {
+            width: 50%;
+          }
+        }
         &::before {
           content: '';
           display: block;
@@ -379,6 +404,23 @@ export default {
         }
       }
       .order-content-box {
+        .good-box {
+          @media screen and (min-width: $screenMid) {
+            position: relative;
+            display: flex;
+            border-bottom: 1px solid #E6E6E6;
+            &::before {
+              content: '';
+              display: block;
+              position: absolute;
+              left: 0;bottom: 0;
+              width: .5rem;
+              height: 105%;
+              background: #1CD0A3;
+              border-radius: .2rem 0px 0px 0px;
+            }
+          }
+        }
         .good-item {
           @extend .flex-box;
           box-sizing: border-box;
@@ -389,6 +431,15 @@ export default {
           &:last-child {
             border: none;
           }
+          @media screen and (min-width: $screenMid) {
+            margin-right: 2.5rem;
+            border: none;
+            width: 50%;
+            justify-content: flex-start;
+            &:last-child {
+              padding-left: 0;
+            }
+          }
         }
       }
       .order-info-box {
@@ -398,6 +449,9 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @media screen and (min-width: $screenMid) {
+          background: #F6F6F6;
+        }
         .order-no {
           font-size: 1.4rem;
           color: #777776;

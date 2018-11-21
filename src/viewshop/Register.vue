@@ -36,12 +36,12 @@
           <b>選擇團長</b>
           <span>（即購買商品後的取貨地點）</span>
         </div>
-        <div class="leader-seleted-box" v-else>
-          <i :class="['down-icon', leaderShow?'rotate-down':'']" @click="toggleLeader"></i>
+        <div class="leader-seleted-box" v-else @click="toggleLeader">
+          <i :class="['down-icon', leaderShow?'rotate-down':'']"></i>
           <div class="seleted-title">已選團長：</div>
           <div class="leader-info-wrap">
             <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}{{leader.phone}}</p>
-            <div class="reset-btn" @click="showLeader">重置</div>
+            <div class="reset-btn">重置</div>
           </div>
         </div>
         <my-aside :show="leaderShow" @hide="hideLeader">

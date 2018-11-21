@@ -3,16 +3,16 @@
     <div class="page-container">
       <div class="logo-box"><img src="" alt=""></div>
       <div class="menu-box">
-        <div class="munu-item mr1">首頁</div>
-        <div class="munu-item mr2">關於我們</div>
+        <div class="munu-item mr1" @click="linkJump('/home')">首頁</div>
+        <div class="munu-item mr2" @click="linkJump('/aboutus')">關於我們</div>
         <div class="munu-item mr3">
           <div class="not-login-box" v-if="!userInfo">
-            <div class="active">請登入</div>
-            <div>注册</div>
+            <div class="active" @click="linkJump('/login')">請登入</div>
+            <div @click="linkJump('/register')">注册</div>
           </div>
           <div class="user-name">{{userInfo.username}}</div>
         </div>
-        <div class="munu-item">個人中心</div>
+        <div class="munu-item" @click="linkJump('/mine')">個人中心</div>
       </div>
       <router-link :to="{name: 'shopCart'}" class="cart-box">
         <i class="cart-icon"></i>
@@ -34,6 +34,14 @@ export default {
   },
   computed: {
     ...mapGetters(['goodCount'])
+  },
+  methods: {
+    hrefJump (href) {
+      window.location.href = href
+    },
+    linkJump (href) {
+      this.$router.push(href)
+    }
   }
 }
 </script>
@@ -49,7 +57,7 @@ export default {
     display: block;
   }
   .page-container {
-    width: 68rem;
+    width: $screenWidth;
     height: 100%;
     @extend .flex-box;
     margin: 0 auto;
@@ -63,7 +71,7 @@ export default {
       }
     }
     .menu-box {
-      flex: 1;
+      // flex: 1;
       height: 100%;
       box-sizing: border-box;
       padding: 0 3rem 0 2.8rem;
@@ -73,6 +81,11 @@ export default {
         font-size: 1.4rem;
         color: #FFFFFF;
         line-height: 4.4rem;
+        cursor: pointer;
+        &:hover {
+          background: #ffffff;
+          color: #0DC6B5;
+        }
       }
       .mr1 {
         margin-right: 3rem;

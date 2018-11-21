@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <common-header></common-header>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
     </div>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import { CommonFooter } from 'components'
+import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText } from 'utils/utils'
 import { productInfo, addCart, updateCart } from 'utils/getData'
@@ -75,6 +76,7 @@ export default {
     clearInterval(pageInterVal)
   },
   components: {
+    CommonHeader,
     CommonFooter
   },
   methods: {
@@ -93,7 +95,7 @@ export default {
         const params = {
           productId: this.goodInfo.id,
           num: count+1
-        } 
+        }
         const data = await updateCart(params)
         if (data.code == 0) {
           this.ADDGOOD(this.goodInfo)
@@ -122,7 +124,7 @@ export default {
         const params = {
           productId: this.goodInfo.id,
           num: count-1
-        } 
+        }
         const data = await updateCart(params)
         if (data.code == 0) {
           this.DESGOOD(this.goodInfo.id)
@@ -187,12 +189,19 @@ export default {
   background: #ffffff;
   position: relative;
   .page-title {
+    position: absolute;
+    left: 0;top: 0;
+    z-index: 1;
     background: none;
   }
   .banner-wrap {
     position: relative;
     width: 100%;
     height: 32.5rem;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      margin: 0 auto;
+    }
     .banner {
       width: 100%;
       height: 100%;
@@ -239,6 +248,10 @@ export default {
   .detail-wrap {
     box-sizing: border-box;
     padding: 2rem 2rem 9rem;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      margin: 0 auto;
+    }
     .title-desc {
       font-size: 1.8rem;
       line-height: 2.5rem;
@@ -255,6 +268,9 @@ export default {
     .info-box {
       padding-bottom: 2.5rem;
       border-bottom: 1px solid #E5E5E5;
+      @media screen and (min-width: $screenMid) {
+        padding-bottom: 4rem;
+      }
       .time-wrap {
         @extend .flex-box;
         .time-tips {

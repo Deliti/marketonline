@@ -77,6 +77,26 @@ export default new Router({
       path: '/addressSetting',
       name: 'addressSetting',
       component: () => import('../viewshop/AddressSetting.vue')
+    },
+    {
+      path: '/agentHome',
+      name: 'agentHome',
+      component: () => import('../viewshop/AgentHome.vue')
+    },
+    {
+      path: '/agentFinance',
+      name: 'agentFinance',
+      component: () => import('../viewshop/AgentFinance.vue')
+    },
+    {
+      path: '/agentOrders',
+      name: 'agentOrders',
+      component: () => import('../viewshop/AgentOrders.vue')
+    },
+    {
+      path: '/agentOrderDetail/:orderId',
+      name: 'agentOrderDetail',
+      component: () => import('../viewshop/AgentOrderDetail.vue')
     }
   ]
 })

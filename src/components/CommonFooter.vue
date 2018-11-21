@@ -1,23 +1,28 @@
 <template>
   <footer class="common-footer">
-    <div class="footer-wrap">
-      <div class="enter-footer active-footer" v-if="activeTab === 'home'">
-        首頁
+    <div class="mobile-footer">
+      <div class="footer-wrap">
+        <div class="enter-footer active-footer" v-if="activeTab === 'home'">
+          首頁
+        </div>
+        <router-link :to="{name: 'home'}" class="enter-footer" v-else>
+          首頁
+        </router-link>
+        <div class="enter-footer active-footer" v-if="activeTab === 'mine'">
+          個人中心
+        </div>
+        <router-link :to="{name: 'mine'}" class="enter-footer" v-else>
+          個人中心
+        </router-link>
       </div>
-      <router-link :to="{name: 'home'}" class="enter-footer" v-else>
-        首頁
-      </router-link>
-      <div class="enter-footer active-footer" v-if="activeTab === 'mine'">
-        個人中心
-      </div>
-      <router-link :to="{name: 'mine'}" class="enter-footer" v-else>
-        個人中心
+      <router-link :to="{name: 'shopCart'}" class="cart-wrap">
+        <div class="cart-bg"></div>
+        <i class="cart-num" v-show="goodCount !== 0">{{goodCount}}</i>
       </router-link>
     </div>
-    <router-link :to="{name: 'shopCart'}" class="cart-wrap">
-      <div class="cart-bg"></div>
-      <i class="cart-num" v-show="goodCount !== 0">{{goodCount}}</i>
-    </router-link>
+    <div class="pc-footer">
+      <span>@2018 www.abcdefg.com. All rights reserved.</span>
+    </div>
   </footer>
 </template>
 
@@ -45,10 +50,30 @@ export default {
   position: fixed;
   left: 0;bottom: 0;
   z-index: 11;
-  display: flex;
-  align-items: flex-end;
   @media screen and (min-width: $screenMid) {
+    background: linear-gradient(-135deg, #0AC4BA 0%, #2BDA8E 100%);
+  }
+  .mobile-footer {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    @media screen and (min-width: $screenMid) {
+      display: none;
+    }
+  }
+  .pc-footer {
+    width: $screenWidth;
+    height: 5.5rem;
+    margin: 0 auto;
     display: none;
+    @media screen and (min-width: $screenMid) {
+      display: block;
+    }
+    span {
+      font-size: 1.2rem;
+      color: #FFFFFF;
+      line-height: 5.5rem;
+    }
   }
   .footer-wrap {
     flex: 1;
@@ -56,6 +81,7 @@ export default {
     display: flex;
     box-sizing: border-box;
     border-top: 1px solid #E5E5E5;
+
     .enter-footer {
       flex: 1;
       height: 100%;
@@ -95,6 +121,7 @@ export default {
       color: #0DC6B5;
     }
   }
+
 }
 </style>
 

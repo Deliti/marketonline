@@ -35,6 +35,11 @@ export const setRem = () => {
   })(document, window);
 }
 
+export const fenTransYuan = fen => {
+  if (typeof fen !== 'number' || isNaN(fen)) return 0
+  return (fen / 100).toFixed(2)
+}
+
 // 校验input
 export const validateInput = ({
   value,

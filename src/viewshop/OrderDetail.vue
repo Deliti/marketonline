@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <common-header></common-header>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
       <h1>訂單詳情</h1>
@@ -7,7 +8,7 @@
     <div class="page-content">
       <div class="order-wrap">
         <div class="order-title-box">
-          <div class="flex-box">
+          <div class="flex-box leader-info-box">
             <p class="order-text-1">團長：{{orderInfo.agentName}}  {{orderInfo.agentPhone}}</p>
             <a class="tel-text" :href="'tel:'+orderInfo.agentPhone" @click.stop="">聯繫團長</a>
           </div>
@@ -26,11 +27,13 @@
                 :key="index"
                 :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
-              <label class="order-item-status">{{prodItem.isPick == 1?'已取':'未取貨'}}</label>
+              <div class="order-item-status-box">
+                <label class="order-item-status">{{prodItem.isPick == 1?'已取':'未取貨'}}</label>
+              </div>
               <img :src="prodItem.pic" alt="" class="good-img">
               <div class="order-item-detail">
                 <p class="good-name">{{prodItem.productName}}</p>
-                <div class="flex-box">
+                <div class="count-flex-box">
                   <div class="count-box">
                     <span>數量</span>
                     <span>{{prodItem.num}}</span>
@@ -71,7 +74,7 @@
         </div>
       </div>
       <div class="over-wrap" v-if="orderInfo.status == 4">
-        <button class="suggest-btn" @click="linkjump('suggest')">反饋意見</button>
+        <button class="suggest-btn" @click="linkjump('/suggest')">反饋意見</button>
         <div class="finish-btn">
           <i class="check-btn-icon"></i>
           <label>已完成</label>
@@ -89,6 +92,7 @@
 </template>
 
 <script>
+import { CommonHeader } from 'components'
 import qrCode from 'qrcodejs2'
 import { mapState, mapMutations } from 'vuex'
 import { getOrderDetail } from 'utils/getData'
@@ -105,6 +109,9 @@ export default {
   },
   computed: {
     ...mapState(['shopCart'])
+  },
+  components: {
+    CommonHeader
   },
   methods: {
     linkjump (href) {
@@ -142,6 +149,9 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   background: #F6F6F6;
+  @media screen and (min-width: $screenMid) {
+    background: #ffffff;
+  }
   .page-title {
     background: #ffffff;
     margin-bottom: 1.6rem;
@@ -150,11 +160,19 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 .7rem;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      margin: 0 auto;
+      padding-top: 3rem;
+    }
     .order-wrap {
       width: 100%;
       box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
       border-radius: .2rem;
       margin-bottom: 1.9rem;
+      @media screen and (min-width: $screenMid) {
+        border: 1px solid #D5D5D5;
+      }
       .order-text-1 {
         text-align: left;
         font-size: 1.7rem;
@@ -164,6 +182,9 @@ export default {
         color: #1CD0A3;
         font-size: 1.7rem;
         text-decoration: underline;
+        @media screen and (min-width: $screenMid) {
+          display: none;
+        }
       }
       .order-title-box {
         width: 100%;
@@ -172,6 +193,12 @@ export default {
         box-sizing: border-box;
         padding: 1.3rem 1.6rem 1.15rem 1.75rem;
         border-bottom: 1px solid #E6E6E6;
+        @media screen and (min-width: $screenMid) {
+          display: flex;
+          .leader-info-box {
+            margin-right: 2.5rem;
+          }
+        }
         &::before {
           content: '';
           display: block;
@@ -190,6 +217,9 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @media screen and (min-width: $screenMid) {
+          background: #F6F6F6;
+        }
         .order-no {
           font-size: 1.4rem;
           color: #777776;
@@ -199,6 +229,9 @@ export default {
     .order-detail-wrap {
       padding-bottom: 3rem;
       @include backImg('../assets/images/rectangletip.png');
+      @media screen and (min-width: $screenMid) {
+        box-shadow: .5rem 0px .5rem -.5rem rgba(0,0,0,0.11), -.5rem 0px .5rem -.5rem rgba(0,0,0,0.11);
+      }
       .detail-title {
         width: 100%;
         height: 4.9rem;
@@ -222,14 +255,27 @@ export default {
             margin-bottom: .9rem;
             display: flex;
             align-items: center;
-            .order-item-status {
+            .order-item-status-box {
               width: 5rem;
-              height: 1.8rem;
               font-size: 1.4rem;
-              line-height: 1.8rem;
               text-align: center;
               color: #1CD0A3;
               margin-right: 1.8rem;
+              @media screen and (min-width: $screenMid) {
+                width: 20rem;
+              }
+              .order-item-status {
+                display: inline-block;
+                width: 100%;
+                height: 1.8rem;
+                line-height: 1.8rem;
+                @media screen and (min-width: $screenMid) {
+                  width: 10rem;
+                  font-size: 2rem;
+                  height: 3.6rem;
+                  line-height: 3.6rem;
+                }
+              }
             }
             .good-img {
               width: 6.25rem;
@@ -245,9 +291,18 @@ export default {
               .good-name {
                 font-size: 1.2rem;
                 color: #444444;
+                @media screen and (min-width: $screenMid) {
+                  font-size: 1.8rem;
+                  font-weight: bold;
+                }
               }
-              .flex-box {
+              .count-flex-box {
+                @extend .flex-box;
                 width: 100%;
+                @media screen and (min-width: $screenMid) {
+                  box-sizing: border-box;
+                  padding-right: 3rem;
+                }
                 .count-box {
                   width: 7.7rem;
                   height: 3rem;
@@ -258,6 +313,11 @@ export default {
                   padding: 0 1.6rem;
                   font-size: 1.4rem;
                   color: #FFFFFF;
+                  @media screen and (min-width: $screenMid) {
+                    width: 14rem;
+                    box-sizing: border-box;
+                    padding-right: 3rem;
+                  }
                 }
                 .good-price {
                   font-size: 1.6rem;
@@ -270,16 +330,28 @@ export default {
             padding-left: 6.4rem;
             font-size: 1.2rem;
             color: #444444;
+            @media screen and (min-width: $screenMid) {
+              font-size: 1.4rem;
+              padding-left: 22rem;
+            }
           }
         }
         .over-order {
           background: #F6F6F6;
           .order-item-flex {
-            .order-item-status {
-              border-radius: 1.8rem;
-              background: #D8D8D8;
-              font-size: 1.3rem;
-              color: #FFFFFF;
+            .order-item-status-box {
+              .order-item-status {
+                border-radius: 1.8rem;
+                background: #D8D8D8;
+                font-size: 1.3rem;
+                color: #FFFFFF;
+                @media screen and (min-width: $screenMid) {
+                  font-size: 2rem;
+                  height: 3.6rem;
+                  border-radius: 3.6rem;
+                  line-height: 3.6rem;
+                }
+              }
             }
           }
         }
@@ -301,6 +373,11 @@ export default {
         @extend .flex-box;
         font-size: 1.8rem;
         color: #444444;
+        @media screen and (min-width: $screenMid) {
+          width: 90%;
+          margin-left: 5%;
+          padding: 0;
+        }
         .total-price {
           font-size: 2.4rem;
           color: #1CD0A3;

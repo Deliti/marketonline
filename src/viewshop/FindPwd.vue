@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <div class="page-bg-bottom"></div>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
       <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
@@ -138,6 +139,23 @@ export default {
   overflow: hidden;
   position: relative;
   @include backImg('../assets/images/rectangle.png');
+  @media screen and (min-width: $screenMid) {
+    background: none;
+    padding-bottom: .43rem;
+  }
+  .page-bg-bottom {
+    display: none;
+    @media screen and (min-width: $screenMid) {
+      display: block;
+      position: absolute;
+      left: 0;top: 0;
+      width: 100%;
+      min-width: 76.8rem;
+      height: 100%;
+      min-height: 10.24rem;
+      @include backImg('../assets/images/pc-login-bg2.png');
+    }
+  }
   .page-title {
     background: none;
     .about-us {
@@ -157,6 +175,15 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 3.3rem;
+    position: relative;
+    @media screen and (min-width: $screenMid) {
+      width: 61.4rem;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 5.3rem 7rem 3rem;
+      @include backImg('../assets/images/pc-login-bg1.png');
+      background-size: 100% 45rem;
+    }
     .program-title {
       width: 100%;
       font-size: 3.6rem;
@@ -164,6 +191,10 @@ export default {
       color: #FFFFFF;
       text-align: center;
       margin-bottom: 2.3rem;
+      @media screen and (min-width: $screenMid) {
+        line-height: 4.5rem;
+        margin-bottom: 4.8rem;
+      }
     }
     .center-title {
       font-size: 2.4rem;
@@ -171,6 +202,9 @@ export default {
       color: #FFFFFF;
       text-align: center;
       margin-bottom: 1rem;
+      @media screen and (min-width: $screenMid) {
+        line-height: 4.5rem;
+      }
     }
     .input-wrap {
       width: 100%;
@@ -215,6 +249,12 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 4.3rem;
+    @media screen and (min-width: $screenMid) {
+      width: 61.4rem;
+      padding: 0 7rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
     .enter-text {
       font-size: 1.8rem;
       color: #FFFFFF;

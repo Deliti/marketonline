@@ -8,7 +8,7 @@
     <div class="page-content">
       <div class="order-wrap">
         <div class="order-title-box">
-          <div class="flex-box">
+          <div class="flex-box leader-info-box">
             <p class="order-text-1">{{orderInfo.name}}  {{orderInfo.phone}}</p>
             <a class="tel-text" :href="'tel:'+orderInfo.phone" @click.stop="">聯繫團員</a>
           </div>
@@ -27,11 +27,13 @@
                 :key="index"
                 :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
-              <label class="order-item-status" v-if="prodItem.isPick == 1">已取</label>
-              <label class="order-item-status" v-else-if="!isVerifed">未取貨</label>
-              <i :class="['radius-circle', isVerifed && selectCart.indexOf(prodItem.productId) != -1 ? 'radius-check' : '']"
+              <div class="order-item-status-box">
+                <label class="order-item-status" v-if="prodItem.isPick == 1">已取</label>
+                <label class="order-item-status" v-else-if="!isVerifed">未取貨</label>
+                <i :class="['radius-circle', isVerifed && selectCart.indexOf(prodItem.productId) != -1 ? 'radius-check' : '']"
                   @click="checkItem(prodItem.productId)"
                   v-else></i>
+              </div>
               <img :src="prodItem.pic" alt="" class="good-img">
               <div class="order-item-detail">
                 <p class="good-name">{{prodItem.productName}}</p>
@@ -208,6 +210,9 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   background: #F6F6F6;
+  @media screen and (min-width: $screenMid) {
+    background: #ffffff;
+  }
   .page-title {
     background: #ffffff;
     margin-bottom: 1.6rem;
@@ -216,6 +221,11 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 .7rem;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      padding: 3rem 1.5rem 0;
+      margin: 0 auto;
+    }
     .radius-check {
       background-image: url('../assets/images/check-seleted.png') !important;
     }
@@ -224,6 +234,9 @@ export default {
       box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
       border-radius: .2rem;
       margin-bottom: 1.9rem;
+      @media screen and (min-width: $screenMid) {
+        border: 1px solid #D5D5D5;
+      }
       .order-text-1 {
         text-align: left;
         font-size: 1.7rem;
@@ -233,6 +246,9 @@ export default {
         color: #1CD0A3;
         font-size: 1.7rem;
         text-decoration: underline;
+        @media screen and (min-width: $screenMid) {
+          display: none;
+        }
       }
       .order-title-box {
         width: 100%;
@@ -241,6 +257,12 @@ export default {
         box-sizing: border-box;
         padding: 1.3rem 1.6rem 1.15rem 1.75rem;
         border-bottom: 1px solid #E6E6E6;
+        @media screen and (min-width: $screenMid) {
+          display: flex;
+          .leader-info-box {
+            margin-right: 3rem;
+          }
+        }
         &::before {
           content: '';
           display: block;
@@ -268,6 +290,9 @@ export default {
     .order-detail-wrap {
       @include backImg('../assets/images/rectangletip.png');
       padding-bottom: 3rem;
+      @media screen and (min-width: $screenMid) {
+        box-shadow: .5rem 0px .5rem -.5rem rgba(0,0,0,0.11), -.5rem 0px .5rem -.5rem rgba(0,0,0,0.11);
+      }
       .detail-title {
         width: 100%;
         height: 4.9rem;
@@ -291,14 +316,31 @@ export default {
             margin-bottom: .9rem;
             display: flex;
             align-items: center;
-            .order-item-status {
+            .order-item-status-box {
               width: 5rem;
-              height: 1.8rem;
               font-size: 1.4rem;
-              line-height: 1.8rem;
               text-align: center;
               color: #1CD0A3;
               margin-right: 1.8rem;
+              @media screen and (min-width: $screenMid) {
+                width: 20rem;
+              }
+              .order-item-status {
+                width: 5rem;
+                height: 1.8rem;
+                font-size: 1.4rem;
+                line-height: 1.8rem;
+                text-align: center;
+                color: #1CD0A3;
+                margin-right: 1.8rem;
+                @media screen and (min-width: $screenMid) {
+                  display: inline-block;
+                  width: 10rem;
+                  font-size: 2rem;
+                  height: 3.6rem;
+                  line-height: 3.6rem;
+                }
+              }
             }
             .radius-circle {
               width: 5rem;
@@ -352,11 +394,19 @@ export default {
         .over-order {
           background: #F6F6F6;
           .order-item-flex {
-            .order-item-status {
-              border-radius: 1.8rem;
-              background: #D8D8D8;
-              font-size: 1.3rem;
-              color: #FFFFFF;
+            .order-item-status-box {
+              .order-item-status {
+                border-radius: 1.8rem;
+                background: #D8D8D8;
+                font-size: 1.3rem;
+                color: #FFFFFF;
+                @media screen and (min-width: $screenMid) {
+                  font-size: 2rem;
+                  height: 3.6rem;
+                  border-radius: 3.6rem;
+                  line-height: 3.6rem;
+                }
+              }
             }
           }
         }
@@ -391,6 +441,10 @@ export default {
         width: 100%;
         @extend .flex-box;
         height: 4.1rem;
+        @media screen and (min-width: $screenMid) {
+          width: 80%;
+          margin: 0 auto;
+        }
         .input-box {
           width: 50%;
           height: 4rem;
@@ -452,6 +506,9 @@ export default {
           line-height: 4.1rem;
           color: #ffffff;
           font-size: 1.8rem;
+          @media screen and (min-width: $screenMid) {
+            width: 20rem;
+          }
         }
       }
       .status-wrap {
