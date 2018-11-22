@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <common-header></common-header>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
       <h1>地址管理</h1>
@@ -16,17 +17,41 @@
                       v-for="(item, index) in myLeaders"
                       :key="index">
               <div class="order-title-box">
-                <div class="flex-box">
-                  <p class="order-text-1">團長：{{item.agentName}}  {{item.agentPhone}}</p>
-                  <i class="close-icon" @click="deleteLeader(item)"></i>
-                </div>
+                <p class="order-text-1">團長：{{item.agentName}}  {{item.agentPhone}}</p>
                 <p class="order-text-1">{{item.agentAddress}}</p>
+                <i class="close-icon" @click="deleteLeader(item)"></i>
               </div>
             </section>
           </div>
-          <div class="fix-button" @click="showLeader">
-            <i class="add-icon"></i>
-            <label>添加新團長</label>
+          <div class="add-container">
+            <div :class="['fix-button', leaderShow?'add-title-active':'']" @click="showLeader">
+              <i class="add-icon"></i>
+              <label>添加新團長</label>
+              <i :class="['down-icon', leaderShow?'rotate-down':'']"></i>
+            </div>
+            <my-aside :show="leaderShow" @hide="hideLeader">
+              <div class="option-seleted">
+                <div class="seleted-title">已選團長：</div>
+                <p class="seleted-text" v-if="leader.id">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
+                <p class="no-seleted" v-else>—— 無 ——</p>
+              </div>
+              <div class="option-wrap">
+                <collapse-item v-for="(childLeaders, districtKey) in leaders"
+                                :key="districtKey">
+                  <div slot="title" class="option-title">{{districtKey}}</div>
+                  <div v-for="(item, index) in childLeaders"
+                      :key="index"
+                      :class="['option-item', isMyLeaders(item.id) ? 'option-item-disable' : '']"
+                      @click="chooseLeader(item)">
+                    <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
+                    <div class="option-box">
+                      <p class="option-text">{{item.address}}</p>
+                      <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
+                    </div>
+                  </div>
+                </collapse-item>
+              </div>
+            </my-aside>
           </div>
         </tab-container-item>
         <tab-container-item id="2">
@@ -35,11 +60,9 @@
                       v-for="(item, index) in myAddress"
                       :key="index">
               <div class="order-title-box">
-                <div class="flex-box">
-                  <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
-                  <i class="close-icon" @click="deleteAddr(item)"></i>
-                </div>
+                <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
                 <p class="order-text-1">{{item.address}}</p>
+                <i class="close-icon" @click="deleteAddr(item)"></i>
               </div>
             </section>
           </div>
@@ -50,35 +73,12 @@
         </tab-container-item>
       </tab-container>
     </div>
-    <my-aside :show="leaderShow" @hide="hideLeader">
-      <div class="option-seleted">
-        <div class="seleted-title">已選團長：</div>
-        <p class="seleted-text" v-if="leader.id">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
-        <p class="no-seleted" v-else>—— 無 ——</p>
-      </div>
-      <div class="option-wrap">
-        <collapse-item v-for="(childLeaders, districtKey) in leaders"
-                        :key="districtKey">
-          <div slot="title" class="option-title">{{districtKey}}</div>
-          <div v-for="(item, index) in childLeaders"
-              :key="index"
-              :class="['option-item', isMyLeaders(item.id) ? 'option-item-disable' : '']"
-              @click="chooseLeader(item)">
-            <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
-            <div class="option-box">
-              <p class="option-text">{{item.address}}</p>
-              <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
-            </div>
-          </div>
-        </collapse-item>
-      </div>
-    </my-aside>
   </div>
 </template>
 
 <script>
 import { Navbar, TabItem, TabContainer, TabContainerItem } from 'mint-ui'
-import { MessageBox, MyAside, CollapseItem } from 'components'
+import { CommonHeader, MessageBox, MyAside, CollapseItem } from 'components'
 import { Toast } from 'mint-ui'
 import { getMyLeader, getLeaderList, getMyAddr, addLeader, deleteLeader, addAddr, deleteAddr } from 'utils/getData'
 export default {
@@ -93,6 +93,7 @@ export default {
     }
   },
   components: {
+    CommonHeader,
     Navbar,
     TabItem,
     TabContainer,
@@ -226,14 +227,27 @@ export default {
 .page-wrap {
   background: #F6F6F6;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  @media screen and (min-width: $screenMid) {
+    background: #ffffff;
+  }
   .page-title {
     background: #ffffff;
   }
   .page-content {
+    box-sizing: border-box;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      padding: 3rem 1.5rem 0;
+      margin: 0 auto;
+    }
     .nav-tab-wrap {
       height: 3.5rem;
       margin-bottom: 1rem;
+      @media screen and (min-width: $screenMid) {
+        border-bottom: 1px solid #E6E6E6;
+        margin-bottom: 2rem;
+      }
       .nav-tab-item {
         height: 100%;
         box-sizing: border-box;
@@ -265,14 +279,25 @@ export default {
         box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
         border-radius: .2rem;
         margin-bottom: .9rem;
+        @media screen and (min-width: $screenMid) {
+          box-shadow: none;
+          background: #FFFFFF;
+          border: 1px solid #D5D5D5;
+          border-radius: 4px;
+        }
         .order-text-1 {
           text-align: left;
           font-size: 1.7rem;
           color: #444444;
+          @media screen and (min-width: $screenMid) {
+            width: 50%;
+          }
         }
         .close-icon {
           width: 1.33rem;
           height: 1.33rem;
+          position: absolute;
+          right: 1.25rem;top: 1.25rem;
           @include backImg('../assets/images/delete-icon.png');
         }
         .order-title-box {
@@ -292,8 +317,18 @@ export default {
             background: #1CD0A3;
             border-radius: .2rem 0px 0px 0px;
           }
+          @media screen and (min-width: $screenMid) {
+            display: flex;
+            justify-content: flex-start;
+            background: #FFFFFF;
+            border: 1px solid #D5D5D5;
+            border-radius: 4px;
+          }
         }
       }
+    }
+    .add-container {
+      padding: 0 .7rem;
     }
     .fix-button {
       position: fixed;
@@ -307,16 +342,54 @@ export default {
       line-height: 4.1rem;
       color: #ffffff;
       font-size: 1.8rem;
+      @media screen and (min-width: $screenMid) {
+        width: 100%;
+        text-align: left;
+        position: relative;
+        left: 0;bottom: 0;
+        background: none;
+        color: #444444;
+        border-radius: 0;
+      }
       .add-icon {
         width: 1rem;
         height: 1rem;
         display: inline-block;
         margin-right: 1rem;
         @include backImg('../assets/images/add-icon.png');
+        @media screen and (min-width: $screenMid) {
+          display: none;
+        }
+      }
+      .down-icon {
+        display: none;
+        width: 1.1rem;
+        height: .6rem;
+        @include backImg('../assets/images/triangle4.png');
+        transition: all .3s;
+        @media screen and (min-width: $screenMid) {
+          display: inline-block;
+        }
+      }
+      .rotate-down {
+        transform: rotate(180deg);
+      }
+    }
+    .add-title-active {
+      @media screen and (min-width: $screenMid) {
+        border-bottom: 1px solid #979797;
+      }
+    }
+    label {
+      @media screen and (min-width: $screenMid) {
+        margin-right: 1rem;
       }
     }
   }
   .option-seleted {
+    @media screen and (min-width: $screenMid) {
+      display: none;
+    }
     .seleted-title {
       font-size: 1.4rem;
       color: #444444;

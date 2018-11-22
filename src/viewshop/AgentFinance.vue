@@ -33,24 +33,26 @@
                     :key="index"
                     class="order-wrap">
             <div class="order-title-box">
-              <div class="flex-box">
+              <div class="flex-box leader-info-box">
                 <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
                 <a class="tel-text" :href="'tel:'+item.phone">聯繫團員</a>
               </div>
               <p class="order-text-1">{{item.address}}</p>
             </div>
             <div class="order-content-box">
-              <div class="good-item">
-                <span class="order-text-2">商品總額</span>
-                <span class="order-text-3">{{'$ '+ item.price}}</span>
-              </div>
-              <div class="good-item">
-                <span class="order-text-2">商品件數</span>
-                <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
+              <div class="good-box">
+                <div class="good-item">
+                  <span class="order-text-2">商品總額</span>
+                  <span class="order-text-3">{{'$ '+ fenTransYuan(item.price)}}</span>
+                </div>
+                <div class="good-item">
+                  <span class="order-text-2">商品件數</span>
+                  <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
+                </div>
               </div>
               <div class="order-info-box">
                 <span class="order-no">訂單編號：{{item.id}}</span>
-                <div class="order-get"><span>提成金額：</span><b>${{item.deliverFee}}</b></div>
+                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(item.deliverFee)}}</b></div>
               </div>
             </div>
           </section>
@@ -60,8 +62,8 @@
         </section>
       </div>
       <div class="total-wrap">
-        <span class="good-total">商品總額：{{`$${moneyCount.count}`}}</span>
-        <div class="order-get"><span>提成金額：</span><b>{{'$'+moneyCount.fee}}</b></div>
+        <span class="good-total">商品總額：{{`$${fenTransYuan(moneyCount.count)}`}}</span>
+        <div class="order-get"><span>提成金額：</span><b>{{'$'+fenTransYuan(moneyCount.fee)}}</b></div>
       </div>
     </div>
     <mt-popup
@@ -85,7 +87,7 @@
 import { CommonHeader } from 'components'
 import { Popup, Picker } from 'mint-ui'
 import { agentOrders } from 'utils/getData'
-import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
+import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth, fenTransYuan } from 'utils/utils'
 const currentD = getCurrentDay()
 const currentW = getCurrentWeek()
 const currentM = getCurrentMonth()
@@ -197,7 +199,7 @@ export default {
       let feeM = 0
       this.orderList.map(item => {
         totalM += item.price
-        feeM += (item.pickWay == 1? item.deliverFee : 0)
+        feeM += (item.pickWay == 2? item.deliverFee : 0)
       })
       return {
         count: totalM,
@@ -220,6 +222,7 @@ export default {
     historyBack () {
       history.go(-1)
     },
+    fenTransYuan: fenTransYuan,
     toggleShowTime () {
       this.timeshow = !this.timeshow
     },
@@ -280,6 +283,9 @@ export default {
 .page-wrap {
   background: #F6F6F6;
   min-height: 100%;
+  @media screen and (min-width: $screenMid) {
+    background: #ffffff;
+  }
   .page-title {
     background: #ffffff;
   }
@@ -287,6 +293,12 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 .7rem;
+    position: relative;
+    @media screen and (min-width: $screenMid) {
+      width: $screenWidth;
+      padding: 3rem 1.5rem 0;
+      margin: 0 auto;
+    }
     .time-wrap {
       width: 100%;
       box-sizing: border-box;
@@ -351,6 +363,9 @@ export default {
         box-shadow: 0 .2rem .4rem 0 rgba(0,0,0,0.09);
         border-radius: .2rem;
         margin-bottom: 1.5rem;
+        @media screen and (min-width: $screenMid) {
+          border: 1px solid #D5D5D5;
+        }
         .order-text-1 {
           text-align: left;
           font-size: 1.7rem;
@@ -368,6 +383,9 @@ export default {
           color: #1CD0A3;
           font-size: 1.7rem;
           text-decoration: underline;
+          @media screen and (min-width: $screenMid) {
+            display: none;
+          }
         }
         .order-title-box {
           width: 100%;
@@ -376,6 +394,12 @@ export default {
           box-sizing: border-box;
           padding: 1.3rem 1.6rem 1.15rem 1.75rem;
           border-bottom: 1px solid #E6E6E6;
+          @media screen and (min-width: $screenMid) {
+            display: flex;
+            .leader-info-box {
+              width: 50%;
+            }
+          }
           &::before {
             content: '';
             display: block;
@@ -388,6 +412,23 @@ export default {
           }
         }
         .order-content-box {
+          .good-box {
+            @media screen and (min-width: $screenMid) {
+              position: relative;
+              display: flex;
+              border-bottom: 1px solid #E6E6E6;
+              &::before {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 0;bottom: 0;
+                width: .5rem;
+                height: 105%;
+                background: #1CD0A3;
+                border-radius: .2rem 0px 0px 0px;
+              }
+            }
+          }
           .good-item {
             @extend .flex-box;
             box-sizing: border-box;
@@ -398,6 +439,15 @@ export default {
             &:last-child {
               border: none;
             }
+            @media screen and (min-width: $screenMid) {
+              margin-right: 2.5rem;
+              border: none;
+              width: 50%;
+              justify-content: flex-start;
+              &:last-child {
+                padding-left: 0;
+              }
+            }
           }
         }
         .order-info-box {
@@ -407,6 +457,9 @@ export default {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          @media screen and (min-width: $screenMid) {
+            background: #F6F6F6;
+          }
           .order-no {
             font-size: 1.4rem;
             color: #777776;
@@ -462,7 +515,7 @@ export default {
     }
     .total-wrap {
       position: fixed;
-      left: 0;bottom: 0;
+      right: 0;bottom: 0;
       width: 100%;
       height: 5rem;
       @extend .flex-box;
@@ -470,6 +523,14 @@ export default {
       padding: 0 1.4rem;
       background: #3D3D3D;
       color: #ffffff;
+      @media screen and (min-width: $screenMid) {
+        width: 30rem;
+        height: 2.5rem;
+        position: absolute;
+        right: 1.5rem;top: 5rem;
+        background: #1CD0A3;
+        border-radius: 6px;
+      }
       .good-total {
         font-size: 1.4rem;
       }

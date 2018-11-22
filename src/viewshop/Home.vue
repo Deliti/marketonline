@@ -107,7 +107,7 @@ export default {
       bannerList: [],
       categoryId: '-1',
       goodType: [{
-        "id": 1,
+        "id": '-1',
         "status": 0,
         "categoryName": "全部"
       }],
@@ -245,6 +245,10 @@ export default {
         categoryId: this.categoryId,
         page: pageNo,
         limit: pageLimit
+      }
+      if (this.categoryId == '-1') {
+        delete params.categoryId
+        params.selectAll = 1
       }
       console.log(params)
       const data = await productList(params)

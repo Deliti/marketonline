@@ -82,7 +82,7 @@ export default {
     position: relative;
     padding-bottom: 7rem;
     @media screen and (min-width: $screenMid) {
-      width: 48rem;
+      width: 40rem;
       margin: 0 auto;
       padding-top: 6rem;
     }

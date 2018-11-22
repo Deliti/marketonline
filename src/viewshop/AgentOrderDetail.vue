@@ -20,7 +20,7 @@
       </div>
       <div class="order-detail-wrap">
         <div class="detail-title">
-          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ orderInfo.price+orderInfo.deliverFee}}</label>
+          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ fenTransYuan(orderInfo.price+orderInfo.deliverFee)}}</label>
         </div>
         <section class="detail-content">
           <div v-for="(prodItem, index) in orderInfo.productList"
@@ -42,7 +42,7 @@
                     <span>數量</span>
                     <span>{{prodItem.num}}</span>
                   </div>
-                  <label class="good-price">{{'$'+prodItem.price}}</label>
+                  <label class="good-price">{{'$'+fenTransYuan(prodItem.price)}}</label>
                 </div>
               </div>
             </div>
@@ -53,11 +53,11 @@
         </section>
         <div class="total-wrap">
           <label>商品總計</label>
-          <span class="total-price">{{'$'+orderInfo.price}}</span>
+          <span class="total-price">{{'$'+fenTransYuan(orderInfo.price)}}</span>
         </div>
         <div class="total-wrap" v-if="orderInfo.pickWay == 2">
           <label>配送费</label>
-          <span class="total-price">${{orderInfo.deliverFee}}</span>
+          <span class="total-price">${{fenTransYuan(orderInfo.deliverFee)}}</span>
         </div>
       </div>
       <section class="bottom-block-wrap">
@@ -81,8 +81,8 @@
             <span>全選</span>
           </div>
           <div class="info-wrap">
-            <p class="total-count">合計：$38</p>
-            <p class="detail-count">總額:$76  剩餘:$38</p>
+            <p class="total-count">合計：${{fenTransYuan(moneyCount.count+moneyCount.fee)}}</p>
+            <p class="detail-count">總額:${{fenTransYuan(orderInfo.price+orderInfo.deliverFee)}}  剩餘:${{fenTransYuan(orderInfo.price+orderInfo.deliverFee-moneyCount.count-moneyCount.fee)}}</p>
           </div>
           <div class="submit-btn" @click="handleComfirm">
             <label>確認</label>
@@ -97,6 +97,7 @@
 import { CommonHeader } from 'components'
 import { Toast } from 'mint-ui'
 import { getOrderDetail, checkPickCode, agentComfirm } from 'utils/getData'
+import { fenTransYuan } from 'utils/utils'
 export default {
   data () {
     return {
@@ -120,6 +121,20 @@ export default {
         }
       }
       return flag
+    },
+    moneyCount () {
+      let totalM = 0
+      let feeM = 0
+      this.orderInfo.productList.map(item => {
+        if (this.selectCart.indexOf(item.productId) != -1) {
+          totalM += item.price
+          feeM += (item.pickWay == 2? item.deliverFee : 0)
+        }
+      })
+      return {
+        count: totalM,
+        fee: feeM
+      }
     }
   },
   mounted () {
@@ -139,6 +154,7 @@ export default {
     linkjump (href) {
       this.$router.push(href)
     },
+    fenTransYuan: fenTransYuan,
     historyBack () {
       history.go(-1)
     },
@@ -210,6 +226,7 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   background: #F6F6F6;
+  min-height: 100%;
   @media screen and (min-width: $screenMid) {
     background: #ffffff;
   }
@@ -308,9 +325,8 @@ export default {
       }
       .detail-content {
         .order-item {
-          height: 12.1rem;
           box-sizing: border-box;
-          padding: 1.9rem 1.65rem 2.7rem 1.8rem;
+          padding: 1.9rem 1.65rem 0 1.8rem;
           .order-item-flex {
             height: 6.25rem;
             margin-bottom: .9rem;
@@ -326,15 +342,11 @@ export default {
                 width: 20rem;
               }
               .order-item-status {
-                width: 5rem;
+                display: inline-block;
+                width: 100%;
                 height: 1.8rem;
-                font-size: 1.4rem;
                 line-height: 1.8rem;
-                text-align: center;
-                color: #1CD0A3;
-                margin-right: 1.8rem;
                 @media screen and (min-width: $screenMid) {
-                  display: inline-block;
                   width: 10rem;
                   font-size: 2rem;
                   height: 3.6rem;
@@ -343,6 +355,7 @@ export default {
               }
             }
             .radius-circle {
+              display: inline-block;
               width: 5rem;
               height: 2rem;
               margin-right: 1.8rem;
@@ -389,6 +402,7 @@ export default {
             padding-left: 6.4rem;
             font-size: 1.2rem;
             color: #444444;
+            padding-bottom: 2.7rem;
           }
         }
         .over-order {

@@ -247,9 +247,8 @@ export default {
       }
       .detail-content {
         .order-item {
-          height: 12.1rem;
           box-sizing: border-box;
-          padding: 1.9rem 1.65rem 2.7rem 1.8rem;
+          padding: 1.9rem 1.65rem 0 1.8rem;
           .order-item-flex {
             height: 6.25rem;
             margin-bottom: .9rem;
@@ -330,6 +329,7 @@ export default {
             padding-left: 6.4rem;
             font-size: 1.2rem;
             color: #444444;
+            padding-bottom: 2.7rem;
             @media screen and (min-width: $screenMid) {
               font-size: 1.4rem;
               padding-left: 22rem;

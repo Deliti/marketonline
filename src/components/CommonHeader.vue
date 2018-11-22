@@ -134,6 +134,11 @@ export default {
         line-height: 1.9rem;
         font-size: 1.4rem;
         color: #0DC6B5;
+        @media screen and (min-width: $screenMid) {
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0rem;
+        }
       }
     }
   }

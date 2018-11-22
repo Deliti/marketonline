@@ -28,7 +28,7 @@ export const getAllCartList = params => fetch('post', '/merchant/app/cart/myCart
 export const addCart = params => fetch('post', '/merchant/app/cart/addCart', params)
 export const updateCart = params => fetch('post', '/merchant/app/cart/update', params)
 export const playOrder = params => fetch('post', '/merchant/app/order/playOrder', params)
-
+export const suggest = params => fetch('post', '/merchant/app/suggest/suggest', params)
 // 訂單
 export const agentOrders = params => fetch('post', '/merchant/app/order/agentOrders', params)
 export const getMyOrders = params => fetch('post', '/merchant/app/order/myOrders', params)
@@ -36,3 +36,8 @@ export const getOrderDetail = params => fetch('post', '/merchant/app/order/detai
 
 export const checkPickCode = params => fetch('post', '/merchant/app/order/checkPickCode', params)
 export const agentComfirm = params => fetch('post', '/merchant/app/order/pickUp', params)
+
+// 开始接单
+export const resumeOrder = params => fetch('post', '/merchant/app/agent/resume', params)
+// 暂停接单
+export const stopOrder = params => fetch('post', '/merchant/app/agent/stop', params)
