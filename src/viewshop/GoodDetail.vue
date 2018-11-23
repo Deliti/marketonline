@@ -24,13 +24,13 @@
         <div class="time-wrap">
           <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime}}後截單</p>
           <p class="time-tips" v-else>已截單</p>
-          <div class="old-price">原購價 ${{goodInfo.price}}</div>
+          <div class="old-price">原購價 ${{fenTransYuan(goodInfo.price)}}</div>
         </div>
         <div class="price-wrap">
           <p class="get-good-time">取貨時間：{{goodInfo.takeTimeStr}}</p>
           <div class="cheap-price-box">
             <span class="cheap-tips">團購價</span>
-            <span class="cheap-price">$<b>{{goodInfo.discountPrice}}</b></span>
+            <span class="cheap-price">$<b>{{fenTransYuan(goodInfo.discountPrice)}}</b></span>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
 <script>
 import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
-import { formateTime, timeText } from 'utils/utils'
+import { formateTime, timeText, fenTransYuan } from 'utils/utils'
 import { productInfo, addCart, updateCart } from 'utils/getData'
 let pageInterVal = null
 let loading = false
@@ -84,6 +84,7 @@ export default {
     historyBack () {
       history.go(-1)
     },
+    fenTransYuan: fenTransYuan,
     async addGoodCart () {
       if (loading) {
         return false
@@ -318,7 +319,7 @@ export default {
             font-size: 1.8rem;
             color: #1CD0A3;
             b {
-              font-size: 3.2rem;
+              font-size: 2.2rem;
             }
           }
         }

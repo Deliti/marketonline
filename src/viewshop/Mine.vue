@@ -27,6 +27,8 @@
 <script>
 import { CommonHeader, CommonFooter } from 'components'
 import { Toast } from 'mint-ui'
+import { getUserInfo } from 'utils/getData'
+
 export default {
   data () {
     return {
@@ -38,11 +40,7 @@ export default {
     CommonFooter
   },
   mounted () {
-    const token = localStorage['token']
-    if (!token) {
-      Toast('請登錄')
-      this.linkJump('/login')
-    }
+    this.getUserInfo()
   },
   methods: {
     linkJump (href) {
@@ -50,6 +48,30 @@ export default {
     },
     historyBack () {
       history.go(-1)
+    },
+    async getUserInfo (cb) {
+      const data = await getUserInfo()
+      if (data.code == 0) {
+        if (data.agent && data.agent.isAgent == 1) {
+          const userInfo = Object.assign({}, data.agent, data.data)
+          if (data.agent.closeTime) {
+            const nowTime = new Date().getTime()
+            const closeTime = new Date(data.agent.closeTime).getTime()
+            if (nowTime >= closeTime) {
+              this.isOpenStatus = 2
+            } else if (nowTime > closeTime-2*24*3600*1000) {
+              this.isOpenStatus = 1
+            } else {
+              this.isOpenStatus = 0
+            }
+          }
+          cb instanceof Function && cb(userInfo.closeTime)
+          localStorage['userInfo'] = JSON.stringify(userInfo)
+        } 
+      } else {
+        Toast('請登錄')
+        this.$router.replace('/login')
+      }
     },
     logout () {
       localStorage.clear()

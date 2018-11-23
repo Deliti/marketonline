@@ -50,10 +50,10 @@
             <div class="item-info-box">
               <label class="item-name">{{goodInfo.name}}</label>
               <div class="item-price-wrap">
-                <div class="old-price">原購價 ${{goodInfo.price}}</div>
+                <div class="old-price">原購價 ${{fenTransYuan(goodInfo.price)}}</div>
                 <div class="cheap-price-box">
                   <span class="cheap-tips">團購價</span>
-                  <span class="cheap-price">${{goodInfo.discountPrice}}</span>
+                  <span class="cheap-price">${{fenTransYuan(goodInfo.discountPrice)}}</span>
                 </div>
               </div>
             </div>
@@ -91,7 +91,7 @@
 import { Swipe, SwipeItem } from 'mint-ui';
 import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
-import { formateTime, timeText } from 'utils/utils'
+import { formateTime, timeText, fenTransYuan } from 'utils/utils'
 import $ from 'jquery'
 import { getBanner, productList, prodType, addCart, updateCart } from 'utils/getData'
 
@@ -105,9 +105,9 @@ export default {
     return {
       isAgent: localStorage['isAgent'],
       bannerList: [],
-      categoryId: '-1',
+      categoryId: -1,
       goodType: [{
-        "id": '-1',
+        "id": -1,
         "status": 0,
         "categoryName": "全部"
       }],
@@ -128,6 +128,7 @@ export default {
     this.addEvent()
   },
   beforeDestroy () {
+    this.resetPage()
     clearInterval(pageInterVal)
   },
   methods: {
@@ -135,7 +136,9 @@ export default {
     init () {
       this.getBanner()
       this.getProdType()
+      this.getProdList()
     },
+    fenTransYuan: fenTransYuan,
     addEvent () {
       $("#scrollBox").off().on('click', '.item', function(){
         var moveX = $(this).position().left+$(this).parent().scrollLeft();
@@ -232,6 +235,12 @@ export default {
       })
       return count
     },
+    resetPage () {
+      this.categoryId = -1
+      pageNo = 0
+      totalPage = 1
+      this.goodList = []
+    },
     async getProdList () {
       if (pageNo >= totalPage) {
         return false
@@ -246,10 +255,7 @@ export default {
         page: pageNo,
         limit: pageLimit
       }
-      if (this.categoryId == '-1') {
-        delete params.categoryId
-        params.selectAll = 1
-      }
+      this.categoryId == -1 && delete params.categoryId
       console.log(params)
       const data = await productList(params)
       if (data.code == 0) {

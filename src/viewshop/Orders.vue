@@ -42,7 +42,7 @@
             <div class="good-box">
               <div class="good-item">
                 <span class="order-text-2">商品總額&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <span class="order-text-3">{{'$ '+ orderItem.price}}</span>
+                <span class="order-text-3">{{'$ '+ fenTransYuan(orderItem.price)}}</span>
               </div>
               <div class="good-item">
                 <span class="order-text-2">商品件數&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -86,7 +86,7 @@
 <script>
 import { Popup, Picker } from 'mint-ui'
 import { CommonHeader } from 'components'
-import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
+import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth, fenTransYuan } from 'utils/utils'
 import { getMyOrders } from 'utils/getData'
 
 const currentD = getCurrentDay()
@@ -210,6 +210,7 @@ export default {
     linkjump (href) {
       this.$router.push(href)
     },
+    fenTransYuan: fenTransYuan,
     historyBack () {
       history.go(-1)
     },

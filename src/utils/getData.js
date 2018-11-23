@@ -2,6 +2,7 @@ import fetch from './fetch'
 
 // user
 export const login = params => fetch('post', '/merchant/app/user/login', params)
+export const getAuthCode = params => fetch('post', '/merchant/app/user/getAuthCode', params)
 export const register = params => fetch('post', '/merchant/app/user/register', params)
 export const resetPwd = params => fetch('post', '/merchant/app/user/resetPwd', params)
 export const getUserInfo = params => fetch('post', '/merchant/app/user/info', params)

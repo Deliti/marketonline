@@ -38,7 +38,7 @@
 import { validateInput } from 'utils/utils'
 import { TimeDown } from 'components'
 import { Toast } from 'mint-ui'
-import { resetPwd } from 'utils/getData'
+import { getAuthCode, resetPwd } from 'utils/getData'
 export default {
   data () {
     return {
@@ -61,7 +61,7 @@ export default {
     historyBack () {
       history.go(-1)
     },
-    sendCode (countdown) {
+    async sendCode (countdown) {
       console.log('發送驗證碼')
       const verifyUsername = validateInput({
         value: this.username,
@@ -72,7 +72,13 @@ export default {
         novalidStr: '請輸入正確的手機號碼'
       })
       if (verifyUsername) {
-        countdown()
+        const params = {
+          phone: this.username
+        }
+        const data = await getAuthCode(params)
+        if (data.code == 0) {
+          countdown()
+        }
       }
     },
     async submit () {

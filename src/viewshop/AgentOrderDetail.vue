@@ -127,10 +127,10 @@ export default {
       let feeM = 0
       this.orderInfo.productList.map(item => {
         if (this.selectCart.indexOf(item.productId) != -1) {
-          totalM += item.price
-          feeM += (item.pickWay == 2? item.deliverFee : 0)
+          totalM += item.price*item.num
         }
       })
+      feeM += this.orderInfo.deliverFee
       return {
         count: totalM,
         fee: feeM

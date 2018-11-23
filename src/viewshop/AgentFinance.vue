@@ -50,9 +50,19 @@
                   <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
                 </div>
               </div>
+              <div class="earn-box">
+                <div class="earn-info-box">
+                  <span class="earn-no">商品佣金</span>
+                  <div class="earn-get"><b>${{fenTransYuan(getGoodRate(item))}}</b></div>
+                </div>
+                <div class="earn-info-box" v-if="item.pickWay == 2">
+                  <span class="earn-no">配送費</span>
+                  <div class="earn-get"><b>${{fenTransYuan(item.deliverFee)}}</b></div>
+                </div>
+              </div>
               <div class="order-info-box">
                 <span class="order-no">訂單編號：{{item.id}}</span>
-                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(item.deliverFee)}}</b></div>
+                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(getGoodRate(item) + item.deliverFee)}}</b></div>
               </div>
             </div>
           </section>
@@ -63,7 +73,7 @@
       </div>
       <div class="total-wrap">
         <span class="good-total">商品總額：{{`$${fenTransYuan(moneyCount.count)}`}}</span>
-        <div class="order-get"><span>提成金額：</span><b>{{'$'+fenTransYuan(moneyCount.fee)}}</b></div>
+        <div class="order-get"><span>提成金額：</span><b>{{'$'+fenTransYuan(moneyCount.earn)}}</b></div>
       </div>
     </div>
     <mt-popup
@@ -196,14 +206,18 @@ export default {
     },
     moneyCount () {
       let totalM = 0
-      let feeM = 0
+      let earnM = 0
       this.orderList.map(item => {
         totalM += item.price
-        feeM += (item.pickWay == 2? item.deliverFee : 0)
+        earnM += (item.pickWay == 2? item.deliverFee : 0)
+        // item.productList.map(pitem => {
+        //   earnM += pitem.price*pitem.num*pitem.rate/100
+        // })
       })
+      console.log(earnM)
       return {
         count: totalM,
-        fee: feeM
+        earn: earnM
       }
     }
   },
@@ -214,6 +228,9 @@ export default {
   },
   mounted () {
     this.getOrderList()
+  },
+  beforeDestroy () {
+    this.resetPage()
   },
   methods: {
     linkjump (href) {
@@ -232,6 +249,20 @@ export default {
     },
     hideMonthPop () {
       this.otherMonthVisible = false
+    },
+    resetPage () {
+      pageNo = 0
+      totalPage = 1
+      loading = false
+      this.current = '0'
+      this.orderList = []
+    },
+    getGoodRate (order) {
+      let m = 0
+      order.productList.map(item => {
+        m += item.price*item.num*item.rate/100
+      })
+      return m
     },
     timeConfirm () {
       const text = this.$refs.picker.getValues()[0]
@@ -436,9 +467,9 @@ export default {
             height: 4rem;
             background: #ffffff;
             border-bottom: 1px solid #E6E6E6;
-            &:last-child {
-              border: none;
-            }
+            // &:last-child {
+            //   border: none;
+            // }
             @media screen and (min-width: $screenMid) {
               margin-right: 2.5rem;
               border: none;
@@ -446,6 +477,31 @@ export default {
               justify-content: flex-start;
               &:last-child {
                 padding-left: 0;
+              }
+            }
+          }
+        }
+        .earn-box {
+          .earn-info-box {
+            @extend .flex-box;
+            box-sizing: border-box;
+            padding: 0 1.4rem 0 1.75rem;
+            height: 4rem;
+            background: #ffffff;
+            border-bottom: 1px solid #E6E6E6;
+            .earn-no {
+              font-size: 1.4rem;
+              color: #777776;
+            }
+            .earn-get {
+              font-size: 1.4rem;
+              color: #444444;
+              align-items: center;
+              display: flex;
+              height: 3.3rem;
+              b {
+                font-size: 1.6rem;
+                color: #1CD0A3;
               }
             }
           }

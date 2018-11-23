@@ -48,8 +48,8 @@
           <div class="info-title addr-info-title">
             <label class="info-tip">我的地址</label>
             <p class="deliver-info" @click="changePickWay">
-              <i :class="['radius-circle', selfPick ? 'radius-seleted' : '']"></i>
-              <span>送貨上門 (配送費+${{leader.deliveryFee}})</span>
+              <i :class="['radius-circle', leaderPick ? 'radius-seleted' : '']"></i>
+              <span>送貨上門 (配送費+${{fenTransYuan(leader.deliveryFee)}})</span>
             </p>
             <span class="edit-btn" @click="showAddr">更改</span>
           </div>
@@ -85,7 +85,7 @@
       <div class="order-wrap">
         <div class="order-detail-wrap" v-if="shopCart.length > 0">
           <div class="detail-title">
-            <label v-show="shopCart.length>0">{{goodCount}}件商品 / 總計 ${{selfPick?cartMoney+leader.deliveryFee:cartMoney}}</label>
+            <label v-show="shopCart.length>0">{{goodCount}}件商品 / 總計 ${{leaderPick?fenTransYuan(cartMoney+leader.deliveryFee):fenTransYuan(cartMoney)}}</label>
           </div>
           <section class="detail-content">
             <div class="order-item"
@@ -104,7 +104,7 @@
                       <span>{{item.count}}</span>
                       <span class="change-btn" @click.stop="addGoodCart(item)">+</span>
                     </div>
-                    <label class="good-price">${{item.money}}</label>
+                    <label class="good-price">${{fenTransYuan(item.money)}}</label>
                   </div>
                 </div>
               </div>
@@ -135,11 +135,11 @@
           </section>
           <div class="total-wrap">
             <label>商品總計</label>
-            <span class="total-price">${{cartMoney}}</span>
+            <span class="total-price">${{fenTransYuan(cartMoney)}}</span>
           </div>
-          <div class="total-wrap" v-if="selfPick">
+          <div class="total-wrap" v-if="leaderPick">
             <label>配送费</label>
-            <span class="total-price">${{leader.deliveryFee}}</span>
+            <span class="total-price">${{fenTransYuan(leader.deliveryFee)}}</span>
           </div>
         </div>
         <div class="no-order-wrap" v-else>
@@ -161,6 +161,7 @@
 <script>
 import { CommonHeader, MessageBox, MyAside } from 'components'
 import { mapState, mapGetters, mapMutations } from 'vuex'
+import { fenTransYuan } from 'utils/utils'
 import { getMyLeader, getMyAddr, getAllCartList, updateCart, playOrder } from 'utils/getData'
 
 let loading = false
@@ -173,7 +174,7 @@ export default {
       addrs: [],
       leader: {},
       addr: {},
-      selfPick: false
+      leaderPick: false
     }
   },
   computed: {
@@ -197,6 +198,7 @@ export default {
     historyBack () {
       history.go(-1)
     },
+    fenTransYuan: fenTransYuan,
     async getMyLeader () {
       const params = {
         pageNo: 0,
@@ -338,7 +340,7 @@ export default {
       })
     },
     changePickWay () {
-      this.selfPick = !this.selfPick
+      this.leaderPick = !this.leaderPick
     },
     comfirmOrder () {
       if (this.shopCart.length == 0) {
@@ -368,7 +370,7 @@ export default {
         }
       })
       const params = {
-        "pickWay": this.selfPick?1:2,
+        "pickWay": this.leaderPick?2:1,
         "addressId": this.addr.id,
         "agentId": this.leader.agentId,
         "productList": productList

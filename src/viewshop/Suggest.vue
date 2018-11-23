@@ -3,7 +3,7 @@
     <common-header></common-header>
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
-      <h1>地址管理</h1>
+      <h1>反饋意見</h1>
     </div>
     <div class="page-content">
       <div class="suggest-wrap">

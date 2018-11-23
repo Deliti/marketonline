@@ -20,7 +20,7 @@
       </div>
       <div class="order-detail-wrap">
         <div class="detail-title">
-          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ orderInfo.price+orderInfo.deliverFee}}</label>
+          <label>{{orderInfo.totalNum + '件商品'}} / {{'總計 $'+ fenTransYuan(orderInfo.price+orderInfo.deliverFee)}}</label>
         </div>
         <section class="detail-content">
           <div v-for="(prodItem, index) in orderInfo.productList"
@@ -38,7 +38,7 @@
                     <span>數量</span>
                     <span>{{prodItem.num}}</span>
                   </div>
-                  <label class="good-price">{{'$'+prodItem.price}}</label>
+                  <label class="good-price">{{'$'+fenTransYuan(prodItem.price)}}</label>
                 </div>
               </div>
             </div>
@@ -66,11 +66,11 @@
         </section>
         <div class="total-wrap">
           <label>商品總計</label>
-          <span class="total-price">{{'$'+orderInfo.price}}</span>
+          <span class="total-price">{{'$'+fenTransYuan(orderInfo.price)}}</span>
         </div>
         <div class="total-wrap" v-if="orderInfo.pickWay == 2">
           <label>配送费</label>
-          <span class="total-price">${{orderInfo.deliverFee}}</span>
+          <span class="total-price">${{fenTransYuan(orderInfo.deliverFee)}}</span>
         </div>
       </div>
       <div class="over-wrap" v-if="orderInfo.status == 4">
@@ -95,6 +95,7 @@
 import { CommonHeader } from 'components'
 import qrCode from 'qrcodejs2'
 import { mapState, mapMutations } from 'vuex'
+import { fenTransYuan } from 'utils/utils'
 import { getOrderDetail } from 'utils/getData'
 
 export default {
@@ -120,6 +121,7 @@ export default {
     historyBack () {
       history.go(-1)
     },
+    fenTransYuan: fenTransYuan,
     init () {
       this.getOrderDetail()
     },
@@ -138,8 +140,8 @@ export default {
     qrcode (text) {
       var qrcode = new qrCode(this.$refs.qrCodeUrl, {
         text: text,
-        width: '107.5',
-        height: '107.5'
+        width: this.$refs.qrCodeUrl.clientWidth,
+        height: this.$refs.qrCodeUrl.clientWidth
       })
     }
   }

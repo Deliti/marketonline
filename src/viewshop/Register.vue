@@ -10,7 +10,7 @@
       <h3 class="center-title">註冊</h3>
       <div class="input-wrap">
         <div class="input-box">
-          <input type="text" class="input" placeholder="註冊時用的手機號碼" v-model="username">
+          <input type="text" class="input" placeholder="手機號碼" v-model="username">
         </div>
         <hr>
         <div class="input-box verify-box">
@@ -29,7 +29,7 @@
       </div>
       <div class="leader-wrap">
         <div class="leader-no-selected"
-            v-if="!leader.userId"
+            v-if="!leader.id"
             @click="toggleLeader">
           <i class="left-icon"></i>
           <i :class="['down-icon', leaderShow?'rotate-down':'']"></i>
@@ -40,14 +40,14 @@
           <i :class="['down-icon', leaderShow?'rotate-down':'']"></i>
           <div class="seleted-title">已選團長：</div>
           <div class="leader-info-wrap">
-            <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}{{leader.phone}}</p>
+            <p class="seleted-text" v-if="leader.id">{{leader.address}}<br>團長：{{leader.name}}{{leader.phone}}</p>
             <div class="reset-btn">重置</div>
           </div>
         </div>
         <my-aside :show="leaderShow" @hide="hideLeader">
           <div class="option-seleted">
             <div class="seleted-title">已選團長：</div>
-            <p class="seleted-text" v-if="leader.userId">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
+            <p class="seleted-text" v-if="leader.id">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
             <p class="no-seleted" v-else>—— 無 ——</p>
           </div>
           <div class="option-wrap">
@@ -58,7 +58,7 @@
                   :key="index"
                   class="option-item"
                   @click="chooseLeader(item)">
-                <i :class="['radius-icon', leader.userId == item.userId?'radius-seleted':'']"></i>
+                <i :class="['radius-icon', leader.id == item.id?'radius-seleted':'']"></i>
                 <div class="option-box">
                   <p class="option-text">{{item.address}}</p>
                   <p class="option-text">團長：{{item.name}}  {{item.phone}}</p>
@@ -92,7 +92,7 @@
 import { MessageBox, MyAside, CollapseItem, TimeDown } from 'components/index.js'
 import { validateInput } from 'utils/utils'
 import { Toast } from 'mint-ui'
-import { login, register, getLeaderList } from 'utils/getData'
+import { login, getAuthCode, register, getLeaderList } from 'utils/getData'
 export default {
   data () {
     return {
@@ -135,7 +135,7 @@ export default {
         this.leaders = data.data
       }
     },
-    sendCode (countdown) {
+    async sendCode (countdown) {
       console.log('發送驗證碼')
       const verifyUsername = validateInput({
         value: this.username,
@@ -146,7 +146,13 @@ export default {
         novalidStr: '請輸入正確的手機號碼'
       })
       if (verifyUsername) {
-        countdown()
+        const params = {
+          phone: this.username
+        }
+        const data = await getAuthCode(params)
+        if (data.code == 0) {
+          countdown()
+        }
       }
     },
     async submit () {
@@ -157,7 +163,7 @@ export default {
         "phone": this.username,
         "password": this.password,
         "authCode": this.verifycode,
-        "agentId": this.leader.userId,
+        "agentId": this.leader.id,
         "name": this.realname,
         "address": this.addrText
       }
@@ -210,7 +216,7 @@ export default {
         Toast('兩次密碼不一致')
         return false
       }
-      if (!this.leader.userId) {
+      if (!this.leader.id) {
         Toast('請選擇團長')
         return false
       }
@@ -338,6 +344,7 @@ export default {
           flex: 1;
         }
         .verifybtn {
+          cursor: pointer;
           text-align: center;
           height: 3rem;
           line-height: 3rem;

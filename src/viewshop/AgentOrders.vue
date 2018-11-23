@@ -50,7 +50,7 @@
                   <div class="good-box">
                     <div class="good-item">
                       <span class="order-text-2">商品總額</span>
-                      <span class="order-text-3">{{'$ '+ item.price}}</span>
+                      <span class="order-text-3">{{'$ '+ fenTransYuan(item.price)}}</span>
                     </div>
                     <div class="good-item">
                       <span class="order-text-2">商品件數</span>
@@ -95,7 +95,7 @@
                   <div class="good-box">
                     <div class="good-item">
                       <span class="order-text-2">商品總額</span>
-                      <span class="order-text-3">{{'$ '+ item.price}}</span>
+                      <span class="order-text-3">{{'$ '+ fenTransYuan(item.price)}}</span>
                     </div>
                     <div class="good-item">
                       <span class="order-text-2">商品件數</span>
@@ -140,7 +140,7 @@
                   <div class="good-box">
                     <div class="good-item">
                       <span class="order-text-2">商品總額</span>
-                      <span class="order-text-3">{{'$ '+ item.price}}</span>
+                      <span class="order-text-3">{{'$ '+ fenTransYuan(item.price)}}</span>
                     </div>
                     <div class="good-item">
                       <span class="order-text-2">商品件數</span>
@@ -186,7 +186,7 @@
 <script>
 import { Navbar, TabItem, TabContainer, TabContainerItem, Popup, Picker } from 'mint-ui'
 import { CommonHeader, MessageBox, MyAside, CollapseItem } from 'components'
-import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth } from 'utils/utils'
+import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth, fenTransYuan } from 'utils/utils'
 import { agentOrders } from 'utils/getData'
 
 const currentD = getCurrentDay()
@@ -330,6 +330,9 @@ export default {
   mounted () {
     this.timeConf[0].click()
   },
+  beforeDestroy () {
+    this.resetPage()
+  },
   methods: {
     linkjump (href) {
       this.$router.push(href)
@@ -337,6 +340,7 @@ export default {
     historyBack () {
       history.go(-1)
     },
+    fenTransYuan: fenTransYuan,
     toggleShowTime () {
       this.timeshow = !this.timeshow
     },
@@ -346,6 +350,34 @@ export default {
     },
     hideMonthPop () {
       this.otherMonthVisible = false
+    },
+    resetPage () {
+      totalPages = {
+        'one': 1,
+        'two': 1,
+        'thr': 1
+      }
+      pageNos = {
+        'one': 0,
+        'two': 0,
+        'thr': 0
+      }
+      statusConf = {
+        'one': '',
+        'two': 1,
+        'thr': 3
+      }
+      loading = false
+      this.current = {
+        'one': '0',
+        'two': '0',
+        'thr': '0'
+      }
+      this.selected = '0'
+      this.orderListone = []
+      this.orderListtwo = []
+      this.orderListthr = []
+      this.timeshow = false
     },
     timeConfirm () {
       const text = this.$refs.picker.getValues()[0]
