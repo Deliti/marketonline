@@ -5,8 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    shopCart: [],
-    userAgent: localStorage['userAgent'] == 'PC' ? localStorage['userAgent'] : 'PHONE'
+    shopCart: []
   },
   mutations: {
     UPDATECART (state, cartList) {

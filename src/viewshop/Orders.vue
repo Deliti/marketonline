@@ -506,7 +506,9 @@ export default {
   .picker-button-wrap {
     width: 100%;
     height: 3rem;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+    box-sizing: border-box;
+    padding: .5rem 1rem;
     @extend .flex-box;
     span {
 

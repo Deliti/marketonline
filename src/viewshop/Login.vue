@@ -32,16 +32,13 @@
 import { validateInput } from 'utils/utils'
 import { Toast } from 'mint-ui'
 import { login, getUserInfo, getAllCartList } from 'utils/getData'
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
       username: '',
       password: ''
     }
-  },
-  computed: {
-    ...mapState(['userAgent'])
   },
   methods: {
     ...mapMutations(['UPDATECART']),

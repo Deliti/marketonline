@@ -131,6 +131,12 @@
               </div>
               <div class="get-time">取貨時間：11月3日（星期六）16:00後</div>
             </div> -->
+            <div class="memo-box">
+              <span class="memo-title">備註：</span>
+              <div class="memo-input-wrap">
+                <input type="text" class="memo-input">
+              </div>
+            </div>
             <div class="dash-hr"></div>
           </section>
           <div class="total-wrap">
@@ -174,7 +180,8 @@ export default {
       addrs: [],
       leader: {},
       addr: {},
-      leaderPick: false
+      leaderPick: false,
+      memo: ''
     }
   },
   computed: {
@@ -207,6 +214,7 @@ export default {
       const data = await getMyLeader(params)
       if (data.code == 0) {
         this.leader = data.page.list.filter(item => item.status === 0)[0]
+        console.log(this.leader)
         this.myLeaders = data.page.list
       }
     },
@@ -348,7 +356,7 @@ export default {
         return false
       }
       MessageBox({
-        message: `<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長：${this.leader.agentName}<br/><br/>（取貨）地址：${this.leader.agentAddress}</div>`,
+        message: `<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長：${this.leader.agentName}<br/><br/>（取貨）地址：${this.leaderPick?this.addr.address:this.leader.agentAddress}</div>`,
         buttons: [{
           text: '取消',
           callBack: () => {
@@ -373,7 +381,8 @@ export default {
         "pickWay": this.leaderPick?2:1,
         "addressId": this.addr.id,
         "agentId": this.leader.agentId,
-        "productList": productList
+        "productList": productList,
+        "memo": this.memo
       }
       const data = await playOrder(params)
       if (data.code == 0) {
@@ -634,6 +643,23 @@ export default {
         .solid-hr {
           width: 100%;
           border-bottom: 1px solid #E2E2E2;
+        }
+        .memo-box {
+          width: 100%;
+          padding: 0 1.65rem 0 2.65rem;
+          font-size: 1.2rem;
+          box-sizing: border-box;
+          @extend .flex-box;
+          justify-content: flex-start;
+          font-size: 1.2rem;
+          color: #444444;
+          .memo-title {
+            margin-right: 1rem;
+          }
+          .memo-input-wrap {
+            flex: 1;
+            // border-bottom: 1px solid #0B2031;
+          }
         }
         .dash-hr {
           width: 90%;

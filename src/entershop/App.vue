@@ -14,13 +14,7 @@ export default {
     this.init()
   },
   beforeCreate () {
-    // console.log(IsPC())
-    // if (IsPC()) {
-    //   localStorage['userAgent'] = 'PC'
-    // } else {
-    //   localStorage['userAgent'] = 'PHONE'
-    //   document.documentElement.style = "font-size: 2.6666667vw !important;"
-    // }
+
   },
   methods: {
     ...mapMutations(['UPDATECART']),

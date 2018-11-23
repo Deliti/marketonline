@@ -169,7 +169,11 @@ export default {
       }
       const data = await checkPickCode(params)
       if (data.code == 0) {
-        this.isVerifed = true
+        if (data.orderId == this.orderId) {
+          this.isVerifed = true
+        } else {
+          Toast('驗證碼錯誤')
+        }
       }
     },
     async handleComfirm () {
@@ -339,7 +343,7 @@ export default {
               font-size: 1.4rem;
               text-align: center;
               color: #1CD0A3;
-              margin-right: 1.8rem;
+              margin-right: .4rem;
               @media screen and (min-width: $screenMid) {
                 width: 20rem;
               }
@@ -394,8 +398,11 @@ export default {
                   color: #FFFFFF;
                 }
                 .good-price {
-                  font-size: 2.4rem;
+                  font-size: 2rem;
                   color: #1CD0A3;
+                  @media screen and (min-width: $screenMid) {
+                    font-size: 2.4rem;
+                  }
                 }
               }
             }
