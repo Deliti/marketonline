@@ -8,7 +8,7 @@
                         v-for="(banner, index) in bannerList"
                         :key="index"
                         @click="linkJump(`goodDetail/${banner.id}`)">
-          <img :src='banner.paramValue' alt="">
+          <img :src='banner.paramValue' @load="imgOnload" alt="">
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -31,7 +31,9 @@
               :class="['list-item', goodInfo.lessTime == -1 ? 'list-over' : '']"
               @click="linkJump(`goodDetail/${goodInfo.id}`)">
           <div class="item-banner-wrap">
-            <img :src='goodInfo.pic' alt="" class="item-banner">
+            <div class="img-wrap">
+              <img :src='goodInfo.pic' alt="" @load="imgOnload" class="item-banner">
+            </div>
             <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime+'後截單'}}</p>
             <p class="time-tips" v-else>已截單</p>
             <div class="add-wrap" @click.stop="" v-show="goodInfo.lessTime != -1">
@@ -137,6 +139,25 @@ export default {
       this.getBanner()
       this.getProdType()
       this.getProdList()
+    },
+    imgOnload (e) {
+      let img = new Image();
+      const imgUrl = e.target.src;
+      img.src = imgUrl;
+      const pWidth = e.path[1].clientWidth
+      const pHeight = e.path[1].clientHeight
+      let imgCss = "";
+      if (img.width / img.height > pWidth/pHeight) {
+        const widthRem = (img.width - pWidth/pHeight*img.height)/2;
+        const left = `-${100*((widthRem/img.width).toFixed(2))}%`;
+        imgCss = `height:100%;width:initial;transform:translateX(${left});position:relative`;
+      } else {
+        const heightRem =  (img.height - img.width/(pWidth/pHeight))/2;
+        const top = `-${100*((heightRem/img.height).toFixed(2))}%`;
+        imgCss = `width: 100%;height:initial; transform:translateY(${top});position:relative`;
+      }
+      // $(e.target).attr('style',imgCss)
+      e.target.setAttribute("style",imgCss)
     },
     fenTransYuan: fenTransYuan,
     addEvent () {
@@ -319,9 +340,10 @@ export default {
       height: 100%;
       .banner-item {
         // background: red;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
         img {
-          width: 100%;
-          height: 100%;
           display: block;
         }
       }
@@ -412,10 +434,15 @@ export default {
           @media screen and (min-width: $screenMid) {
             height: 11rem;
           }
-          .item-banner {
+          .img-wrap {
             width: 100%;
             height: 100%;
-            display: block;
+            overflow: hidden;
+            .item-banner {
+              // width: 100%;
+              // height: 100%;
+              display: block;
+            }
           }
           .time-tips {
             position: absolute;

@@ -5,7 +5,9 @@
       <i class="return-icon" @click="historyBack"></i>
     </div>
     <div class="banner-wrap">
-      <img :src="goodInfo.pic" alt="" class="banner">
+      <div class="img-wrap">
+        <img :src="goodInfo.pic" alt="" @load="imgOnload" class="banner">
+      </div>
       <div class="add-wrap" v-show="goodInfo.lessTime != -1">
         <div class="add-cart" v-if="!isHasGood" @click.stop="addGoodCart">
           <i class="cart-icon"></i><label>購買</label>
@@ -83,6 +85,25 @@ export default {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
     historyBack () {
       history.go(-1)
+    },
+     imgOnload (e) {
+      let img = new Image();
+      const imgUrl = e.target.src;
+      img.src = imgUrl;
+      const pWidth = e.path[1].clientWidth
+      const pHeight = e.path[1].clientHeight
+      let imgCss = "";
+      if (img.width / img.height > pWidth/pHeight) {
+        const widthRem = (img.width - pWidth/pHeight*img.height)/2;
+        const left = `-${100*((widthRem/img.width).toFixed(2))}%`;
+        imgCss = `height:100%;width:initial;transform:translateX(${left});position:relative`;
+      } else {
+        const heightRem =  (img.height - img.width/(pWidth/pHeight))/2;
+        const top = `-${100*((heightRem/img.height).toFixed(2))}%`;
+        imgCss = `width: 100%;height:initial; transform:translateY(${top});position:relative`;
+      }
+      // $(e.target).attr('style',imgCss)
+      e.target.setAttribute("style",imgCss)
     },
     fenTransYuan: fenTransYuan,
     async addGoodCart () {
@@ -203,11 +224,15 @@ export default {
       width: $screenWidth;
       margin: 0 auto;
     }
-    .banner {
+    .img-wrap {
       width: 100%;
       height: 100%;
-      display: block;
-    }
+      overflow: hidden;
+      .banner {
+        display: block;
+      }
+    } 
+    
     .add-wrap {
       width: 10.7rem;
       height: 3rem;
