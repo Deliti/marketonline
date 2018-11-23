@@ -16,6 +16,7 @@
         </div>
          <div class="order-info-box">
           <span class="order-no">訂單編號：{{orderInfo.id}}</span>
+          <span class="order-time">{{orderInfo.createAt}}</span>
         </div>
       </div>
       <div class="order-detail-wrap">

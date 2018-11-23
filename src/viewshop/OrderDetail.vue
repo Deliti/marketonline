@@ -16,6 +16,7 @@
         </div>
          <div class="order-info-box">
           <span class="order-no">訂單編號：{{orderInfo.id}}</span>
+          <span class="order-time">{{orderInfo.createAt}}</span>
         </div>
       </div>
       <div class="order-detail-wrap">
@@ -219,6 +220,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        color: #777776;
         @media screen and (min-width: $screenMid) {
           background: #F6F6F6;
         }
