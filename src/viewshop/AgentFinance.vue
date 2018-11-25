@@ -8,7 +8,7 @@
     <div class="page-content">
       <div class="time-wrap">
         <div class="time-content">
-          <span>篩選日期：</span>
+          <span>訂單已完成日期篩選：</span>
           <div class="time-box">
             <b class="time-now"  @click="toggleShowTime">{{currentTimeText}}</b>
             <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
