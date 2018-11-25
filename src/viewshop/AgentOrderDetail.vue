@@ -50,6 +50,12 @@
             <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr + '後'}}</div>
             <div class="solid-hr" v-show="index !== orderInfo.productList.length-1"></div>
           </div>
+          <div class="memo-box">
+            <span class="memo-title">備註：</span>
+            <div class="memo-input-wrap">
+              {{orderInfo.memo}}
+            </div>
+          </div>
           <div class="dash-hr"></div>
         </section>
         <div class="total-wrap">
@@ -112,6 +118,7 @@ export default {
   computed: {
     allSelected () {
       let flag = true
+      this.orderInfo.productList = this.orderInfo.productList?this.orderInfo.productList:[]
       for (let i = 0;i < this.orderInfo.productList.length; i++) {
         if (this.orderInfo.productList[i].isPick == 1) {
           continue
@@ -436,6 +443,25 @@ export default {
         .solid-hr {
           width: 100%;
           border-bottom: 1px solid #E2E2E2;
+        }
+        .memo-box {
+          width: 100%;
+          height: 2rem;
+          padding: 0 1.65rem 0 2.65rem;
+          font-size: 1.2rem;
+          box-sizing: border-box;
+          @extend .flex-box;
+          justify-content: flex-start;
+          align-items: flex-start;
+          font-size: 1.2rem;
+          color: #444444;
+          .memo-title {
+            margin-right: 1rem;
+          }
+          .memo-input-wrap {
+            flex: 1;
+            // border-bottom: 1px solid #0B2031;
+          }
         }
         .dash-hr {
           width: 90%;

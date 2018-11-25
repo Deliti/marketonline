@@ -6,9 +6,11 @@
       <mt-swipe :auto="4000" class="banner-box">
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
-                        :key="index"
-                        @click="linkJump(`goodDetail/${banner.id}`)">
-          <img :src='banner.paramValue' @load="imgOnload" alt="">
+                        :key="index">
+          <img :src='banner.paramValue' 
+                @load="imgOnload" 
+                @click="linkJump(`goodDetail/${banner.id}`)"
+                alt="">
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -184,10 +186,32 @@ export default {
       this.getProdList()
     },
     async getBanner () {
-      const data = await getBanner()
-      if (data.code == 0) {
-        this.bannerList = data.data
-      }
+      // const data = await getBanner()
+      // if (data.code == 0) {
+      //   this.bannerList = data.data
+      // }
+      // mock数据
+      this.bannerList = [
+        {
+          "id": 1,
+          "paramKey": "banner_one",
+          "paramValue": 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543069953&di=b69ecf83d2de77ceced6ce8a80dd0e3e&src=http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18c6b5570e3efae6cd7b890b63.jpg',
+          "remark": null,
+          "category": "banner"
+        },{
+          "id": 2,
+          "paramKey": "banner_one",
+          "paramValue": 'https://img.alicdn.com/imgextra/i1/1910146537/TB2x9I0Db9YBuNjy0FgXXcxcXXa_!!1910146537.jpg_430x430q90.jpg',
+          "remark": null,
+          "category": "banner"
+        },{
+          "id": 3,
+          "paramKey": "banner_one",
+          "paramValue": 'https://img.alicdn.com/imgextra/i1/1910146537/TB2tERsD_JYBeNjy1zeXXahzVXa_!!1910146537.jpg_430x430q90.jpg',
+          "remark": null,
+          "category": "banner"
+        }
+      ]
     },
     async getProdType () {
       const data = await prodType()
@@ -515,6 +539,9 @@ export default {
             font-size: 1.4rem;
             line-height: 2rem;
             color: #999999;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
             @media screen and (min-width: $screenMid) {
               line-height: 1.8rem;
             }

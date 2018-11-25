@@ -82,10 +82,10 @@ export default {
         color: #FFFFFF;
         line-height: 4.4rem;
         cursor: pointer;
-        &:hover {
-          background: #ffffff;
-          color: #0DC6B5;
-        }
+        // &:hover {
+        //   background: #ffffff;
+        //   color: #0DC6B5;
+        // }
       }
       .mr1 {
         margin-right: 3rem;

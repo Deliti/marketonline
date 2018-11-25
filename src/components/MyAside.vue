@@ -70,7 +70,6 @@ export default {
   .aside-wrap {
     position: relative;
     width: 100%;
-    padding-left: 4rem;
     .cover-wrap {
       display: none;
     }

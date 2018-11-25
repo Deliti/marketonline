@@ -50,7 +50,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			throw new Error(error)
 		}
 		if(responseJson.code == ERR_Reload){
-			window.location.href = `/shop/#/login`;
+			window.location.href = `#/login`;
 			// removeStore('userInfo');
 		}
     if(responseJson.code != ERR_OK) {
@@ -85,6 +85,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 							obj = JSON.parse(obj);
 						}
 						if(obj.code == ERR_Reload){
+							window.location.href = `#/login`;
 							// window.location.href = `/shop/login`;
 							// removeStore('userInfo');
 						}

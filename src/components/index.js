@@ -12,7 +12,7 @@ import CollapseItem from './MyCollapse/CollapseItem.vue'
 import TimeDown from './TimeDown.vue'
 import CommonHeader from './CommonHeader.vue'
 import CommonFooter from './CommonFooter.vue'
-
+import AddAddress from './AddAddress.vue'
 export {
   // JianPan,
   // Loading,
@@ -22,7 +22,8 @@ export {
   CollapseItem,
   TimeDown,
   CommonHeader,
-  CommonFooter
+  CommonFooter,
+  AddAddress
   // Button,
   // TextInput,
   // KeyBoard,

@@ -4,12 +4,12 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
-  baseUrl: '/',
+  baseUrl: '/store/',
   pages: {
     shop: {
       entry: 'src/entershop/main.js',
       template: 'public/shop/index.html',
-      filename: 'shop/index.html'
+      filename: 'index.html'
     },
     seller: {
       entry: 'src/enterseller/main.js',

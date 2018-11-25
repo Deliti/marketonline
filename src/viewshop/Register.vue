@@ -44,7 +44,7 @@
             <div class="reset-btn">重置</div>
           </div>
         </div>
-        <my-aside :show="leaderShow" @hide="hideLeader">
+        <my-aside :show="leaderShow" @hide="hideLeader" class="aside-wrap-polify">
           <div class="option-seleted">
             <div class="seleted-title">已選團長：</div>
             <p class="seleted-text" v-if="leader.id">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
@@ -501,7 +501,11 @@ export default {
     }
   }
 }
-
+.aside-wrap-polify {
+  @media screen and (min-width: $screenMid) {
+    padding-left: 4rem;
+  }
+}
 .option-seleted {
   @media screen and (min-width: $screenMid) {
     display: none;

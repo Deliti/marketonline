@@ -134,7 +134,7 @@
             <div class="memo-box">
               <span class="memo-title">備註：</span>
               <div class="memo-input-wrap">
-                <input type="text" class="memo-input">
+                <input type="text" class="memo-input" v-model="memo">
               </div>
             </div>
             <div class="dash-hr"></div>

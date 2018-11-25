@@ -24,12 +24,12 @@
             </section>
           </div>
           <div class="add-container">
-            <div :class="['fix-button', leaderShow?'add-title-active':'']" @click="showLeader">
+            <div :class="['fix-button', leaderShow?'add-title-active':'']" @click="toggleLeader">
               <i class="add-icon"></i>
               <label>添加新團長</label>
               <i :class="['down-icon', leaderShow?'rotate-down':'']"></i>
             </div>
-            <my-aside :show="leaderShow" @hide="hideLeader">
+            <my-aside :show="leaderShow" @hide="hideLeader" class="aside-wrap-polify">
               <div class="option-seleted">
                 <div class="seleted-title">已選團長：</div>
                 <p class="seleted-text" v-if="leader.id">{{leader.address}}<br>團長：{{leader.name}}  {{leader.phone}}</p>
@@ -66,10 +66,12 @@
               </div>
             </section>
           </div>
-          <div class="fix-button" @click="linkAddr">
+          <div :class="['fix-button', addrShow?'add-title-active':'']" @click="toggleAddr">
             <i class="add-icon"></i>
             <label>添加新地址</label>
+            <i :class="['down-icon', addrShow?'rotate-down':'']"></i>
           </div>
+          <add-address @saveAddr="saveAddr" @hideAddr='hideAddr' :show="addrShow"></add-address>
         </tab-container-item>
       </tab-container>
     </div>
@@ -78,7 +80,7 @@
 
 <script>
 import { Navbar, TabItem, TabContainer, TabContainerItem } from 'mint-ui'
-import { CommonHeader, MessageBox, MyAside, CollapseItem } from 'components'
+import { CommonHeader, MessageBox, MyAside, CollapseItem, AddAddress } from 'components'
 import { Toast } from 'mint-ui'
 import { getMyLeader, getLeaderList, getMyAddr, addLeader, deleteLeader, addAddr, deleteAddr } from 'utils/getData'
 export default {
@@ -86,6 +88,7 @@ export default {
     return {
       selected: this.$route.query.type == 2 ? "2" : "1",
       leaderShow: false,
+      addrShow: false,
       leaders: {},
       myLeaders: [],
       leader: {},
@@ -95,6 +98,7 @@ export default {
   components: {
     CommonHeader,
     Navbar,
+    AddAddress,
     TabItem,
     TabContainer,
     TabContainerItem,
@@ -139,14 +143,24 @@ export default {
         this.myAddress = data.page.list
       }
     },
+    saveAddr () {
+      this.hideAddr()
+      this.getMyAddr()
+    },
     isMyLeaders (leaderId) {
       return this.myLeaders.filter(item => item.agentId == leaderId).length > 0 ? true : false
+    },
+    toggleLeader () {
+      this.leaderShow = !this.leaderShow
     },
     showLeader () {
       this.leaderShow = true
     },
     hideLeader () {
       this.leaderShow = false
+    },
+    hideAddr () {
+      this.addrShow = false
     },
     async chooseLeader (leader) {
       if (this.isMyLeaders(leader.id)) {
@@ -185,8 +199,9 @@ export default {
         }]
       })
     },
-    linkAddr () {
-      this.$router.push('addAddr')
+    toggleAddr () {
+      // this.$router.push('addAddr')
+      this.addrShow = !this.addrShow
     },
     deleteAddr (addrInfo) {
       MessageBox({
@@ -386,6 +401,17 @@ export default {
       }
     }
   }
+  .aside-wrap-polify {
+    @media screen and (min-width: $screenMid) {
+      .collapse-wrap {
+        .collapse-item__header {
+          .collapse-item__header__arrow {
+            @include backImg('../assets/images/up-arrow.png'); 
+          }
+        }
+      }
+    }
+  }
   .option-seleted {
     @media screen and (min-width: $screenMid) {
       display: none;
@@ -417,6 +443,9 @@ export default {
         height: 1.4rem;
         margin-right: .9rem;
         @include backImg('../assets/images/radius-item.png');
+        @media screen and (min-width: $screenMid) {
+          margin-right: 1.4rem;
+        }
       }
       .radius-disable {
         @include backImg('../assets/images/radius-item-disabled.png');
