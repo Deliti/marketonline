@@ -537,7 +537,7 @@ export default {
     .radius-icon{
       width: 1.4rem;
       height: 1.4rem;
-      margin-right: .9rem;
+      margin: .3rem .9rem 0 0;
       @include backImg('../assets/images/radius-item.png');
     }
     .radius-disable {
@@ -547,7 +547,7 @@ export default {
       @include backImg('../assets/images/radius-seleted.png');
     }
     .option-box {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       @media screen and (min-width: $screenMid) {
         color: #ffffff;
       }

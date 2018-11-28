@@ -7,8 +7,8 @@
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
                         :key="index">
-          <img :src='banner.paramValue' 
-                @load="imgOnload" 
+          <img :src='banner.paramValue'
+                @load="imgOnload"
                 @click="linkJump(`goodDetail/${banner.id}`)"
                 alt="">
         </mt-swipe-item>
@@ -482,8 +482,8 @@ export default {
             border-radius: 5rem;
           }
           .add-wrap {
-            width: 10.7rem;
-            height: 3rem;
+            width: 11.5rem;
+            height: 3.3rem;
             position: absolute;
             right: .1rem;bottom: -2.5rem;
             margin: 1rem;
@@ -516,12 +516,12 @@ export default {
               height: 100%;
               box-sizing: border-box;
               @extend .flex-box;
-              font-size: 1.4rem;
+              font-size: 1.8rem;
               color: #FFFFFF;
               .change-btn {
-                width: 30%;
+                width: 35%;
                 height: 100%;
-                line-height: 3rem;
+                line-height: 3.3rem;
                 text-align: center;
                 @media screen and (min-width: $screenMid) {
                   line-height: 1.8rem;

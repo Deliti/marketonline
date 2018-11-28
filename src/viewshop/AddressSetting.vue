@@ -406,7 +406,7 @@ export default {
       .collapse-wrap {
         .collapse-item__header {
           .collapse-item__header__arrow {
-            @include backImg('../assets/images/up-arrow.png'); 
+            @include backImg('../assets/images/up-arrow.png');
           }
         }
       }
@@ -441,7 +441,7 @@ export default {
       .radius-icon{
         width: 1.4rem;
         height: 1.4rem;
-        margin-right: .9rem;
+        margin: .3rem .9rem 0 0;
         @include backImg('../assets/images/radius-item.png');
         @media screen and (min-width: $screenMid) {
           margin-right: 1.4rem;
@@ -454,7 +454,7 @@ export default {
         @include backImg('../assets/images/radius-seleted.png');
       }
       .option-box {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         color: #444444;
       }
     }

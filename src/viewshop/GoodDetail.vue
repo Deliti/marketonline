@@ -231,11 +231,11 @@ export default {
       .banner {
         display: block;
       }
-    } 
-    
+    }
+
     .add-wrap {
-      width: 10.7rem;
-      height: 3rem;
+      width: 11.5rem;
+      height: 3.3rem;
       position: absolute;
       right: .1rem;bottom: -2.5rem;
       margin: 1rem;
@@ -260,12 +260,12 @@ export default {
         height: 100%;
         box-sizing: border-box;
         @extend .flex-box;
-        font-size: 1.4rem;
+        font-size: 1.8rem;
         color: #FFFFFF;
         .change-btn {
           width: 30%;
           height: 100%;
-          line-height: 3rem;
+          line-height: 3.3rem;
           text-align: center;
         }
       }
