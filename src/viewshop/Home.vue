@@ -146,8 +146,8 @@ export default {
       let img = new Image();
       const imgUrl = e.target.src;
       img.src = imgUrl;
-      const pWidth = e.path[1].clientWidth
-      const pHeight = e.path[1].clientHeight
+      const pWidth = $(e.target).parent().width()
+      const pHeight = $(e.target).parent().height()
       let imgCss = "";
       if (img.width / img.height > pWidth/pHeight) {
         const widthRem = (img.width - pWidth/pHeight*img.height)/2;
@@ -345,6 +345,7 @@ export default {
     height: 21.9rem;
     position: relative;
     @media screen and (min-width: $screenMid) {
+      min-width: $screenWidth;
       height: 33rem;
     }
     .leader-btn {

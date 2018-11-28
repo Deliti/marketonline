@@ -54,6 +54,7 @@ export default {
   box-sizing: border-box;
   @extend .theme-color;
   @media screen and (min-width: $screenMid) {
+    min-width: $screenWidth;
     display: block;
   }
   .page-container {
