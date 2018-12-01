@@ -25,11 +25,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-const userInfo = localStorage['userInfo'] || false
 export default {
   data () {
     return {
-      userInfo: JSON.parse(userInfo)
+      userInfo: JSON.parse(localStorage['userInfo'] || false)
     }
   },
   computed: {
@@ -118,6 +117,7 @@ export default {
       justify-content: flex-start;
       color: #ffffff;
       text-decoration: none;
+      font-size: 1.4rem;
       .cart-icon {
         width: 1.8rem;
         height: 1.8rem;

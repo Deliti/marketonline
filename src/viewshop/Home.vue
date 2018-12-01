@@ -7,7 +7,7 @@
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
                         :key="index">
-          <img :src='banner.paramValue'
+          <img :src='banner.url'
                 @load="imgOnload"
                 @click="linkJump(`goodDetail/${banner.id}`)"
                 alt="">
@@ -38,6 +38,7 @@
             </div>
             <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime+'後截單'}}</p>
             <p class="time-tips" v-else>已截單</p>
+            <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
             <div class="add-wrap" @click.stop="" v-show="goodInfo.lessTime != -1">
               <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo, 'first')">
                 <i class="cart-icon"></i><label>購買</label>
@@ -99,6 +100,7 @@ import { formateTime, timeText, fenTransYuan } from 'utils/utils'
 import $ from 'jquery'
 import { getBanner, productList, prodType, addCart, updateCart } from 'utils/getData'
 
+const saleStatusConf = ['普通', '促銷', '超低', '折扣']
 let pageInterVal = null
 let pageNo = 0
 const pageLimit = 10
@@ -162,6 +164,13 @@ export default {
       e.target.setAttribute("style",imgCss)
     },
     fenTransYuan: fenTransYuan,
+    showSaleText (status) {
+      if (status != 0) {
+        return saleStatusConf[status]
+      } else {
+        return ''
+      }
+    },
     addEvent () {
       $("#scrollBox").off().on('click', '.item', function(){
         var moveX = $(this).position().left+$(this).parent().scrollLeft();
@@ -186,32 +195,32 @@ export default {
       this.getProdList()
     },
     async getBanner () {
-      // const data = await getBanner()
-      // if (data.code == 0) {
-      //   this.bannerList = data.data
-      // }
+      const data = await getBanner()
+      if (data.code == 0) {
+        this.bannerList = data.data
+      }
       // mock数据
-      this.bannerList = [
-        {
-          "id": 1,
-          "paramKey": "banner_one",
-          "paramValue": 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543069953&di=b69ecf83d2de77ceced6ce8a80dd0e3e&src=http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18c6b5570e3efae6cd7b890b63.jpg',
-          "remark": null,
-          "category": "banner"
-        },{
-          "id": 2,
-          "paramKey": "banner_one",
-          "paramValue": 'https://img.alicdn.com/imgextra/i1/1910146537/TB2x9I0Db9YBuNjy0FgXXcxcXXa_!!1910146537.jpg_430x430q90.jpg',
-          "remark": null,
-          "category": "banner"
-        },{
-          "id": 3,
-          "paramKey": "banner_one",
-          "paramValue": 'https://img.alicdn.com/imgextra/i1/1910146537/TB2tERsD_JYBeNjy1zeXXahzVXa_!!1910146537.jpg_430x430q90.jpg',
-          "remark": null,
-          "category": "banner"
-        }
-      ]
+      // this.bannerList = [
+      //   {
+      //     "id": 1,
+      //     "paramKey": "banner_one",
+      //     "paramValue": 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543069953&di=b69ecf83d2de77ceced6ce8a80dd0e3e&src=http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18c6b5570e3efae6cd7b890b63.jpg',
+      //     "remark": null,
+      //     "category": "banner"
+      //   },{
+      //     "id": 2,
+      //     "paramKey": "banner_one",
+      //     "paramValue": 'https://img.alicdn.com/imgextra/i1/1910146537/TB2x9I0Db9YBuNjy0FgXXcxcXXa_!!1910146537.jpg_430x430q90.jpg',
+      //     "remark": null,
+      //     "category": "banner"
+      //   },{
+      //     "id": 3,
+      //     "paramKey": "banner_one",
+      //     "paramValue": 'https://img.alicdn.com/imgextra/i1/1910146537/TB2tERsD_JYBeNjy1zeXXahzVXa_!!1910146537.jpg_430x430q90.jpg',
+      //     "remark": null,
+      //     "category": "banner"
+      //   }
+      // ]
     },
     async getProdType () {
       const data = await prodType()
@@ -382,6 +391,9 @@ export default {
   }
   .page-content {
     position: relative;
+    @media screen and (min-width: $screenMid) {
+      min-width: $screenWidth;
+    }
     .top-bg {
       width: 100%;
       height: 31.7rem;
@@ -436,10 +448,14 @@ export default {
       @media screen and (min-width: $screenMid) {
         width: $screenWidth;
         margin: 0 auto;
-        padding: 0 0 9rem;
+        padding: 0 1rem 9rem;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        &:after {
+          content: '';
+          width: 20rem;
+        }
       }
       .list-item {
         width: 100%;
@@ -480,6 +496,26 @@ export default {
             line-height: 2.5rem;
             background: #444444;
             border-radius: 5rem;
+            @media screen and (min-width: $screenMid) {
+              padding: 0 1.5rem;
+            }
+          }
+          .sale-tips {
+            width: 8.5rem;
+            height: 5.7rem;
+            position: absolute;
+            right: 0;top: 0;
+            overflow: hidden;
+            @include backImg('../assets/images/sale.png');
+            span {
+              width: 10.27rem;
+              position: absolute;
+              left: 0;top: 1rem;
+              transform: rotate(37deg);
+              font-size: 1.4rem;
+              color: #ffffff;
+              text-align: center;
+            }
           }
           .add-wrap {
             width: 11.5rem;

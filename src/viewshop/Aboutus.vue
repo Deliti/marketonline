@@ -6,7 +6,7 @@
       <i class="return-icon" @click="historyBack"></i>
     </div>
     <h1 class="about-title">關於我們</h1>
-    <div class="page-content">
+    <div class="page-content-s">
       <div class="html-wrap" v-html="html"></div>
       <!-- <p>熱情果，又叫百香果，係熱情果科熱情果屬嘅爬藤草本植物，亦係種生果，原產南美洲熱帶地區，通常用嚟整果汁</p>
       <p>熱情果，又叫百香果，係熱情果科熱情果屬嘅爬藤草本植物，亦係種生果，原產南美洲熱帶地區，通常用嚟整果汁</p>
@@ -77,7 +77,7 @@ export default {
     margin-bottom: 3.5rem;
     text-align: center;
   }
-  .page-content {
+  .page-content-s {
     position: relative;
     box-sizing: border-box;
     padding: 0 4rem;

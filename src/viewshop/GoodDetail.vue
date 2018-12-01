@@ -8,6 +8,7 @@
       <div class="img-wrap">
         <img :src="goodInfo.pic" alt="" @load="imgOnload" class="banner">
       </div>
+      <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
       <div class="add-wrap" v-show="goodInfo.lessTime != -1">
         <div class="add-cart" v-if="!isHasGood" @click.stop="addGoodCart">
           <i class="cart-icon"></i><label>購買</label>
@@ -47,6 +48,8 @@ import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText, fenTransYuan } from 'utils/utils'
 import { productInfo, addCart, updateCart } from 'utils/getData'
+
+const saleStatusConf = ['普通', '促銷', '超低', '折扣']
 let pageInterVal = null
 let loading = false
 export default {
@@ -106,6 +109,13 @@ export default {
       e.target.setAttribute("style",imgCss)
     },
     fenTransYuan: fenTransYuan,
+    showSaleText (status) {
+      if (status != 0) {
+        return saleStatusConf[status]
+      } else {
+        return ''
+      }
+    },
     async addGoodCart () {
       if (loading) {
         return false
@@ -232,7 +242,23 @@ export default {
         display: block;
       }
     }
-
+    .sale-tips {
+      width: 8.5rem;
+      height: 5.7rem;
+      position: absolute;
+      right: 0;top: 0;
+      overflow: hidden;
+      @include backImg('../assets/images/sale.png');
+      span {
+        width: 10.27rem;
+        position: absolute;
+        left: 0;top: 1rem;
+        transform: rotate(37deg);
+        font-size: 1.4rem;
+        color: #ffffff;
+        text-align: center;
+      }
+    }
     .add-wrap {
       width: 11.5rem;
       height: 3.3rem;

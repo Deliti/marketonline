@@ -30,6 +30,9 @@ input,textarea {
   color: #000000;
   background: transparent;
 }
+textarea {
+  resize: none;
+}
 
 html,body {
   font-size: 2.6666667vw;

@@ -75,7 +75,7 @@
                 <i :class="['radius-icon', addr.id == item.id?'radius-seleted':'']"></i>
                 <div class="option-box">
                   <p class="option-text">{{item.address}}</p>
-                  <p class="option-text">{{item.username}}  {{item.phone}}</p>
+                  <p class="option-text">{{item.name}}  {{item.phone}}</p>
                 </div>
               </div>
             </div>
@@ -655,6 +655,9 @@ export default {
           color: #444444;
           .memo-title {
             margin-right: 1rem;
+            @media screen and (min-width: $screenMid) {
+              font-size: 1.4rem;
+            }
           }
           .memo-input-wrap {
             flex: 1;

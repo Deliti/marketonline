@@ -209,10 +209,8 @@ export default {
       let earnM = 0
       this.orderList.map(item => {
         totalM += item.price
-        earnM += (item.pickWay == 2? item.deliverFee : 0)
-        // item.productList.map(pitem => {
-        //   earnM += pitem.price*pitem.num*pitem.rate/100
-        // })
+        earnM += this.getGoodRate(item)
+        earnM += item.deliverFee
       })
       console.log(earnM)
       return {
@@ -296,8 +294,8 @@ export default {
         "page": pageNo,
         "limit": pageLimit,
         "pickStatus": 3,
-        "startTime": this.currentTime.start,
-        "endTime": this.currentTime.end
+        "receiptStartTime": this.currentTime.start,
+        "receiptEndTime": this.currentTime.end
       }
       const data = await agentOrders(params)
       if (data.code == 0) {

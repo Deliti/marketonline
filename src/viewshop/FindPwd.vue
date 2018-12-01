@@ -6,6 +6,10 @@
       <div class="about-us" @click="linkjump('aboutus')">關於我們</div>
     </div>
     <div class="page-content">
+      <div class="menu-box">
+        <div class="munu-item" @click="linkjump('home')">首頁</div>
+        <div class="munu-item" @click="linkjump('aboutus')">關於我們</div>
+      </div>
       <h1 class="program-title">品牌名字</h1>
       <h3 class="center-title">重置密碼</h3>
       <div class="input-wrap">
@@ -188,7 +192,26 @@ export default {
       margin: 0 auto;
       padding: 5.3rem 7rem 3rem;
       @include backImg('../assets/images/pc-login-bg1.png');
-      background-size: 100% 45rem;
+      background-size: 43rem 34rem;
+      background-position: center 0;
+    }
+    .menu-box {
+      display: none;
+      @media screen and (min-width: $screenMid) {
+        display: block;
+        display: flex;
+        justify-content: space-between;
+        width: 8rem;
+        height: 2rem;
+        box-sizing: border-box;
+        padding-left: .5rem;
+        position: absolute;
+        left: 0;top: 1.8rem;
+        font-size: 1.4rem;
+      }
+      .munu-item {
+        cursor: pointer;
+      }
     }
     .program-title {
       width: 100%;
@@ -215,6 +238,11 @@ export default {
     .input-wrap {
       width: 100%;
       margin-bottom: 1rem;
+      @media screen and (min-width: $screenMid) {
+        width: 29rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
       .input-box {
         width: 100%;
         height: 4.4rem;
@@ -257,7 +285,7 @@ export default {
     padding: 0 4.3rem;
     @media screen and (min-width: $screenMid) {
       width: 61.4rem;
-      padding: 0 7rem;
+      padding: 0 16.2rem;
       left: 50%;
       transform: translateX(-50%);
     }

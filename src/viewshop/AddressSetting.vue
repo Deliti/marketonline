@@ -312,7 +312,8 @@ export default {
           width: 1.33rem;
           height: 1.33rem;
           position: absolute;
-          right: 1.25rem;top: 1.25rem;
+          right: 1.25rem;top: 50%;
+          transform: translateY(-50%);
           @include backImg('../assets/images/delete-icon.png');
         }
         .order-title-box {

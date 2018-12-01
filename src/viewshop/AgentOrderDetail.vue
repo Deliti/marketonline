@@ -457,6 +457,9 @@ export default {
           color: #444444;
           .memo-title {
             margin-right: 1rem;
+            @media screen and (min-width: $screenMid) {
+              font-size: 1.4rem;
+            }
           }
           .memo-input-wrap {
             flex: 1;
