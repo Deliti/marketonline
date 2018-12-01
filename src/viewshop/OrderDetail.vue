@@ -139,8 +139,9 @@ export default {
       }
     },
     qrcode (text) {
+      const link = location.origin + location.pathname + `#/agentOrderDetail/${this.orderId}?pickCode=${text}`
       var qrcode = new qrCode(this.$refs.qrCodeUrl, {
-        text: text,
+        text: link,
         width: this.$refs.qrCodeUrl.clientWidth,
         height: this.$refs.qrCodeUrl.clientWidth
       })

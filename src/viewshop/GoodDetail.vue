@@ -27,7 +27,7 @@
         <div class="time-wrap">
           <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime}}後截單</p>
           <p class="time-tips" v-else>已截單</p>
-          <div class="old-price">原購價 ${{fenTransYuan(goodInfo.price)}}</div>
+          <div class="old-price">原購價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
         </div>
         <div class="price-wrap">
           <p class="get-good-time">取貨時間：{{goodInfo.takeTimeStr}}</p>
@@ -341,6 +341,9 @@ export default {
           line-height: 2rem;
           color: #444444;
           margin-bottom: .5rem;
+          span {
+            text-decoration: line-through;
+          }
         }
       }
       .price-wrap {

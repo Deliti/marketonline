@@ -119,6 +119,7 @@ export default {
   @media screen and (min-width: $screenMid) {
     background: none;
     padding-bottom: .43rem;
+    min-height: $screenMid;
   }
   .page-bg-bottom {
     display: none;

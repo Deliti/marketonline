@@ -14,7 +14,7 @@
         <div class="person-info">
           <div class="info-title">
             <label class="info-tip">我的團長</label>
-            <span class="edit-btn" @click="showLeader">更改</span>
+            <span class="edit-btn" @click="toggleLeader">更改</span>
           </div>
           <div class="info-content">
             <span>{{leader.agentAddress}}</span>
@@ -51,7 +51,7 @@
               <i :class="['radius-circle', leaderPick ? 'radius-seleted' : '']"></i>
               <span>送貨上門 (配送費+${{fenTransYuan(leader.deliveryFee)}})</span>
             </p>
-            <span class="edit-btn" @click="showAddr">更改</span>
+            <span class="edit-btn" @click="toggleAddr">更改</span>
           </div>
           <div class="info-content">
             <span>{{addr.address}}</span>
@@ -168,7 +168,8 @@
 import { CommonHeader, MessageBox, MyAside } from 'components'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { fenTransYuan } from 'utils/utils'
-import { getMyLeader, getMyAddr, getAllCartList, updateCart, playOrder } from 'utils/getData'
+import { Toast } from 'mint-ui'
+import { getMyLeader, getMyAddr, getAllCartList, addCart, updateCart, playOrder } from 'utils/getData'
 
 let loading = false
 export default {
@@ -228,6 +229,9 @@ export default {
     isMyLeaers (leaderId) {
       return this.leader.agentId === leaderId
     },
+    toggleLeader () {
+      this.leaderShow = !this.leaderShow
+    },
     showLeader () {
       this.leaderShow = true
     },
@@ -240,6 +244,9 @@ export default {
       }
       this.leader = leader
       this.hideLeader()
+    },
+    toggleAddr () {
+      this.addrShow = !this.addrShow
     },
     showAddr () {
       this.addrShow = true
@@ -355,6 +362,14 @@ export default {
         this.$router.push('home')
         return false
       }
+      // if (this.myLeaders.length == 0) {
+      //   Toast('您還未添加團長，請去個人中心添加團長')
+      //   return false
+      // }
+      // if (!this.leader.agentId) {
+      //   Toast('请选择团长')
+      //   return false
+      // }
       MessageBox({
         message: `<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長：${this.leader.agentName}<br/><br/>（取貨）地址：${this.leaderPick?this.addr.address:this.leader.agentAddress}</div>`,
         buttons: [{
@@ -657,6 +672,7 @@ export default {
             margin-right: 1rem;
             @media screen and (min-width: $screenMid) {
               font-size: 1.4rem;
+              line-height: 1.8rem;
             }
           }
           .memo-input-wrap {

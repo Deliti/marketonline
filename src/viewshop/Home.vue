@@ -55,7 +55,7 @@
             <div class="item-info-box">
               <label class="item-name">{{goodInfo.name}}</label>
               <div class="item-price-wrap">
-                <div class="old-price">原購價 ${{fenTransYuan(goodInfo.price)}}</div>
+                <div class="old-price">原購價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
                 <div class="cheap-price-box">
                   <span class="cheap-tips">團購價</span>
                   <span class="cheap-price">${{fenTransYuan(goodInfo.discountPrice)}}</span>
@@ -602,6 +602,9 @@ export default {
                 line-height: 2rem;
                 color: #444444;
                 margin-bottom: .5rem;
+                span {
+                  text-decoration: line-through;
+                }
               }
               .cheap-price-box {
                 height: 2.1rem;

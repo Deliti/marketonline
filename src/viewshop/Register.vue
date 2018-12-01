@@ -181,6 +181,7 @@ export default {
         if (loginData.code == 0) {
           Toast('註冊成功，已為您自動登錄')
           localStorage['token'] = loginData.data.token
+          localStorage['userInfo'] = JSON.stringify(data.data)
           this.linkjump('home')
         }
       }
@@ -461,7 +462,10 @@ export default {
           box-sizing: border-box;
           padding-left: 4rem;
           border-radius: 6px;
-          height: 5rem;
+          height: 6rem;
+          .down-icon {
+            top: 2.4rem;
+          }
         }
         .seleted-title {
           font-size: 1.4rem;

@@ -146,6 +146,10 @@ export default {
     }
   },
   mounted () {
+    if (!localStorage['isAgent'] || localStorage['isAgent'] == 'undefined') {
+      this.$router.replace('/home')
+      return false
+    }
     this.init()
   },
   components: {
@@ -419,6 +423,9 @@ export default {
             font-size: 1.2rem;
             color: #444444;
             padding-bottom: 2.7rem;
+            @media screen and (min-width: $screenMid) {
+              padding-left: 20.4rem;
+            }
           }
         }
         .over-order {
@@ -455,11 +462,11 @@ export default {
           align-items: flex-start;
           font-size: 1.2rem;
           color: #444444;
+          @media screen and (min-width: $screenMid) {
+            font-size: 1.4rem;
+          }
           .memo-title {
             margin-right: 1rem;
-            @media screen and (min-width: $screenMid) {
-              font-size: 1.4rem;
-            }
           }
           .memo-input-wrap {
             flex: 1;

@@ -8,7 +8,7 @@
     <div class="page-content">
       <div class="time-wrap">
         <div class="time-content">
-          <span>訂單已完成日期篩選：</span>
+          <span>完成日期篩選：</span>
           <div class="time-box">
             <b class="time-now"  @click="toggleShowTime">{{currentTimeText}}</b>
             <i :class="['down-icon', timeshow?'rotate-down':'']"  @click="toggleShowTime"></i>
@@ -343,6 +343,7 @@ export default {
           height: 100%;
           display: flex;
           align-items: center;
+          cursor: pointer;
           .time-now {
             color: #000000;
             margin-right: 1.7rem;
@@ -364,6 +365,7 @@ export default {
             @extend .theme-color;
             color: #ffffff;
             .time-option {
+              cursor: pointer;
               padding: 0 2rem;
               font-size: 1.4rem;
               text-align: center;
