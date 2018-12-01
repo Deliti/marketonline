@@ -74,7 +74,7 @@ export default {
       // flex: 1;
       height: 100%;
       box-sizing: border-box;
-      padding: 0 3rem 0 2.8rem;
+      padding: 0 2.5rem 0 2.8rem;
       @extend .flex-box;
       .munu-item {
         height: 100%;
@@ -110,7 +110,7 @@ export default {
       }
     }
     .cart-box {
-      width: 7.5rem;
+      width: 8rem;
       height: 100%;
       position: relative;
       @extend .flex-box;

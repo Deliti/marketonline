@@ -366,10 +366,10 @@ export default {
       //   Toast('您還未添加團長，請去個人中心添加團長')
       //   return false
       // }
-      // if (!this.leader.agentId) {
-      //   Toast('请选择团长')
-      //   return false
-      // }
+      if (!this.leader.agentId) {
+        Toast('请选择团长')
+        return false
+      }
       MessageBox({
         message: `<div class="cart-msg" style="text-align:left;">因取貨地點空間有限，請街坊於指定取貨日期和時間內取貨。<br/><br/>你所選擇的團長：${this.leader.agentName}<br/><br/>（取貨）地址：${this.leaderPick?this.addr.address:this.leader.agentAddress}</div>`,
         buttons: [{
@@ -812,6 +812,7 @@ export default {
         @include backImg('../assets/images/radius-seleted.png');
       }
       .option-box {
+        flex: 1;
         font-size: 1.6rem;
         color: #444444;
       }
