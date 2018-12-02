@@ -5,9 +5,15 @@
       <i class="return-icon" @click="historyBack"></i>
     </div>
     <div class="banner-wrap">
-      <div class="img-wrap">
-        <img :src="goodInfo.pic" alt="" @load="imgOnload" class="banner">
-      </div>
+      <mt-swipe :auto="4000" class="banner-box">
+        <mt-swipe-item class="banner-item"
+                        v-for="(banner, index) in bannerList"
+                        :key="index">
+          <img :src='banner.url'
+                @load="imgOnload"
+                alt="">
+        </mt-swipe-item>
+      </mt-swipe>
       <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
       <div class="add-wrap" v-show="goodInfo.lessTime != -1">
         <div class="add-cart" v-if="!isHasGood" @click.stop="addGoodCart">
@@ -37,13 +43,14 @@
           </div>
         </div>
       </div>
-      <p class="good-desc">{{goodInfo.remark}}</p>
+      <p class="good-desc" v-html="goodInfo.remark"></p>
     </div>
     <common-footer :activeTab="'none'"></common-footer>
   </div>
 </template>
 
 <script>
+import { Swipe, SwipeItem } from 'mint-ui';
 import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText, fenTransYuan } from 'utils/utils'
@@ -55,6 +62,7 @@ let loading = false
 export default {
   data () {
     return {
+      bannerList: [],
       goodId: this.$route.params.goodId,
       goodInfo: {}
     }
@@ -82,7 +90,9 @@ export default {
   },
   components: {
     CommonHeader,
-    CommonFooter
+    CommonFooter,
+    mtSwipe: Swipe,
+    mtSwipeItem: SwipeItem
   },
   methods: {
     ...mapMutations(['ADDGOOD', 'DESGOOD']),
@@ -176,16 +186,34 @@ export default {
       const params = {
         id: this.goodId
       }
+      this.bannerList = []
       const data = await productInfo(params)
       if (data.code == 0) {
         this.goodInfo = data.data
+        this.bannerList[0] = {
+          name: '',
+          url: this.goodInfo.pic
+        }
+        if (JSON.parse(this.goodInfo.picList) instanceof Array) {
+          this.bannerList.push(...this.goodInfo.picList)
+        }
         this.updateTime()
       }
       loading = false
     },
     updateTime () {
       clearInterval(pageInterVal)
-      this.goodInfo.lessTime = this.formateTime(this.goodInfo.todayDeadline)
+      if (this.goodInfo.scheduleStatus == 1) {
+        this.goodInfo.lessTime = this.formateTime(this.goodInfo.deadline)
+      } else {
+        let deadlineTime = this.formateTime(this.goodInfo.nextDeadline)
+        if (deadlineTime == -1) {
+          this.goodInfo.lessTime = this.formateTime(this.goodInfo.nextNextDeadline)
+        } else {
+          this.goodInfo.lessTime = deadlineTime
+        }
+      }
+      
       this.goodInfo = Object.assign({}, this.goodInfo)
       if (this.goodInfo.lessTime == -1) {
         console.log('已结束')
@@ -193,7 +221,16 @@ export default {
         return false
       }
       pageInterVal = setInterval(() => {
-        this.goodInfo.lessTime = this.formateTime(this.goodInfo.todayDeadline)
+        if (this.goodInfo.scheduleStatus == 1) {
+          this.goodInfo.lessTime = this.formateTime(this.goodInfo.deadline)
+        } else {
+          let deadlineTime = this.formateTime(this.goodInfo.nextDeadline)
+          if (deadlineTime == -1) {
+            this.goodInfo.lessTime = this.formateTime(this.goodInfo.nextNextDeadline)
+          } else {
+            this.goodInfo.lessTime = deadlineTime
+          }
+        }
         this.goodInfo = Object.assign({}, this.goodInfo)
         if (this.goodInfo.lessTime == -1) {
           console.log('已结束')
@@ -234,12 +271,16 @@ export default {
       width: $screenWidth;
       margin: 4rem auto 0;
     }
-    .img-wrap {
+    .banner-box {
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      .banner {
-        display: block;
+      .banner-item {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        img {
+          display: block;
+        }
       }
     }
     .sale-tips {
