@@ -86,6 +86,9 @@
             <p class="get-good-time">取貨時間：11月3日（星期六）</p>
           </div>
         </div> -->
+        <a class="link-fb-wrap" href="https://www.baidu.com">
+          <p class="text">按此加入地區WhatsApp群組，每日通知你有咩至抵團購產品！</p>
+        </a>
       </section>
     </div>
     <common-footer :activeTab="'home'"></common-footer>
@@ -456,6 +459,17 @@ export default {
           content: '';
           width: 20rem;
         }
+      }
+      .link-fb-wrap {
+        width: 100%;
+        background: #FFFFFF;
+        border-radius: .3rem;
+        padding: 1.3rem 1.1rem 1.3rem 1.9rem;
+        box-shadow: 0 .1rem .5rem 0 #00000029;
+        color: #444444;
+        font-size: 1.4rem;
+        box-sizing: border-box;
+        @extend .flex-box;
       }
       .list-item {
         width: 100%;

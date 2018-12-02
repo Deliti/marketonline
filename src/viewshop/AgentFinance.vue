@@ -258,7 +258,7 @@ export default {
     getGoodRate (order) {
       let m = 0
       order.productList.map(item => {
-        m += item.price*item.num*item.rate/100
+        m += item.price*item.num*(item.rate+order.agentRate)/100
       })
       return m
     },
