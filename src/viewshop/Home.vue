@@ -314,8 +314,9 @@ export default {
       }
       this.categoryId == -1 && delete params.categoryId
       console.log(params)
-      const data = await productList(params)
+      let data = await productList(params)
       if (data.code == 0) {
+        data = {"msg":"success","code":0,"page":{"totalCount":6,"pageSize":10,"totalPage":1,"currPage":1,"list":[{"id":8,"status":1,"name":"拖把","pic":"https://s3-ap-southeast-1.amazonaws.com/product-shequshengxian/20181130/5fab5b43fbb044209e68693c3530801f.jpg","rate":30,"titleOne":"居家良品","takeTime":"2018-12-01 22:04:57","takeTimeStr":"12月01日 (星期六)","categoryId":14,"categoryName":"日用品","price":5000,"discountPrice":4000,"remark":null,"deadline":"23:59:59","todayDeadline":"2018-12-02 23:59:59","schedule":"2,7","isDelete":0,"saleStatus":0},{"id":11,"status":1,"name":"大水果","pic":"https://s3-ap-southeast-1.amazonaws.com/product-shequshengxian/20181202/f1ec57ae0bee4d8aa69a30e207df4ba8.jpg","rate":15,"titleOne":"香甜水果","takeTime":"2018-12-03 00:11:27","takeTimeStr":"12月03日 (星期一)","categoryId":12,"categoryName":"水果","price":1050,"discountPrice":819,"remark":null,"deadline":"23:59:59","todayDeadline":"2018-12-02 23:59:59","schedule":"1,2,3,4,7","isDelete":0,"saleStatus":1},{"id":9,"status":1,"name":"牛油果","pic":"https://s3-ap-southeast-1.amazonaws.com/product-shequshengxian/20181201/7c20222738e04427a29afd187b41c3fd.jpg","rate":20,"titleOne":"智利進口","takeTime":"2018-11-30 23:12:19","takeTimeStr":"11月30日 (星期五)","categoryId":12,"categoryName":"水果","price":5000,"discountPrice":3700,"remark":"好吃好吃","deadline":"23:12:21","todayDeadline":"2018-12-02 23:12:21","schedule":"1,6,7","isDelete":0,"saleStatus":1},{"id":10,"status":1,"name":"courgette","pic":"https://s3-ap-southeast-1.amazonaws.com/product-shequshengxian/20181201/39c1edcebea54adb98e7ed517c0b70eb.jpg","rate":15,"titleOne":"口感非常好","takeTime":"2018-12-03 20:00:00","takeTimeStr":"12月03日 (星期一)","categoryId":13,"categoryName":"蔬菜","price":3000,"discountPrice":2000,"remark":"輔大看過號碼密碼結果，大佛嘎嘎結果，大概大家看見開發大概低估","deadline":"23:59:59","todayDeadline":"2018-12-02 23:59:59","schedule":"6,7","isDelete":0,"saleStatus":1},{"id":12,"status":1,"name":"哩哩啦啦青蘋果 500g/0.5kg","pic":"https://s3-ap-southeast-1.amazonaws.com/product-shequshengxian/20181202/80d84e1be85349aebba0b6ca95ae3bb3.png","rate":10,"titleOne":"酸甜爽口","takeTime":"2018-12-02 16:20:40","takeTimeStr":"12月02日 (星期日)","categoryId":13,"categoryName":"蔬菜","price":2000,"discountPrice":1500,"remark":"好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果，好吃好吃青蘋果青蘋果。","deadline":"23:25:00","todayDeadline":"2018-12-02 23:25:00","schedule":"1,7","isDelete":0,"saleStatus":1}]}}
         this.goodList.push(...data.page.list)
         totalPage = data.page.totalPage
         this.updateTime()
@@ -454,11 +455,7 @@ export default {
         padding: 0 1rem 9rem;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
-        &:after {
-          content: '';
-          width: 20rem;
-        }
+        justify-content: flex-start;
       }
       .link-fb-wrap {
         width: 100%;
@@ -477,9 +474,14 @@ export default {
         box-shadow: 0 .1rem .5rem 0 #00000029;
         border-radius: .3rem;
         margin-bottom: 1.5rem;
+        overflow: hidden;
         @media screen and (min-width: $screenMid) {
           width: 20rem;
           margin-bottom: 2.2rem;
+          margin-right: 1rem;
+          &:nth-child(3n) {
+            margin-right: 0;
+          }
           cursor: pointer;
         }
         .item-banner-wrap {

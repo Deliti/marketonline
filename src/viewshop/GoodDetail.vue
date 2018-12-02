@@ -232,7 +232,7 @@ export default {
     height: 32.5rem;
     @media screen and (min-width: $screenMid) {
       width: $screenWidth;
-      margin: 0 auto;
+      margin: 4rem auto 0;
     }
     .img-wrap {
       width: 100%;

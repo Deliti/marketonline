@@ -20,7 +20,7 @@
         <h3 class="enter-title">我的訂單</h3>
       </div>
       <div class="enter-wrap right-enter" @click="linkJump('/agentFinance')">
-        <img src="../assets/images/mine-local.png" alt="" class="enter-icon">
+        <img src="../assets/images/payment_illustration.png" alt="" class="enter-icon">
         <h3 class="enter-title">財務匯總</h3>
       </div>
       <div :class="['change-submit', isOpenStatus == 1 ? 'grey': '']" @click="changeOpenStatus">
