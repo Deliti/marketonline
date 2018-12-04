@@ -195,7 +195,8 @@ export default {
           url: this.goodInfo.pic
         }
         if (JSON.parse(this.goodInfo.picList) instanceof Array) {
-          this.bannerList.push(...this.goodInfo.picList)
+          this.bannerList.push(...JSON.parse(this.goodInfo.picList))
+          console.log(this.bannerList)
         }
         this.updateTime()
       }
