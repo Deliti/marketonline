@@ -51,7 +51,10 @@
             </div>
           </div>
           <div class="item-detail-wrap">
-            <p class="item-desc">{{goodInfo.titleOne}}</p>
+            <div class="little-part">
+              <p class="item-desc">{{goodInfo.titleOne}}</p>
+              <p class="item-storenum">{{showStoreNum(goodInfo.storeNum)}}</p>
+            </div>
             <div class="item-info-box">
               <label class="item-name">{{goodInfo.name}}</label>
               <div class="item-price-wrap">
@@ -172,6 +175,15 @@ export default {
         return saleStatusConf[status]
       } else {
         return ''
+      }
+    },
+    showStoreNum (num) {
+      if (!num) {
+        return ''
+      } else if (num >= 1000) {
+        return '庫存999+'
+      } else {
+        return `庫存${num}件`
       }
     },
     addEvent () {
@@ -538,6 +550,7 @@ export default {
             height: 5.7rem;
             position: absolute;
             right: 0;top: 0;
+            z-index: 1;
             overflow: hidden;
             @include backImg('../assets/images/sale.png');
             span {
@@ -605,7 +618,12 @@ export default {
           @media screen and (min-width: $screenMid) {
             padding: .7rem .7rem .3rem;
           }
+          .little-part {
+            overflow: hidden;
+          }
           .item-desc {
+            width: 65%;
+            float: left;
             font-size: 1.4rem;
             line-height: 2rem;
             color: #999999;
@@ -615,6 +633,12 @@ export default {
             @media screen and (min-width: $screenMid) {
               line-height: 1.8rem;
             }
+          }
+          .item-storenum {
+            font-size: 1.2rem;
+            line-height: 2rem;
+            color: #999999;
+            text-align: right;
           }
           .item-info-box {
             @extend .flex-box;
@@ -630,6 +654,10 @@ export default {
               text-overflow:ellipsis;
               font-size: 1.8rem;
               color: #444444;
+              @media screen and (min-width: $screenMid) {
+                font-size: 1.3rem;
+                font-weight: bold;
+              }
             }
             .item-price-wrap {
               text-align: right;

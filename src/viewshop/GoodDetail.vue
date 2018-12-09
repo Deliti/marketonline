@@ -27,7 +27,10 @@
       </div>
     </div>
     <div class="detail-wrap">
-      <p class="title-desc">{{goodInfo.titleOne}}</p>
+      <div class="little-part">
+        <p class="title-desc">{{goodInfo.titleOne}}</p>
+        <p class="item-storenum">{{showStoreNum(goodInfo.storeNum)}}</p>
+      </div>
       <p class="good-name">{{goodInfo.name}}</p>
       <div class="info-box">
         <div class="time-wrap">
@@ -124,6 +127,15 @@ export default {
         return saleStatusConf[status]
       } else {
         return ''
+      }
+    },
+    showStoreNum (num) {
+      if (!num) {
+        return ''
+      } else if (num >= 1000) {
+        return '庫存999+'
+      } else {
+        return `庫存${num}件`
       }
     },
     async addGoodCart () {
@@ -346,11 +358,22 @@ export default {
       width: $screenWidth;
       margin: 0 auto;
     }
-    .title-desc {
-      font-size: 1.8rem;
-      line-height: 2.5rem;
-      color: #999999;
-      margin-bottom: .5rem;
+    .little-part {
+      overflow: hidden;
+      .title-desc {
+        float: left;
+        width: 65%;
+        font-size: 1.8rem;
+        line-height: 2.5rem;
+        color: #999999;
+        margin-bottom: .5rem;
+      }
+      .item-storenum {
+        font-size: 1.2rem;
+        line-height: 2rem;
+        color: #999999;
+        text-align: right;
+      }
     }
     .good-name {
       font-size: 2.4rem;
