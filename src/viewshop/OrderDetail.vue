@@ -29,7 +29,7 @@
                 :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
               <div class="order-item-status-box">
-                <label class="order-item-status">{{prodItem.isPick == 1?'已取':'未取貨'}}</label>
+                <label class="order-item-status">{{orderInfo.status == 5 ? '取消' : (prodItem.isPick == 1?'已取':'未取貨')}}</label>
               </div>
               <img :src="prodItem.pic" alt="" class="good-img">
               <div class="order-item-detail">
@@ -74,14 +74,15 @@
           <span class="total-price">${{fenTransYuan(orderInfo.deliverFee)}}</span>
         </div>
       </div>
-      <div class="over-wrap" v-if="orderInfo.status == 4">
+      <div class="over-wrap" v-if="orderInfo.status == 4 || orderInfo.status == 5">
         <button class="suggest-btn" @click="linkjump('/suggest')">反饋意見</button>
         <div class="finish-btn">
           <i class="check-btn-icon"></i>
-          <label>已完成</label>
+          <label v-if="orderInfo.status == 4">已完成</label>
+          <label v-if="orderInfo.status == 5">已取消</label>
         </div>
       </div>
-      <div class="code-info" v-else>
+      <div class="code-info" v-if="orderInfo.status == 3">
         <div class="code-box">
           取貨驗證碼<br>
           <span>{{orderInfo.pickCode}}</span>
@@ -133,12 +134,15 @@ export default {
       const data = await getOrderDetail(params)
       if (data.code == 0) {
         this.orderInfo = data.data
-        if (this.orderInfo.status != 4) {
+        this.$nextTick(() => {
           this.qrcode(this.orderInfo.pickCode)
-        }
+        })
       }
     },
     qrcode (text) {
+      if (this.orderInfo.status == 4 || this.orderInfo.status == 5) {
+        return false
+      }
       const link = location.origin + location.pathname + `#/agentOrderDetail/${this.orderId}?pickCode=${text}`
       var qrcode = new qrCode(this.$refs.qrCodeUrl, {
         text: link,

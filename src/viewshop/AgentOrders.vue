@@ -60,7 +60,10 @@
                   <div class="order-info-box">
                     <span class="order-no">訂單編號：{{item.id}}</span>
                     <span class="order-get">{{'已取 '+item.pickNum+' 件'}}</span>
-                    <button class="status-btn" v-if="item.status != 4">取貨</button>
+                    <button class="status-btn" v-if="item.status == 1">已下單</button>
+                    <button class="status-btn" v-else-if="item.status == 2">已收單</button>
+                    <button class="status-btn" v-else-if="item.status == 3">取貨</button>
+                    <button class="status-btn" v-else-if="item.status == 5">已取消</button>
                     <div class="finish-btn " v-else>
                       <i class="check-btn-icon"></i>
                       <label>已完成</label>
@@ -105,7 +108,10 @@
                   <div class="order-info-box">
                     <span class="order-no">訂單編號：{{item.id}}</span>
                     <span class="order-get">{{'已取 '+item.pickNum+' 件'}}</span>
-                    <button class="status-btn" v-if="item.status != 4">取貨</button>
+                    <button class="status-btn" v-if="item.status == 1">已下單</button>
+                    <button class="status-btn" v-else-if="item.status == 2">已收單</button>
+                    <button class="status-btn" v-else-if="item.status == 3">取貨</button>
+                    <button class="finish-btn" v-else-if="item.status == 5">已取消</button>
                     <div class="finish-btn " v-else>
                       <i class="check-btn-icon"></i>
                       <label>已完成</label>

@@ -29,7 +29,8 @@
                 :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
               <div class="order-item-status-box">
-                <label class="order-item-status" v-if="prodItem.isPick == 1">已取</label>
+                <label class="order-item-status" v-if="orderInfo.status == 5">取消</label>
+                <label class="order-item-status" v-else-if="prodItem.isPick == 1">已取</label>
                 <label class="order-item-status" v-else-if="!isVerifed">未取貨</label>
                 <i :class="['radius-circle', isVerifed && selectCart.indexOf(prodItem.productId) != -1 ? 'radius-check' : '']"
                   @click="checkItem(prodItem.productId)"
@@ -72,6 +73,12 @@
           <div class="finish-btn">
             <i class="check-btn-icon"></i>
             <label>已完成</label>
+          </div>
+        </div>
+        <div class="status-wrap" v-else-if="orderInfo.status == 5">
+          <div class="finish-btn">
+            <i class="check-btn-icon"></i>
+            <label>已取消</label>
           </div>
         </div>
         <div class="verify-wrap" v-else-if="orderInfo.status != 4 && !isVerifed">
@@ -190,6 +197,10 @@ export default {
     async handleComfirm () {
       if (this.selectCart.length == 0) {
         Toast('請選擇需要確認的商品')
+        return false
+      }
+      if (this.orderInfo.status == 1 || this.orderInfo.status == 2) {
+        Toast('此訂單還未配送')
         return false
       }
       const params = {

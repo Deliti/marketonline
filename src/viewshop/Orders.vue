@@ -57,7 +57,10 @@
                 <i class="check-btn-icon"></i>
                 <label>已完成</label>
               </button>
-              <button class="status-btn" v-else>取貨</button>
+              <button class="status-btn" v-else-if="orderItem.status == 1">已下單</button>
+              <button class="status-btn" v-else-if="orderItem.status == 2">已收單</button>
+              <button class="status-btn" v-else-if="orderItem.status == 3">取貨</button>
+              <button class="status-btn" v-else-if="orderItem.status == 5">已取消</button>
             </div>
           </div>
         </section>
