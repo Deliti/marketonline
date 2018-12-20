@@ -199,8 +199,8 @@ export default {
         Toast('請選擇需要確認的商品')
         return false
       }
-      if (this.selectCart.filter(s => s.productStatus != 2).length > 0) {
-        Toast('商品還未配送')
+      if (this.orderInfo.status == 1 || this.orderInfo.status == 2) {
+        Toast('此訂單還未配送')
         return false
       }
       const params = {

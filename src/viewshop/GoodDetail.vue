@@ -36,12 +36,12 @@
         <div class="time-wrap">
           <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime}}後截單</p>
           <p class="time-tips" v-else>已截單</p>
-          <div class="old-price">原購價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
+          <div class="old-price">市場價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
         </div>
         <div class="price-wrap">
           <p class="get-good-time">取貨時間：{{goodInfo.takeTimeStr}}</p>
           <div class="cheap-price-box">
-            <span class="cheap-tips">團購價</span>
+            <span class="cheap-tips">會員價</span>
             <span class="cheap-price">$<b>{{fenTransYuan(goodInfo.discountPrice)}}</b></span>
           </div>
         </div>
@@ -142,8 +142,13 @@ export default {
       if (loading) {
         return false
       }
-      loading = true
+      const maxNum = this.goodInfo.maxPurchaseNum || 9999999999999
       const thisGood = this.shopCart.filter(item => item.id == this.goodInfo.id)
+      if (thisGood.length > maxNum) {
+        Toast('已超過最大購買數量')
+        return false
+      }
+      loading = true
       if (thisGood.length > 0) {
         const count = thisGood[0].count
         const params = {

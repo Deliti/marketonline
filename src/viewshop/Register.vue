@@ -75,12 +75,12 @@
       <!-- <div class="tips-wrap">Tips: 部分貨品需送貨服務，請登記您的住址信息。</div> -->
       <div class="input-wrap">
         <div class="input-box">
-          <input type="text" class="input" placeholder="填寫你的名字" v-model="realname">
+          <input type="text" class="input" placeholder="填寫你的名字（請填寫你的真實名字）" v-model="realname">
         </div>
         <hr>
         <div class="input-box area-box">
           <textarea class="input-area"
-                  placeholder="填寫個人收貨地址（即配送上門地址）"
+                  placeholder="填寫個人收貨地址（即配送上門地址，因为有些商品保鲜理由，需即时送货到府上）"
                   v-model="addrText">
           </textarea>
         </div>

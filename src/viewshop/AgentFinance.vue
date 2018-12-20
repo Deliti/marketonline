@@ -31,38 +31,43 @@
               infinite-scroll-distance="10">
           <section v-for="(item, index) in orderList"
                     :key="index"
+                    @click="linkjump(`agentOrderDetail/${item.id}`)"
                     class="order-wrap">
             <div class="order-title-box">
               <div class="flex-box leader-info-box">
-                <p class="order-text-1">{{item.name}}  {{item.phone}}</p>
-                <a class="tel-text" :href="'tel:'+item.phone">聯繫團員</a>
+                <p class="order-text-1">{{item.productName}}</p>
+                <!-- <a class="tel-text" :href="'tel:'+item.phone">聯繫團員</a> -->
               </div>
-              <p class="order-text-1">{{item.address}}</p>
+              <!-- <p class="order-text-1">{{item.address}}</p> -->
             </div>
             <div class="order-content-box">
               <div class="good-box">
                 <div class="good-item">
                   <span class="order-text-2">商品總額</span>
-                  <span class="order-text-3">{{'$ '+ fenTransYuan(item.price)}}</span>
+                  <span class="order-text-3">{{'$ '+ fenTransYuan(item.productPrice*item.productNum)}}</span>
                 </div>
                 <div class="good-item">
                   <span class="order-text-2">商品件數</span>
-                  <span class="order-text-3">{{item.totalNum + ' 件'}}</span>
+                  <span class="order-text-3">{{item.productNum + ' 件'}}</span>
                 </div>
               </div>
               <div class="earn-box">
-                <div class="earn-info-box">
+                <!-- <div class="earn-info-box">
                   <span class="earn-no">商品佣金</span>
                   <div class="earn-get"><b>${{fenTransYuan(getGoodRate(item))}}</b></div>
-                </div>
-                <div class="earn-info-box" v-if="item.pickWay == 2">
+                </div> -->
+                <!-- <div class="earn-info-box" v-if="item.pickWay == 2">
                   <span class="earn-no">配送費</span>
                   <div class="earn-get"><b>${{fenTransYuan(item.deliverFee)}}</b></div>
+                </div> -->
+                <div class="earn-info-box">
+                  <span class="earn-no">结算状态</span>
+                  <div class="earn-get"><b>{{item.withdrawId ? '已結算': '未結算'}}</b></div>
                 </div>
               </div>
               <div class="order-info-box">
                 <span class="order-no">訂單編號：{{item.id}}</span>
-                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(getGoodRate(item) + item.deliverFee)}}</b></div>
+                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(getGoodRate(item))}}</b></div>
               </div>
             </div>
           </section>
@@ -208,9 +213,9 @@ export default {
       let totalM = 0
       let earnM = 0
       this.orderList.map(item => {
-        totalM += item.price
+        totalM += item.productPrice*item.productNum
         earnM += this.getGoodRate(item)
-        earnM += item.deliverFee
+        // earnM += item.deliverFee
       })
       console.log(earnM)
       return {
@@ -257,9 +262,10 @@ export default {
     },
     getGoodRate (order) {
       let m = 0
-      order.productList.map(item => {
-        m += item.price*item.num*(item.rate+order.agentRate)/100
-      })
+      // order.productList.map(item => {
+      //   m += item.price*item.num*(item.rate+order.agentRate)/100
+      // })
+      m += order.productPrice*order.productNum*(order.productRate+order.agentRate)/100
       return m
     },
     timeConfirm () {
@@ -293,7 +299,7 @@ export default {
       const params = {
         "page": pageNo,
         "limit": pageLimit,
-        "pickStatus": 3,
+        // "pickStatus": 3,
         "receiptStartTime": this.currentTime.start,
         "receiptEndTime": this.currentTime.end
       }

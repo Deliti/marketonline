@@ -111,7 +111,7 @@
                     <button class="status-btn" v-if="item.status == 1">已下單</button>
                     <button class="status-btn" v-else-if="item.status == 2">已收單</button>
                     <button class="status-btn" v-else-if="item.status == 3">取貨</button>
-                    <button class="finish-btn" v-else-if="item.status == 5">已取消</button>
+                    <button class="status-btn grey-btn" v-else-if="item.status == 5">已取消</button>
                     <div class="finish-btn " v-else>
                       <i class="check-btn-icon"></i>
                       <label>已完成</label>
@@ -696,6 +696,10 @@ body {
               height: .75rem;
               @include backImg('../assets/images/checkmark.png');
             }
+          }
+          .grey-btn {
+            background: #777776;
+            color: #ffffff;
           }
         }
       }

@@ -30,16 +30,16 @@
                 infinite-scroll-distance="10">
         <div v-for="(goodInfo, index) in goodList"
               :key="index"
-              :class="['list-item', goodInfo.lessTime == -1 ? 'list-over' : '']"
+              :class="['list-item']"
               @click="linkJump(`goodDetail/${goodInfo.id}`)">
-          <div class="item-banner-wrap">
+          <div :class="['item-banner-wrap', showStoreNum(goodInfo.storeNum) == -1 ? 'list-over' : '']">
             <div class="img-wrap">
               <img :src='goodInfo.pic' alt="" @load="imgOnload" class="item-banner">
             </div>
-            <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime+'後截單'}}</p>
-            <p class="time-tips" v-else>已截單</p>
+            <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != -1">{{goodInfo.lessTime+'後截單'}}</p>
+            <p class="time-tips" v-else-if="showStoreNum(goodInfo.storeNum) != -1">已截單</p>
             <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
-            <div class="add-wrap" @click.stop="" v-show="goodInfo.lessTime != -1">
+            <div class="add-wrap" @click.stop="" v-show="showStoreNum(goodInfo.storeNum) != -1">
               <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo, 'first')">
                 <i class="cart-icon"></i><label>購買</label>
               </div>
@@ -49,18 +49,22 @@
                 <span class="change-btn" @click.stop="addGoodCart(goodInfo)">+</span>
               </div>
             </div>
+            <div class="over-text">
+              <p class="p1">賣光了</p>
+              <p class="p2">下次快點啦</p>
+            </div>
           </div>
           <div class="item-detail-wrap">
             <div class="little-part">
               <p class="item-desc">{{goodInfo.titleOne}}</p>
-              <p class="item-storenum">{{showStoreNum(goodInfo.storeNum)}}</p>
+              <p class="item-storenum" v-if="showStoreNum(goodInfo.storeNum) != -1">{{showStoreNum(goodInfo.storeNum)}}</p>
             </div>
             <div class="item-info-box">
               <label class="item-name">{{goodInfo.name}}</label>
               <div class="item-price-wrap">
-                <div class="old-price">原購價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
+                <div class="old-price">市場價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
                 <div class="cheap-price-box">
-                  <span class="cheap-tips">團購價</span>
+                  <span class="cheap-tips">會員價</span>
                   <span class="cheap-price">${{fenTransYuan(goodInfo.discountPrice)}}</span>
                 </div>
               </div>
@@ -90,7 +94,7 @@
           </div>
         </div> -->
         <a class="link-fb-wrap" href="https://www.baidu.com">
-          <p class="text">按此加入地區WhatsApp群組，每日通知你有咩至抵團購產品！</p>
+          <p class="text">按此加入我们的Facebook群組专页，以便了解我们最新的产品消息和资讯！</p>
         </a>
       </section>
     </div>
@@ -100,6 +104,7 @@
 
 <script>
 import { Swipe, SwipeItem } from 'mint-ui';
+import { Toast } from 'mint-ui'
 import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText, fenTransYuan } from 'utils/utils'
@@ -178,8 +183,9 @@ export default {
       }
     },
     showStoreNum (num) {
+      // return '-1'
       if (!num) {
-        return ''
+        return '-1'
       } else if (num >= 1000) {
         return '庫存999+'
       } else {
@@ -248,8 +254,13 @@ export default {
       if (loading) {
         return false
       }
-      loading = true
+      const maxNum = goodInfo.maxPurchaseNum || 9999999999999
       const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
+      if (thisGood.length > maxNum) {
+        Toast('已超過最大購買數量')
+        return false
+      }
+      loading = true
       if (thisGood.length > 0) {
         const count = thisGood[0].count
         const params = {
@@ -520,6 +531,9 @@ export default {
           @media screen and (min-width: $screenMid) {
             height: 11rem;
           }
+          .over-text {
+            opacity: 0;
+          }
           .img-wrap {
             width: 100%;
             height: 100%;
@@ -652,7 +666,7 @@ export default {
               max-height: 4.6rem;
               overflow: hidden;
               text-overflow:ellipsis;
-              font-size: 1.8rem;
+              font-size: 1.6rem;
               color: #444444;
               @media screen and (min-width: $screenMid) {
                 font-size: 1.3rem;
@@ -700,13 +714,31 @@ export default {
       }
       .list-over {
         position: relative;
-        &::after {
+        .over-text {
+          position: absolute;
+          @extend .flex-box;
+          opacity: 1 !important;
+          flex-direction: column;
+          justify-content: center;
+          left: 0;top: 0;
+          right: 0;bottom: 0;
+          .p1 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+          }
+          .p2 {
+            font-size: 1.2rem;
+            color: #ffffff;
+          }
+        }
+        &::before {
           content: '';
           width: 100%;
           height: 100%;
           position: absolute;
           left: 0;top: 0;
-          background: rgba(255, 255, 255, .6);
+          background: rgba(0, 0, 0, .6);
         }
       }
     }

@@ -69,6 +69,11 @@ export default new Router({
       component: () => import('../viewshop/OrderDetail.vue')
     },
     {
+      path: '/moneyOrderDetail/:orderId',
+      name: 'moneyOrderDetail',
+      component: () => import('../viewshop/MoneyOrderDetail.vue')
+    },
+    {
       path: '/suggest',
       name: 'suggest',
       component: () => import('../viewshop/Suggest.vue')

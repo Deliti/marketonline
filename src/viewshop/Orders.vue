@@ -60,7 +60,7 @@
               <button class="status-btn" v-else-if="orderItem.status == 1">已下單</button>
               <button class="status-btn" v-else-if="orderItem.status == 2">已收單</button>
               <button class="status-btn" v-else-if="orderItem.status == 3">取貨</button>
-              <button class="status-btn" v-else-if="orderItem.status == 5">已取消</button>
+              <button class="status-btn grey-btn" v-else-if="orderItem.status == 5">已取消</button>
             </div>
           </div>
         </section>
@@ -482,6 +482,10 @@ export default {
           border-radius: .2rem;
           text-align: center;
           line-height: 3rem;
+          color: #ffffff;
+        }
+        .grey-btn {
+          background: #777776;
           color: #ffffff;
         }
         .finish-btn {

@@ -85,11 +85,11 @@ export default {
       }
       const verifyPhone = validateInput({
         value: this.phone,
-        emptyTxt: '請輸入手機號碼',
-        length: 11,
-        lengthTxt: '手機號碼長度不正確',
-        regStr: /^1(3|4|5|7|8|9)\d{9}$/,
-        novalidStr: '請輸入正確的手機號碼'
+        emptyTxt: '請輸入手機號碼'
+        // length: 11,
+        // lengthTxt: '手機號碼長度不正確',
+        // regStr: /^1(3|4|5|7|8|9)\d{9}$/,
+        // novalidStr: '請輸入正確的手機號碼'
       })
       if (!verifyPhone) {
         return false
