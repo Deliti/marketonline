@@ -433,7 +433,7 @@ export default {
       margin-right: 1rem;
       width: 2.5rem;
       height: 2.5rem;
-      @include backImg('../assets/images/cart.png');
+      @include backImg('../assets/images/cartfull.png');
     }
   }
   .page-content {

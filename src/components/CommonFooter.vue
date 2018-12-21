@@ -104,7 +104,7 @@ export default {
     .cart-bg {
       width: 100%;
       height: 100%;
-      @include backImg('../assets/images/cart.png');
+      @include backImg('../assets/images/cartfull.png');
       background-position: center center;
       background-size: 5rem 5rem;
     }

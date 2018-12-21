@@ -1,7 +1,7 @@
 <template>
   <header class="pc-header">
     <div class="page-container">
-      <div class="logo-box"><img src="" alt=""></div>
+      <div class="logo-box"><img src="../assets/images/logo.png" alt=""></div>
       <div class="menu-box">
         <div class="munu-item mr1" @click="linkJump('/home')">首頁</div>
         <div class="munu-item mr2" @click="linkJump('/aboutus')">關於我們</div>
@@ -64,10 +64,13 @@ export default {
     .logo-box {
       width: 13rem;
       height: 100%;
+      text-align: center;
+      line-height: 4.4rem;
       img {
-        width: 100%;
-        height: 100%;
-        display: block;
+        // width: 100%;
+        height: 45%;
+        vertical-align: middle;
+        // display: block;
       }
     }
     .menu-box {
@@ -122,7 +125,7 @@ export default {
         width: 1.8rem;
         height: 1.8rem;
         margin-right: .5rem;
-        @include backImg('../assets/images/cart.png');
+        @include backImg('../assets/images/cartfull.png');
       }
       .cart-num {
         width: 1.9rem;

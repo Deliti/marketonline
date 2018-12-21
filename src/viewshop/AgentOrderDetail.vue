@@ -199,8 +199,16 @@ export default {
         Toast('請選擇需要確認的商品')
         return false
       }
-      if (this.selectCart.filter(s => s.productStatus != 2).length > 0) {
-        Toast('商品還未配送')
+      let errMsg = ''
+      this.orderInfo.productList.map(item => {
+        if (this.selectCart.indexOf(item.productId) != -1) {
+          if (item.status != 2) {
+            errMsg = '所選商品還未配送'
+          }
+        }
+      })
+      if (errMsg) {
+        Toast(errMsg)
         return false
       }
       const params = {

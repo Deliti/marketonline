@@ -67,7 +67,7 @@
               </div>
               <div class="order-info-box">
                 <span class="order-no">訂單編號：{{item.id}}</span>
-                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(getGoodRate(item))}}</b></div>
+                <div class="order-get"><span>提成金額：</span><b>${{fenTransYuan(item.agentProfit)}}</b></div>
               </div>
             </div>
           </section>
@@ -214,7 +214,8 @@ export default {
       let earnM = 0
       this.orderList.map(item => {
         totalM += item.productPrice*item.productNum
-        earnM += this.getGoodRate(item)
+        // earnM += this.getGoodRate(item)
+        earnM += item.agentProfit
         // earnM += item.deliverFee
       })
       console.log(earnM)

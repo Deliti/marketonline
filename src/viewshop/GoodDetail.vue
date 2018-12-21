@@ -337,7 +337,7 @@ export default {
         .cart-icon {
           width: 1.6rem;
           height: 1.6rem;
-          @include backImg('../assets/images/cart.png');
+          @include backImg('../assets/images/cartfull.png');
         }
       }
       .count-box {
