@@ -39,7 +39,7 @@
             <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != -1">{{goodInfo.lessTime+'後截單'}}</p>
             <p class="time-tips" v-else-if="showStoreNum(goodInfo.storeNum) != -1">已截單</p>
             <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
-            <div class="add-wrap" @click.stop="" v-show="showStoreNum(goodInfo.storeNum) != -1">
+            <div class="add-wrap" v-show="showStoreNum(goodInfo.storeNum) != -1">
               <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo, 'first')">
                 <i class="cart-icon"></i><label>購買</label>
               </div>
@@ -256,13 +256,14 @@ export default {
       }
       const maxNum = goodInfo.maxPurchaseNum || 9999999999999
       const thisGood = this.shopCart.filter(item => item.id == goodInfo.id)
-      if (thisGood.length > maxNum) {
-        Toast('已超過最大購買數量')
-        return false
-      }
       loading = true
       if (thisGood.length > 0) {
         const count = thisGood[0].count
+        if (count > maxNum) {
+          Toast('已超過最大購買數量')
+          loading = false
+          return false
+        }
         const params = {
           productId: goodInfo.id,
           num: count+1

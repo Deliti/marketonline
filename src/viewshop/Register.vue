@@ -10,7 +10,9 @@
         <div class="munu-item" @click="linkjump('home')">首頁</div>
         <div class="munu-item" @click="linkjump('aboutus')">關於我們</div>
       </div>
-      <h1 class="program-title">品牌名字</h1>
+      <h1 class="program-title">
+        <img src="../assets/images/logo.png" alt="">
+      </h1>
       <h3 class="center-title">註冊</h3>
       <div class="input-wrap">
         <div class="input-box">
@@ -337,9 +339,15 @@ export default {
       color: #FFFFFF;
       text-align: center;
       margin-bottom: 2.3rem;
+      img {
+        width: 70%;
+      }
       @media screen and (min-width: $screenMid) {
         line-height: 4.5rem;
         margin-bottom: 4.8rem;
+        img {
+          width: 50%;
+        }
       }
     }
     .center-title {

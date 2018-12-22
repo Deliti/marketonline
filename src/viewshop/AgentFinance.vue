@@ -101,7 +101,7 @@
 <script>
 import { CommonHeader } from 'components'
 import { Popup, Picker } from 'mint-ui'
-import { agentOrders } from 'utils/getData'
+import { financeOrders } from 'utils/getData'
 import { getCurrentDay, getCurrentWeek, getCurrentMonth, getBeforeMonth, fenTransYuan } from 'utils/utils'
 const currentD = getCurrentDay()
 const currentW = getCurrentWeek()
@@ -300,11 +300,11 @@ export default {
       const params = {
         "page": pageNo,
         "limit": pageLimit,
-        // "pickStatus": 3,
+        // "status": 3,
         "receiptStartTime": this.currentTime.start,
         "receiptEndTime": this.currentTime.end
       }
-      const data = await agentOrders(params)
+      const data = await financeOrders(params)
       if (data.code == 0) {
         this.orderList.push(...data.data.list)
         totalPage = data.data.totalPage

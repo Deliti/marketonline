@@ -33,6 +33,7 @@ export const playOrder = params => fetch('post', '/merchant/app/order/playOrder'
 export const suggest = params => fetch('post', '/merchant/app/suggest/suggest', params)
 // 訂單
 export const agentOrders = params => fetch('post', '/merchant/app/order/agentOrders', params)
+export const financeOrders = params => fetch('post', '/merchant/app/order/financeOrders', params)
 export const getMyOrders = params => fetch('post', '/merchant/app/order/myOrders', params)
 export const getOrderDetail = params => fetch('post', '/merchant/app/order/detail', params)
 

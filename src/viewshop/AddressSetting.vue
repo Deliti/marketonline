@@ -455,6 +455,7 @@ export default {
         @include backImg('../assets/images/radius-seleted.png');
       }
       .option-box {
+        max-width: 80%;
         font-size: 1.6rem;
         color: #444444;
       }

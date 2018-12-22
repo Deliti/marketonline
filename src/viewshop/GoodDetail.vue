@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { Swipe, SwipeItem } from 'mint-ui';
+import { Swipe, SwipeItem, Toast } from 'mint-ui';
 import { CommonHeader, CommonFooter } from 'components'
 import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText, fenTransYuan } from 'utils/utils'
@@ -144,13 +144,14 @@ export default {
       }
       const maxNum = this.goodInfo.maxPurchaseNum || 9999999999999
       const thisGood = this.shopCart.filter(item => item.id == this.goodInfo.id)
-      if (thisGood.length > maxNum) {
-        Toast('已超過最大購買數量')
-        return false
-      }
       loading = true
       if (thisGood.length > 0) {
         const count = thisGood[0].count
+        if (count >= maxNum) {
+          Toast('已超過最大購買數量')
+          loading = false
+          return false
+        }
         const params = {
           productId: this.goodInfo.id,
           num: count+1
