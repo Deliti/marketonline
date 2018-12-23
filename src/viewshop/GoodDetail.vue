@@ -4,7 +4,7 @@
     <div class="page-title">
       <i class="return-icon" @click="historyBack"></i>
     </div>
-    <div class="banner-wrap">
+    <div :class="['banner-wrap', showStoreNum(goodInfo.storeNum) == 'over' ? 'list-over' : '']">
       <mt-swipe :auto="4000" class="banner-box">
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
@@ -15,7 +15,7 @@
         </mt-swipe-item>
       </mt-swipe>
       <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
-      <div class="add-wrap" v-show="goodInfo.lessTime != -1">
+      <div class="add-wrap" v-show="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">
         <div class="add-cart" v-if="!isHasGood" @click.stop="addGoodCart">
           <i class="cart-icon"></i><label>購買</label>
         </div>
@@ -25,17 +25,21 @@
           <span class="change-btn"  @click.stop="addGoodCart">+</span>
         </div>
       </div>
+      <div class="over-text">
+        <p class="p1">賣光了</p>
+        <p class="p2">下次快點啦</p>
+      </div>
     </div>
     <div class="detail-wrap">
       <div class="little-part">
         <p class="title-desc">{{goodInfo.titleOne}}</p>
-        <p class="item-storenum">{{showStoreNum(goodInfo.storeNum)}}</p>
+        <p class="item-storenum"  v-if="showStoreNum(goodInfo.storeNum) != -1 && showStoreNum(goodInfo.storeNum) != 'over'">{{showStoreNum(goodInfo.storeNum)}}</p>
       </div>
       <p class="good-name">{{goodInfo.name}}</p>
       <div class="info-box">
         <div class="time-wrap">
-          <p class="time-tips" v-if="goodInfo.lessTime != -1">{{goodInfo.lessTime}}後截單</p>
-          <p class="time-tips" v-else>已截單</p>
+          <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">{{goodInfo.lessTime}}後截單</p>
+          <p class="time-tips" v-else-if="goodInfo.lessTime == -1 && showStoreNum(goodInfo.storeNum) != 'over'">已截單</p>
           <div class="old-price">市場價 <span>${{fenTransYuan(goodInfo.price)}}</span></div>
         </div>
         <div class="price-wrap">
@@ -130,9 +134,11 @@ export default {
       }
     },
     showStoreNum (num) {
-      if (!num) {
-        return ''
-      } else if (num >= 1000) {
+      if (num == -1) {
+        return '-1'
+      } else if (num == 0) {
+        return 'over'
+      }else if (num >= 1000) {
         return '庫存999+'
       } else {
         return `庫存${num}件`
@@ -142,7 +148,7 @@ export default {
       if (loading) {
         return false
       }
-      const maxNum = this.goodInfo.maxPurchaseNum || 9999999999999
+      const maxNum = this.goodInfo.maxPurchaseNum == -1 ? 99999999999999999 : this.goodInfo.maxPurchaseNum
       const thisGood = this.shopCart.filter(item => item.id == this.goodInfo.id)
       loading = true
       if (thisGood.length > 0) {
@@ -289,6 +295,10 @@ export default {
     @media screen and (min-width: $screenMid) {
       width: $screenWidth;
       margin: 4rem auto 0;
+    }
+    .over-text {
+      position: absolute;
+      opacity: 0;
     }
     .banner-box {
       width: 100%;
@@ -455,6 +465,36 @@ export default {
       font-size: 1.4rem;
       color: #444444;
       line-height: 1.8rem;
+    }
+  }
+  .list-over {
+    position: relative;
+    .over-text {
+      position: absolute;
+      background: rgba(0, 0, 0, .6);
+      @extend .flex-box;
+      opacity: 1 !important;
+      flex-direction: column;
+      justify-content: center;
+      left: 0;top: 0;
+      right: 0;bottom: 0;
+      .p1 {
+        font-size: 1.8rem;
+        color: #ffffff;
+        margin-bottom: 1rem;
+      }
+      .p2 {
+        font-size: 1.2rem;
+        color: #ffffff;
+      }
+    }
+    &::before {
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;top: 0;
+      background: rgba(0, 0, 0, .6);
     }
   }
 }

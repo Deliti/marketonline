@@ -32,14 +32,14 @@
               :key="index"
               :class="['list-item']"
               @click="linkJump(`goodDetail/${goodInfo.id}`)">
-          <div :class="['item-banner-wrap', showStoreNum(goodInfo.storeNum) == -1 ? 'list-over' : '']">
+          <div :class="['item-banner-wrap', showStoreNum(goodInfo.storeNum) == 'over' ? 'list-over' : '']">
             <div class="img-wrap">
               <img :src='goodInfo.pic' alt="" @load="imgOnload" class="item-banner">
             </div>
-            <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != -1">{{goodInfo.lessTime+'後截單'}}</p>
-            <p class="time-tips" v-else-if="showStoreNum(goodInfo.storeNum) != -1">已截單</p>
+            <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">{{goodInfo.lessTime+'後截單'}}</p>
+            <p class="time-tips" v-else-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">已截單</p>
             <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
-            <div class="add-wrap" v-show="showStoreNum(goodInfo.storeNum) != -1">
+            <div class="add-wrap" v-show="showStoreNum(goodInfo.storeNum) != 'over'">
               <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo, 'first')">
                 <i class="cart-icon"></i><label>購買</label>
               </div>
@@ -57,7 +57,7 @@
           <div class="item-detail-wrap">
             <div class="little-part">
               <p class="item-desc">{{goodInfo.titleOne}}</p>
-              <p class="item-storenum" v-if="showStoreNum(goodInfo.storeNum) != -1">{{showStoreNum(goodInfo.storeNum)}}</p>
+              <p class="item-storenum" v-if="showStoreNum(goodInfo.storeNum) != -1 && showStoreNum(goodInfo.storeNum) != 'over'">{{showStoreNum(goodInfo.storeNum)}}</p>
             </div>
             <div class="item-info-box">
               <label class="item-name">{{goodInfo.name}}</label>
@@ -184,9 +184,11 @@ export default {
     },
     showStoreNum (num) {
       // return '-1'
-      if (!num) {
+      if (num == -1) {
         return '-1'
-      } else if (num >= 1000) {
+      } else if (num == 0) {
+        return 'over'
+      }else if (num >= 1000) {
         return '庫存999+'
       } else {
         return `庫存${num}件`
@@ -718,6 +720,7 @@ export default {
         .over-text {
           position: absolute;
           @extend .flex-box;
+          background: rgba(0, 0, 0, .8);
           opacity: 1 !important;
           flex-direction: column;
           justify-content: center;
