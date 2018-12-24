@@ -82,7 +82,7 @@
           <label v-if="orderInfo.status == 5">已取消</label>
         </div>
       </div>
-      <div class="code-info" v-if="orderInfo.status == 3">
+      <div class="code-info" v-if="orderInfo.status == 1">
         <div class="code-box">
           取貨驗證碼<br>
           <span>{{orderInfo.pickCode}}</span>
