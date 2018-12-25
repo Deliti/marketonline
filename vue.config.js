@@ -4,7 +4,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
-  baseUrl: '/store/',
+  baseUrl: '',
   pages: {
     shop: {
       entry: 'src/entershop/main.js',
