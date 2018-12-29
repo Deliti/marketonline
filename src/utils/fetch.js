@@ -2,6 +2,7 @@ import {
 	baseUrl,
 	basePath
 } from './env'
+require("es6-promise").polyfill()
 // import { removeStore } from './mUtils'
 import { Toast } from 'mint-ui'
 export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
@@ -21,7 +22,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			url = url + '?' + dataStr;
 		}
 	}
-	if (fetch && method == 'fetch') {
+	if (false) {
 		let requestConfig = {
 			credentials: 'include',
 			method: type,
@@ -89,7 +90,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 							// window.location.href = `/shop/login`;
 							// removeStore('userInfo');
 						}
-            if(obj.code != ERR_OK) Toast(responseJson.msg);
+            if(obj.code != ERR_OK) Toast(obj.msg);
 						resolve(obj);
 					} else {
 						reject(new Error(requestObj.status));
