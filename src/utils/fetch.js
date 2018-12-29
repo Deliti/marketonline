@@ -22,7 +22,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 			url = url + '?' + dataStr;
 		}
 	}
-	if (false) {
+	if (window.fetch && method == 'fetch') {
 		let requestConfig = {
 			credentials: 'include',
 			method: type,
@@ -72,7 +72,7 @@ export default async(type = 'GET', path = '', data = {}, method = 'fetch') => {
 		}
 
 		requestObj.open(type, url, true);
-		requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		requestObj.setRequestHeader("Content-type", "application/json");
 		requestObj.setRequestHeader("Accept", "application/json");
 		requestObj.setRequestHeader("Access-Control-Allow-Origin", "*");
 		requestObj.setRequestHeader("token", token);
