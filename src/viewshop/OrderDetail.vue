@@ -29,7 +29,7 @@
                 :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
               <div class="order-item-status-box">
-                <label class="order-item-status">{{orderInfo.status == 5 ? '取消' : (prodItem.isPick == 1?'已取':'未取貨')}}</label>
+                <label class="order-item-status">{{prodItem.status == 5 ? '取消' : (prodItem.isPick == 1?'已取':'未取貨')}}</label>
               </div>
               <img :src="prodItem.pic" alt="" class="good-img">
               <div class="order-item-detail">

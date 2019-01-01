@@ -29,7 +29,7 @@
                 :class="['order-item', prodItem.isPick == 1?'over-order':'']">
             <div class="order-item-flex">
               <div class="order-item-status-box">
-                <label class="order-item-status" v-if="orderInfo.status == 5">取消</label>
+                <label class="order-item-status" v-if="prodItem.status == 5">取消</label>
                 <label class="order-item-status" v-else-if="prodItem.isPick == 1">已取</label>
                 <label class="order-item-status" v-else-if="!isVerifed">未取貨</label>
                 <i :class="['radius-circle', isVerifed && selectCart.indexOf(prodItem.productId) != -1 ? 'radius-check' : '']"
@@ -48,7 +48,7 @@
                 </div>
               </div>
             </div>
-            <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr + '後'}}</div>
+            <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr}}</div>
             <div class="solid-hr" v-show="index !== orderInfo.productList.length-1"></div>
           </div>
           <div class="memo-box">

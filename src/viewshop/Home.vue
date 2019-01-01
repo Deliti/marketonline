@@ -6,10 +6,10 @@
       <mt-swipe :auto="4000" class="banner-box">
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
-                        :key="index"
-                        @click="linkJump(`goodDetail/${banner.id}`)">
+                        :key="index">
           <img :src='banner.url'
                 @load="imgOnload"
+                @click="linkJump(`goodDetail/${banner.productId}`)"
                 alt="">
         </mt-swipe-item>
       </mt-swipe>
@@ -208,7 +208,6 @@ export default {
       window.location.href = href
     },
     linkJump (href) {
-      debugger
       this.$router.push(href)
     },
     chooseProd (item) {
