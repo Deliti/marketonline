@@ -9,7 +9,7 @@
     <div class="page-content">
       <div class="input-code-wrap">
         <div class="input-box">
-          <input type="text" v-model="pickCode" placeholder="輸入驗證碼">
+          <input type="text" v-model="pickCode" placeholder="請輸入取貨驗證碼">
         </div>
         <div class="submit-btn" @click="handleVerify">
           <label>確認</label>
@@ -23,10 +23,10 @@
         <img src="../assets/images/payment_illustration.png" alt="" class="enter-icon">
         <h3 class="enter-title">財務匯總</h3>
       </div>
-      <div :class="['change-submit', isOpenStatus == 1 ? 'grey': '']" @click="changeOpenStatus">
+      <!-- <div :class="['change-submit', isOpenStatus == 1 ? 'grey': '']" @click="changeOpenStatus">
         <i :class="['flag-icon', isOpenStatus == 2?'start-icon':(isOpenStatus == 0?'pause-icon':'')]"></i>
         <label>{{statusText}}</label>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

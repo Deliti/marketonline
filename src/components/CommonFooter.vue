@@ -21,7 +21,7 @@
       </router-link>
     </div>
     <div class="pc-footer">
-      <span>@2018 www.abcdefg.com. All rights reserved.</span>
+      <span>@2019 www.moqqb.com. All Rights Reserved.</span>
     </div>
   </footer>
 </template>
@@ -71,7 +71,7 @@ export default {
     }
     span {
       font-size: 1.2rem;
-      color: #FFFFFF;
+      color: red;
       line-height: 5.5rem;
     }
   }
@@ -118,7 +118,7 @@ export default {
       text-align: center;
       line-height: 1.9rem;
       font-size: 1.4rem;
-      color: #0DC6B5;
+      color: red;
     }
   }
 

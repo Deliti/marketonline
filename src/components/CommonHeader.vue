@@ -1,7 +1,7 @@
 <template>
   <header class="pc-header">
     <div class="page-container">
-      <div class="logo-box"><img src="../assets/images/logo.png" alt=""></div>
+      <div class="logo-box" @click="linkJump('/home')"><img src="../assets/images/logo.png" alt=""></div>
       <div class="menu-box">
         <div class="munu-item mr1" @click="linkJump('/home')">首頁</div>
         <div class="munu-item mr2" @click="linkJump('/aboutus')">關於我們</div>
@@ -137,7 +137,7 @@ export default {
         text-align: center;
         line-height: 1.9rem;
         font-size: 1.4rem;
-        color: #0DC6B5;
+        color: red;
         @media screen and (min-width: $screenMid) {
           top: 50%;
           transform: translateY(-50%);

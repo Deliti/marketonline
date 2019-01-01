@@ -6,10 +6,10 @@
       <mt-swipe :auto="4000" class="banner-box">
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
-                        :key="index">
+                        :key="index"
+                        @click="linkJump(`goodDetail/${banner.id}`)">
           <img :src='banner.url'
                 @load="imgOnload"
-                @click="linkJump(`goodDetail/${banner.id}`)"
                 alt="">
         </mt-swipe-item>
       </mt-swipe>
@@ -208,6 +208,7 @@ export default {
       window.location.href = href
     },
     linkJump (href) {
+      debugger
       this.$router.push(href)
     },
     chooseProd (item) {
@@ -261,11 +262,11 @@ export default {
       loading = true
       if (thisGood.length > 0) {
         const count = thisGood[0].count
-        if (count > maxNum) {
-          Toast('已超過最大購買數量')
-          loading = false
-          return false
-        }
+        // if (count > maxNum) {
+        //   Toast('已超過最大購買數量')
+        //   loading = false
+        //   return false
+        // }
         const params = {
           productId: goodInfo.id,
           num: count+1
