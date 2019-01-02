@@ -75,10 +75,10 @@ export default {
       const verifyUsername = validateInput({
         value: this.username,
         emptyTxt: '請輸入手機號碼',
-        length: 11,
-        lengthTxt: '手機號碼長度不正確',
-        regStr: /^1(3|4|5|7|8|9)\d{9}$/,
-        novalidStr: '請輸入正確的手機號碼'
+        // length: 8,
+        // lengthTxt: '手機號碼長度不正確',
+        // regStr: /^(28[0-9]{2}|((6|8)[0-9]{3}))[-_－—\s]?[0-9]{4}$/,
+        // novalidStr: '請輸入正確的手機號碼'
       })
       if (!verifyUsername) {
         return false
