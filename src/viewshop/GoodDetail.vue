@@ -106,19 +106,21 @@ export default {
     historyBack () {
       history.go(-1)
     },
-     imgOnload (e) {
+    imgOnload (e) {
       let img = new Image();
       const imgUrl = e.target.src;
       img.src = imgUrl;
-      const pWidth = e.path[1].clientWidth
-      const pHeight = e.path[1].clientHeight
+      const pWidth = document.querySelector('.banner-wrap').clientWidth
+      const pHeight = document.querySelector('.banner-wrap').clientHeight
       let imgCss = "";
+      // console.log('pWidth', e.path[1])
       if (img.width / img.height > pWidth/pHeight) {
         const widthRem = (img.width - pWidth/pHeight*img.height)/2;
         const left = `-${100*((widthRem/img.width).toFixed(2))}%`;
         imgCss = `height:100%;width:initial;transform:translateX(${left});position:relative`;
       } else {
         const heightRem =  (img.height - img.width/(pWidth/pHeight))/2;
+        console.log('heightRem', heightRem, 'heightRem/img.height', heightRem/img.height)
         const top = `-${100*((heightRem/img.height).toFixed(2))}%`;
         imgCss = `width: 100%;height:initial; transform:translateY(${top});position:relative`;
       }

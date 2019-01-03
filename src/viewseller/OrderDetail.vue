@@ -45,7 +45,7 @@
                 </div>
               </div>
             </div>
-            <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr + '後'}}</div>
+            <div class="get-time">{{'取貨時間：' + prodItem.takeTimeStr}}</div>
             <div class="solid-hr" v-show="index !== orderInfo.productList.length-1"></div>
           </div>
           <div class="dash-hr"></div>

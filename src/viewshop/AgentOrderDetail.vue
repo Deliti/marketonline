@@ -235,7 +235,7 @@ export default {
       } else {
         this.selectCart = []
         this.orderInfo.productList.map(item => {
-          if (item.isPick == 1 ) {
+          if (item.isPick == 1 || +item.status === 5) {
             return false
           }
           this.selectCart.push(item.productId)

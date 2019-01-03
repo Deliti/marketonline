@@ -108,7 +108,7 @@
                   </div>
                 </div>
               </div>
-              <div class="get-time">取貨時間：{{item.takeTime}}後</div>
+              <div class="get-time">取貨時間：{{item.takeTime}}</div>
               <div class="solid-hr" v-show="index !== shopCart.length-1"></div>
             </div>
             <!-- <div class="order-item">
