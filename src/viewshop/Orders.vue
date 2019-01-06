@@ -53,14 +53,15 @@
               <span class="order-no">訂單編號：{{orderItem.id}}</span>
               <button class="suggest-btn" v-if="orderItem.status == 4" @click.stop="linkjump('suggest')">反饋意見</button>
               <span class="order-get" v-else>{{'已取 '+orderItem.pickNum+' 件'}}</span>
-              <button class="finish-btn" v-if="orderItem.status == 4">
+              <button class="status-btn">查看詳情</button>
+              <!-- <button class="finish-btn" v-if="orderItem.status == 4">
                 <i class="check-btn-icon"></i>
                 <label>已完成</label>
               </button>
               <button class="status-btn" v-else-if="orderItem.status == 1">已下單</button>
               <button class="status-btn" v-else-if="orderItem.status == 2">已收單</button>
               <button class="status-btn" v-else-if="orderItem.status == 3">取貨</button>
-              <button class="status-btn grey-btn" v-else-if="orderItem.status == 5">已取消</button>
+              <button class="status-btn grey-btn" v-else-if="orderItem.status == 5">已取消</button> -->
             </div>
           </div>
         </section>
