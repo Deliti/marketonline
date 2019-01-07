@@ -498,7 +498,7 @@ export default {
               vertical-align: middle;
               width: 1rem;
               height: 1rem;
-              @include backImg('../assets/images/check-item.png');
+              @include backImg('../assets/images/radius-item.png');
               @media screen and (min-width: $screenMid) {
                 margin-right: .9rem;
               }

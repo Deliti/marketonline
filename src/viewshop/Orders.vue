@@ -48,6 +48,10 @@
                 <span class="order-text-2">商品件數&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="order-text-3">{{orderItem.totalNum + ' 件'}}</span>
               </div>
+              <div class="good-item">
+                <span class="order-text-4">下單時間&nbsp;&nbsp;&nbsp;</span>
+                <span class="order-text-4">{{orderItem.createAt}}</span>
+              </div>
             </div>
             <div class="order-info-box">
               <span class="order-no">訂單編號：{{orderItem.id}}</span>
@@ -109,6 +113,16 @@ export default {
       otherMonthVisible: false,
       timeConf: [
         {
+          text: '全部',
+          click: () => {
+            pageNo = 0
+            totalPage = 1
+            this.current = '~1'
+            this.timeshow = false
+            this.orderList = []
+            this.getOrderList()
+          }
+        }, {
           text: '今日',
           click: () => {
             pageNo = 0
@@ -118,7 +132,7 @@ export default {
             this.orderList = []
             this.getOrderList()
           }
-        },{
+        }, {
           text: '本週',
           click: () => {
             pageNo = 0
@@ -128,7 +142,7 @@ export default {
             this.orderList = []
             this.getOrderList()
           }
-        },{
+        }, {
           text: '本月',
           click: () => {
             pageNo = 0
@@ -159,6 +173,9 @@ export default {
     currentTimeText () {
       const cArr = this.current.split('-')
       switch (cArr[0]) {
+        case '~1':
+          return '全部'
+          break;
         case '0':
           return '今日'
           break;
@@ -180,6 +197,12 @@ export default {
     currentTime () {
       const cArr = this.current.split('-')
       switch (cArr[0]) {
+        case '~1':
+          return {
+            start: '',
+            end: ''
+          }
+          break;
         case '0':
           return currentD
           break;
@@ -376,6 +399,10 @@ export default {
         font-size: 1.6rem;
         color: #152935;
       }
+      .order-text-4 {
+        font-size: 1.2rem;
+        color: #152935;
+      }
       .tel-text {
         color: #1CD0A3;
         font-size: 1.7rem;
@@ -439,10 +466,11 @@ export default {
           @media screen and (min-width: $screenMid) {
             margin-right: 2.5rem;
             border: none;
-            width: 50%;
+            width: 30%;
             justify-content: flex-start;
             &:last-child {
               padding-left: 0;
+
             }
           }
         }

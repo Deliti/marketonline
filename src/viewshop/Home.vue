@@ -3,6 +3,7 @@
     <common-header></common-header>
     <div class="banner-wrap">
       <div v-show="isAgent == 1" class="leader-btn" @click="linkJump('/agentHome')">團長入口</div>
+      <div class="middle-page"><div class="show-btn">本期至抵</div></div>
       <mt-swipe :auto="4000" class="banner-box">
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
@@ -93,8 +94,11 @@
             <p class="get-good-time">取貨時間：11月3日（星期六）</p>
           </div>
         </div> -->
-        <a class="link-fb-wrap" href="https://www.baidu.com">
+        <a class="link-fb-wrap" href="https://www.facebook.com/moqqb/">
           <p class="text">按此加入我们的Facebook群組专页，以便了解我们最新的产品消息和资讯！</p>
+        </a>
+        <a class="link-fb-wrap center" @click="linkJump('aboutus')">
+          <p class="text">關於我們</p>
         </a>
       </section>
     </div>
@@ -126,7 +130,7 @@ export default {
       goodType: [{
         "id": -1,
         "status": 0,
-        "categoryName": "全部"
+        "categoryName": "全部產品"
       }],
       goodList: []
     }
@@ -416,6 +420,29 @@ export default {
       @include backImg('../assets/images/leader-enter-bg.png');
       z-index: 1;
     }
+    .middle-page {
+      width: 100%;
+      @media screen and (min-width: $screenMid) {
+        width: $screenWidth;
+        position: absolute;
+        left: 50%;top: 0;
+        margin-left: -$screenWidth/2;
+        z-index: 1;
+      }
+    }
+    .show-btn {
+      position: absolute;
+      right: 0;top: 0;
+      width: 9rem;
+      height: 3.7rem;
+      font-size: 1.4rem;
+      color: #ffffff;
+      text-align: center;
+      line-height: 3.7rem;
+      @include backImg('../assets/images/leader-enter-bg.png');
+      z-index: 1;
+
+    }
     .banner-box {
       width: 100%;
       height: 100%;
@@ -510,6 +537,9 @@ export default {
         font-size: 1.4rem;
         box-sizing: border-box;
         @extend .flex-box;
+      }
+      .center {
+        margin-top: 1rem;
       }
       .list-item {
         width: 100%;
