@@ -133,11 +133,11 @@ export default {
         position: absolute;
         border-radius: 50%;
         right: .9rem;top: .9rem;
-        background: #ffffff;
+        background: red;
         text-align: center;
         line-height: 1.9rem;
         font-size: 1.4rem;
-        color: red;
+        color: #ffffff;
         @media screen and (min-width: $screenMid) {
           top: 50%;
           transform: translateY(-50%);
