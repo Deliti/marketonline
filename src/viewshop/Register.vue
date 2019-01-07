@@ -99,7 +99,7 @@
 import { MessageBox, MyAside, CollapseItem, TimeDown } from 'components/index.js'
 import { validateInput } from 'utils/utils'
 import { Toast } from 'mint-ui'
-import { login, getAuthCode, register, getLeaderList } from 'utils/getData'
+import { login, getAuthCode, getUserInfo, register, getLeaderList } from 'utils/getData'
 export default {
   data () {
     return {
@@ -182,11 +182,18 @@ export default {
         }
         const loginData = await login(loginParams)
         if (loginData.code == 0) {
-          Toast('註冊成功，已為您自動登錄')
           localStorage['token'] = loginData.data.token
-          localStorage['userInfo'] = JSON.stringify(data.data)
-          this.linkjump('home')
+          // localStorage['isAgent'] = loginData.data.isAgent
+          this.getUserInfo()
         }
+      }
+    },
+    async getUserInfo () {
+      Toast('註冊成功，已為您自動登錄')
+      const data = await getUserInfo()
+      if (data.code == 0) {
+        localStorage['userInfo'] = JSON.stringify(data.data)
+        this.linkjump('home')
       }
     },
     verifyFrom () {
