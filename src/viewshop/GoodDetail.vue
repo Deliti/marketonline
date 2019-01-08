@@ -63,7 +63,7 @@ import { mapState, mapMutations } from 'vuex'
 import { formateTime, timeText, fenTransYuan } from 'utils/utils'
 import { productInfo, addCart, updateCart } from 'utils/getData'
 
-const saleStatusConf = ['普通', '促銷', '超低', '折扣']
+const saleStatusConf = ['普通', '開團', '限定', '至抵']
 let pageInterVal = null
 let loading = false
 export default {
