@@ -11,7 +11,7 @@
       <!-- <p>熱情果，又叫百香果，係熱情果科熱情果屬嘅爬藤草本植物，亦係種生果，原產南美洲熱帶地區，通常用嚟整果汁</p>
       <p>熱情果，又叫百香果，係熱情果科熱情果屬嘅爬藤草本植物，亦係種生果，原產南美洲熱帶地區，通常用嚟整果汁</p>
       <p>熱情果，又叫百香果，係熱情果科熱情果屬嘅爬藤草本植物，亦係種生果，原產南美洲熱帶地區，通常用嚟整果汁</p> -->
-      <div class="submit-btn" @click="linkJump('/home')"><label>去落單</label></div>
+      <div class="submit-btn"><a href="mailto:cs@moqqb.com" >想買乜，請留言</a ></div>
     </div>
   </div>
 </template>
@@ -67,7 +67,7 @@ export default {
     position: relative;
     background: none;
     margin-bottom: 0;
-    
+
   }
   .about-title {
     position: relative;
@@ -99,7 +99,7 @@ export default {
         margin-bottom: 1rem;
       }
     }
-    
+
     .submit-btn {
       margin-top: 3rem;
       width: 100%;
@@ -110,8 +110,11 @@ export default {
       line-height: 4.1rem;
       color: #ffffff;
       font-size: 1.8rem;
+      a {
+        color: #ffffff;
+      }
     }
   }
-  
+
 }
 </style>
