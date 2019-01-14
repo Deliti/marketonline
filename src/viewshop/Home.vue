@@ -95,7 +95,7 @@
           </div>
         </div> -->
         <a class="link-fb-wrap" href="https://www.facebook.com/moqqb/">
-          <p class="text">按此加入我们的Facebook群組专页，以便了解我们最新的产品消息和资讯！</p>
+          <p class="text">按此加入我們的Facebook群組專頁，以便了解我們最新的產品消息和資訊！內地朋友請使用微信搜索 paco66276628 添加店長為好友。</p>
         </a>
         <a class="link-fb-wrap center" @click="linkJump('aboutus')">
           <p class="text">關於我們</p>

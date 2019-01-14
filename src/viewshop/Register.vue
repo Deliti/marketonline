@@ -77,7 +77,7 @@
       <!-- <div class="tips-wrap">Tips: 部分貨品需送貨服務，請登記您的住址信息。</div> -->
       <div class="input-wrap">
         <div class="input-box">
-          <input type="text" class="input" placeholder="填寫你的名字（請填寫你的真實名字）" v-model="realname">
+          <input type="text" class="input" placeholder="填寫你的名字（用作日後拿貨用）" v-model="realname">
         </div>
         <hr>
         <div class="input-box area-box">
