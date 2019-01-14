@@ -40,13 +40,13 @@
             <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">{{goodInfo.lessTime+'後截單'}}</p>
             <p class="time-tips" v-else-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">已截單</p>
             <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
-            <div class="add-wrap" v-show="showStoreNum(goodInfo.storeNum) != 'over'">
+            <div class="add-wrap" @click.stop="stopIt" v-show="showStoreNum(goodInfo.storeNum) != 'over'">
               <div class="add-cart" v-if="!isHasGood(goodInfo.id)" @click.stop="addGoodCart(goodInfo, 'first')">
                 <i class="cart-icon"></i><label>購買</label>
               </div>
               <div class="count-box" v-else>
                 <span class="change-btn" @click.stop="desGoodCart(goodInfo)">-</span>
-                <span >{{getGoodCount(goodInfo.id)}}</span>
+                <span @click.stop="stopIt" >{{getGoodCount(goodInfo.id)}}</span>
                 <span class="change-btn" @click.stop="addGoodCart(goodInfo)">+</span>
               </div>
             </div>
@@ -158,6 +158,9 @@ export default {
       this.getBanner()
       this.getProdType()
       this.getProdList()
+    },
+    stopIt () {
+      console.log('阻止冒泡')
     },
     imgOnload (e) {
       let img = new Image();
@@ -616,6 +619,7 @@ export default {
             position: absolute;
             right: .1rem;bottom: -2.5rem;
             margin: 1rem;
+            z-index: 10;
             @extend .theme-color;
             border-radius: .5rem;
             @media screen and (min-width: $screenMid) {
