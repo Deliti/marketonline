@@ -52,7 +52,8 @@ export default {
       this.$router.push(href)
     },
     historyBack () {
-      history.go(-1)
+      // history.go(-1)
+      this.$router.push('home')
     },
     async login () {
       if (!this.verifyFrom()) {
