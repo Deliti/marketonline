@@ -6,12 +6,13 @@
     </div>
     <div :class="['banner-wrap', showStoreNum(goodInfo.storeNum) == 'over' ? 'list-over' : '']">
       <mt-swipe :auto="4000" class="banner-box">
-        <mt-swipe-item class="banner-item"
+        <mt-swipe-item class="banner-item backbg" 
+                        :style="{backgroundImage:`url(${goodInfo.pic})`}" 
                         v-for="(banner, index) in bannerList"
                         :key="index">
-          <img :src='banner.url'
+          <!-- <img :src='banner.url'
                 @load="imgOnload"
-                alt="">
+                alt=""> -->
         </mt-swipe-item>
       </mt-swipe>
       <div class="sale-tips" v-if="goodInfo.saleStatus != 0"><span>{{showSaleText(goodInfo.saleStatus)}}</span></div>
@@ -312,6 +313,12 @@ export default {
         img {
           display: block;
         }
+      }
+      .backbg {
+        background-color: #FFFFFF;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: contain;
       }
     }
     .sale-tips {

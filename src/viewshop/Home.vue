@@ -8,10 +8,13 @@
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
                         :key="index">
-          <img :src='banner.url'
+          <div class="banner-item-div backbg" 
+                @click="linkJump(`goodDetail/${banner.productId}`)"
+                :style="{backgroundImage:`url(${banner.url})`}"></div>
+          <!-- <img :src='banner.url'
                 @load="imgOnload"
                 @click="linkJump(`goodDetail/${banner.productId}`)"
-                alt="">
+                alt=""> -->
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -34,8 +37,8 @@
               :class="['list-item']"
               @click="linkJump(`goodDetail/${goodInfo.id}`)">
           <div :class="['item-banner-wrap', showStoreNum(goodInfo.storeNum) == 'over' ? 'list-over' : '']">
-            <div class="img-wrap">
-              <img :src='goodInfo.pic' alt="" @load="imgOnload" class="item-banner">
+            <div class="img-wrap backbg" :style="{backgroundImage:`url(${goodInfo.pic})`}" >
+              <!-- <img :src='goodInfo.pic' alt="" @load="imgOnload" class="item-banner"> -->
             </div>
             <p class="time-tips" v-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">{{goodInfo.lessTime+'後截單'}}</p>
             <p class="time-tips" v-else-if="goodInfo.lessTime != -1 && showStoreNum(goodInfo.storeNum) != 'over'">已截單</p>
@@ -457,6 +460,16 @@ export default {
         img {
           display: block;
         }
+        .banner-item-div {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .backbg {
+        background-color: #FFFFFF;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: contain;
       }
       .banner-item-1 {
         // background: blue;
@@ -579,6 +592,12 @@ export default {
               // height: 100%;
               display: block;
             }
+          }
+          .backbg {
+            background-color: #FFFFFF;
+            background-repeat: no-repeat;
+            background-position: 50%;
+            background-size: contain;
           }
           .time-tips {
             position: absolute;
