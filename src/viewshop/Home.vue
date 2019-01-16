@@ -502,7 +502,7 @@ export default {
         .item {
           flex:1 0 auto;
           height: 100%;
-          padding: 0 4.5rem;
+          padding: 0 3.5rem;
           font-size: 1.7rem;
           color: #FFFFFF;
           line-height: 5rem;

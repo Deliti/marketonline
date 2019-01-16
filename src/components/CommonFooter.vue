@@ -21,7 +21,7 @@
       </router-link>
     </div>
     <div class="pc-footer">
-      <span>@2019 www.moqqb.com. All Rights Reserved.</span>
+      <span>@2019 順源科技有限公司 & 順境科技有限公司. All Rights Reserved.</span>
     </div>
   </footer>
 </template>
