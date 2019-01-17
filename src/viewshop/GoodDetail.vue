@@ -6,10 +6,10 @@
     </div>
     <div :class="['banner-wrap', showStoreNum(goodInfo.storeNum) == 'over' ? 'list-over' : '']">
       <mt-swipe :auto="4000" class="banner-box">
-        <mt-swipe-item class="banner-item backbg" 
-                        :style="{backgroundImage:`url(${goodInfo.pic})`}" 
+        <mt-swipe-item class="banner-item backbg"
                         v-for="(banner, index) in bannerList"
-                        :key="index">
+                        :key="index"
+                        :style="{backgroundImage:`url(${banner.url})`}">
           <!-- <img :src='banner.url'
                 @load="imgOnload"
                 alt=""> -->
@@ -241,7 +241,7 @@ export default {
           this.goodInfo.lessTime = deadlineTime
         }
       }
-      
+
       this.goodInfo = Object.assign({}, this.goodInfo)
       if (this.goodInfo.lessTime == -1) {
         console.log('已结束')

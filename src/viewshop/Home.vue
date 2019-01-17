@@ -8,7 +8,7 @@
         <mt-swipe-item class="banner-item"
                         v-for="(banner, index) in bannerList"
                         :key="index">
-          <div class="banner-item-div backbg" 
+          <div class="banner-item-div backbg"
                 @click="linkJump(`goodDetail/${banner.productId}`)"
                 :style="{backgroundImage:`url(${banner.url})`}"></div>
           <!-- <img :src='banner.url'
@@ -31,7 +31,7 @@
       <section class="list-container"
                 v-infinite-scroll="getProdList"
                 infinite-scroll-disabled="loading"
-                infinite-scroll-distance="10">
+                infinite-scroll-distance="80">
         <div v-for="(goodInfo, index) in goodList"
               :key="index"
               :class="['list-item']"
