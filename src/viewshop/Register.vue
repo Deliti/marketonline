@@ -418,11 +418,14 @@ export default {
       }
     }
     .leader-wrap {
-      margin: 2.2rem 0 1.8rem 0;
+      margin: 1.2rem 0 .8rem 0;
       width: 100%;
+      padding: 1rem 0;
+      color: #444444;
+      background: #ffffff;
       @media screen and (min-width: $screenMid) {
         margin-bottom: 1.4rem;
-        background: #444444;
+        // background: #444444;
         width: 29rem;
         margin-right: auto;
         margin-left: auto;
@@ -432,15 +435,17 @@ export default {
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        color: #FFFFFF;
+        padding-left: 1rem;
+        // color: #FFFFFF;
         font-size: 1.4rem;
         position: relative;
         @media screen and (min-width: $screenMid) {
           height: 4rem;
-          padding-left: 4rem;
+          padding-left: 2rem;
           border-radius: 6px;
         }
         .left-icon {
+          display: none;
           width: .7rem;
           height: 1.2rem;
           @include backImg('../assets/images/link-arrow.png');
@@ -463,7 +468,7 @@ export default {
         @include backImg('../assets/images/pc-down-icon.png');
         transition: all .3s;
         @media screen and (min-width: $screenMid) {
-          display: block;
+          // display: block;
         }
       }
       .rotate-down {
@@ -471,21 +476,25 @@ export default {
       }
       .leader-seleted-box {
         position: relative;
+        box-sizing: border-box;
+        padding: 0 1rem;
         @media screen and (min-width: $screenMid) {
           display: flex;
           justify-content: flex-start;
           align-items: center;
           box-sizing: border-box;
-          padding-left: 4rem;
+          // padding-left: 4rem;
+          padding-left: 2rem;
           border-radius: 6px;
-          height: 6rem;
+          min-height: 6rem;
           .down-icon {
-            top: 2.4rem;
+            // top: 2.4rem;
+            display: none;
           }
         }
         .seleted-title {
           font-size: 1.4rem;
-          color: #ffffff;
+          // color: #ffffff;
           margin-bottom: .6rem;
         }
         .leader-info-wrap {
@@ -496,18 +505,19 @@ export default {
           .seleted-text {
             max-width: 80%;
             font-size: 1.7rem;
-            font-weight: bold;
-            color: #ffffff;
+            color: #444444;
+            // font-weight: bold;
+            // color: #ffffff;
             @media screen and (min-width: $screenMid) {
               max-width: 100%;
             }
           }
           .reset-btn {
             height: 2.4rem;
-            padding-right: 1.8rem;
+            padding-right: .8rem;
             line-height: 2.4rem;
             font-size: 1.7rem;
-            color: #FFFFFF;
+            // color: #FFFFFF;
             @include backImg('../assets/images/link-arrow.png');
             background-size: .7rem 1.2rem;
             background-position: right center;
@@ -568,7 +578,7 @@ export default {
 }
 .aside-wrap-polify {
   @media screen and (min-width: $screenMid) {
-    padding-left: 4rem;
+    padding-left: 2rem;
   }
 }
 .option-seleted {
@@ -593,7 +603,7 @@ export default {
   .option-title {
     font-size: 1.8rem;
     @media screen and (min-width: $screenMid) {
-      color: #ffffff;
+      color: #444444;
     }
   }
   .option-item {
@@ -613,8 +623,9 @@ export default {
     }
     .option-box {
       font-size: 1.6rem;
+      width: 90%;
       @media screen and (min-width: $screenMid) {
-        color: #ffffff;
+        color: #444444;
       }
     }
   }
