@@ -108,7 +108,7 @@ let loading = false
 export default {
   data () {
     return {
-      current: '0',
+      current: '~1',
       timeshow: false,
       otherMonthVisible: false,
       timeConf: [
